@@ -1,0 +1,37 @@
+{% load crypto_filters %}
+<div class="card"> 
+    <div class="card-body">
+        <h5 class="card-title">{{ trimestre }}</h5>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th class="white-space">Date début</th>
+                        <th class="white-space">Date fin</th>
+                        <th>Description</th>
+                        {% if anneeacademique.status_cloture and contrat.status_signature %}
+                        <th>Actions</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for evenement in evenements %}
+                    <tr>
+                        <td class="white-space">{{ evenement.name }}</td>
+                        <td class="white-space">{{ evenement.start_date|date:"d/m/Y" }}</td>
+                        <td class="white-space">{{ evenement.end_date|date:"d/m/Y" }}</td>
+                        <td>{{ evenement.description }}</td>
+                        {% if anneeacademique.status_cloture %}
+                        <td class="white-space">
+                            <a class="btn btn-danger btn-sm delete-evenement" id="{{ evenement.id }}"><i class="bi bi-trash"></i></a>
+                            <a href="{% url 'evenement/edit_evenement' evenement.id|crypter_id %}" title="Modifier" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

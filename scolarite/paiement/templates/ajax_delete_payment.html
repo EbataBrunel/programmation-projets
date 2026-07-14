@@ -1,0 +1,7 @@
+{% load crypto_filters %}
+<div class="text-center">
+    <p>Voulez-vous vraiment supprimer ce paiement ?</p>
+    <p>{{ payment.student.lastname }} {{ payment.student.firstname }}</p>
+    <p>{{ payment.month }}</p>
+    <a href="{% url 'del_payment' payment.id|crypter_id %}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Supprimer </b>
+</div>

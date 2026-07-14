@@ -1,0 +1,33 @@
+{% if matieres %}
+<div class="col-12 margin-bottom">
+    <label for="Enseignant" class="form-label">Enseignant : </label>
+    <select name="enseignant" id="Enseignant" class="form-select" aria-label="Default select example">
+        <option value="">-- Selectionnez --</option>
+        {% for enseignant in enseignants %}
+            <option value="{{ enseignant.id }}">{{ enseignant.last_name|upper }} {{ enseignant.first_name|title }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="col-12 margin-bottom">
+    <label for="Matiere" class="form-label">Matière : *</label>
+    <select name="matiere" id="Matiere" class="form-select" aria-label="Default select example" required>
+        <option value="">-- Selectionnez --</option>
+        {% for matiere in matieres %}
+            <option value="{{ matiere.id }}">{{ matiere }}</option>
+        {% endfor %}
+    </select>
+</div>
+{% else %}
+<div class="col-12 margin-bottom">
+    <label for="Enseignant" class="form-label">Enseignant : </label>
+    <select name="enseignant" id="Enseignant" class="form-select" aria-label="Default select example">
+        <option value="">Aucune donnée n'a été enregistrée</option>
+    </select>
+</div>
+<div class="col-12 margin-bottom">
+    <label for="Matiere" class="form-label">Matière : *</label>
+    <select name="matiere" id="Matiere" class="form-select" aria-label="Default select example" required>
+        <option value="">Aucune donnée n'a été enregistrée</option>
+    </select>
+</div>
+{% endif %}

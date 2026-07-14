@@ -1,0 +1,148 @@
+{% extends 'global/base.html' %}
+{% block title %} {{ setting.appname }} | Mes rénumerations {% endblock %}
+{% block content %}
+{% load static %}
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Mes rénumerations</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'settings/db' %}">Tableau de bord</a></li>
+          <li class="breadcrumb-item active">Mes rénumérations</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Liste de mes rénumérations</h5>
+
+                <!-- Table with stripped rows -->
+                <div class="table-responsive">
+                    <table class="table datatable">
+                        <thead>
+                            <tr>
+                                <th>Mois</th>
+                                <th>Montants</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in renumerations %}
+                            <tr>
+                                <td>{{ r.renumeration.month }}</td>
+                                <td>{{ r.net_payer }}</td>
+                                <td>
+                                    <a href="#"  data-bs-toggle="modal" data-bs-target="#detailModal{{ r.renumeration.id }}" title="Plus d'info" class="btn btn-info btn-sm"><i class="bi bi-eye"></i> Détails</a>
+                                    <!-- Start de delete Modal -->
+                                    <div class="modal fade" id="detailModal{{ r.renumeration.id }}" tabindex="-1">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                                          <div class="modal-content">
+                                            <div class="modal-header {{ setting.theme }} {{ setting.text_color }}">
+                                              <h5 class="modal-title">Détails</h5>
+                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                              <div class="card">
+                                                <div class="card-body">
+                                                    <h4 class="text-center">Mois : <b>{{ r.renumeration.month }}</b></h4>
+                                                    <hr>
+                                                    <!-- Table with stripped rows -->
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered">
+                                                        {% for e in r.emargements %}
+                                                            <thead>
+                                                                <tr>
+                                                                    <th colspan="5" class="text-center {{ setting.theme }} {{ setting.text_color }}"><h3>{{ e.salle }}</h3></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for m in e.matieres %}
+                                                                <tr>
+                                                                    <th colspan="5" class="text-center">{{ m.matiere }}</th>
+                                                                </tr>
+                                                                <tr>
+                                                                <th>Horaire</th>
+                                                                <th>Jour</th>
+                                                                <th>Date</th>
+                                                                <th>Séance</th>
+                                                                <th>Heure</th>
+                                                            </tr>
+                                                                {% for e in m.emargements %}
+                                                                <tr>
+                                                                    <td>{{ e.emargement.heure_debut }} - {{ e.emargement.heure_fin }}</td>
+                                                                    <td>{{ e.emargement.jour }}</td>
+                                                                    <td>{{ e.emargement.date_emargement|date:"d/m/Y" }}</td>
+                                                                    <td>{{ e.emargement.seance }}</td>
+                                                                    <td>{{ e.hour }}</th>
+                                                                </tr>
+                                                                {% endfor %}
+                                                                <tr>
+                                                                <td class="text-center">Cout heure</td>
+                                                                <th>{{ m.cout_heure }}{{ setting.devise }}</th>
+                                                                <th colspan="2" class="text-center">Total</th>
+                                                                <th><b>{{ m.total_time }}</b></th>
+                                                                </tr>
+                                                                <tr>
+                                                                <td colspan="4" class="text-center">Montant total</td>
+                                                                <td>{{ m.montant_total_matiere }}{{ setting.devise }}</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        {% endfor %}
+                                                        </table>
+                                                    </div>
+                                                    <br>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered">
+                                                            <tr>
+                                                                <th>HeureTotal</th>
+                                                                <th><b>{{ r.time_total }}</b></th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>MontantTotal</th>
+                                                                <th>{{ r.montant_total }}{{ setting.devise }}</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Indemnité</th>
+                                                                <th>{{ r.renumeration.indeminte }}{{ setting.devise }}</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>SalaireNet</th>                                                            
+                                                                <th class="bg-success text-light"><span>{{ r.net_payer }} {{ setting.devise }}</span></th>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <p class="text-center">
+                                                      <a href="{% url 'bulletin_paie_enseignant' r.renumeration.id %}" class="btn btn-dark btn-sm"><i class="bi bi-file-earmark-pdf"></i> Télécharger le fichier</a>
+                                                    </p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Fermer</button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div><!-- Fin de delete Modal-->
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End Table with stripped rows -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+{% endblock %}

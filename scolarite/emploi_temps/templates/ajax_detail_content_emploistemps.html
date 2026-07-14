@@ -1,0 +1,34 @@
+
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="text-dark table">
+                <tr>
+                    <th> Jour</th><td>: {{ emploitemps.jour }}</td>
+                </tr>
+                <tr>
+                    <th> Horaire</th><td class="white-space">: {{ emploitemps.heure_debut }}-{{ emploitemps.heure_fin }}</td>
+                </tr>
+                {% if emploitemps.salle.cycle.libelle == "Collège" or emploitemps.salle.cycle.libelle == "Lycée" %}
+                <tr>
+                    <th> Matière</th><td class="white-space">: {{ emploitemps.matiere }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th> Enseignant</th><td class="white-space">: {{ emploitemps.enseignant.last_name|title }} {{ emploitemps.enseignant.first_name|title }}</td>
+                </tr>
+                {% if request.session.group_name in permission_directeur_etudes and anneeacademique.status_cloture %}
+                <tr>
+                    <td><a href="{% url 'save_absence' emploitemps.id|crypter_id %}" class="btn btn-primary btn-sm"><i class="bi bi-gem"></i> Enregistrer une absence de l'enseignant </a></td>
+                    <td><a href="{% url 'add_emargement' emploitemps.id|crypter_id %}" class="btn btn-success btn-sm"><i class="bi bi-gem"></i> Ajouter un émargement à l'enseignant </a><br></td>
+                </tr>
+                <tr>
+                    <td><a href="{% url 'edit_emploitemps' emploitemps.id|crypter_id %}"class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Modifier l'emploi du temps </a></td>
+                    <td><a href="{% url 'del_emploitemps' emploitemps.id|crypter_id %}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Supprimer</a></td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>

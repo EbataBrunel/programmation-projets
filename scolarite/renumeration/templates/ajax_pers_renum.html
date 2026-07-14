@@ -1,0 +1,59 @@
+<!-- Table with stripped rows -->
+<h5 class="card-title text-center">Rénumeration des énseignants</h5>
+<div class="table-responsive">
+    <table class="table datatable">
+        <thead>
+            <tr>
+                <th class="{{ setting.theme }} {{ setting.text_color }}">Id</th>
+                <th class="{{ setting.theme }} {{ setting.text_color }}">Enseignants</th>
+                <th class="{{ setting.theme }} {{ setting.text_color }}">Statut</th>
+                <th class="{{ setting.theme }} {{ setting.text_color }}">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in renumerations %}
+            <tr>
+                <td>{{ r.enseignant.id }}</td>
+                <td>{{ r.enseignant.last_name }} {{ r.enseignant.first_name }}</td>
+                {% if r.status == "Payé" %}
+                <td><span class="badge bg-success">{{ r.status }}</span></td>
+                <td><a href="{% url 'recap_emargement' r.enseignant.id month %}" class="btn btn-info btn-sm"><i class="bi bi-eye"></i> voir plus</a></td>
+                {% else %}
+                <td><span class="badge bg-warning">{{ r.status }}</span></td>
+                <td><a href="{% url 'recap_emargement' r.enseignant.id month %}" class="btn btn-info btn-sm"><i class="bi bi-cash"></i> Rénumérer</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<!-- End Table with stripped rows -->
+<hr>
+<h5 class="card-title text-center">Rénumeration des administrateurs</h5>
+<div class="table-responsive">
+    <table class="table datatable">
+        <thead>
+            <tr>
+                <th class="{{ setting.theme }} {{ setting.text_color }}">Id</th>
+                <th class="{{ setting.theme }} {{ setting.text_color }}">Enseignants</th>
+                <th class="{{ setting.theme }} {{ setting.text_color }}">Statut</th>
+                <th class="{{ setting.theme }} {{ setting.text_color }}">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in renumerations_admin %}
+            <tr>
+                <td>{{ r.administrateur.id }}</td>
+                <td>{{ r.administrateur.last_name }} {{ r.administrateur.first_name }}</td>
+                {% if r.status == "Payé" %}
+                <td><span class="badge bg-success">{{ r.status }}</span></td>
+                <td><a href="{% url 'renum/renum_admin' %}" class="btn btn-info btn-sm"><i class="bi bi-eye"></i> voir plus</a></td>
+                {% else %}
+                <td><span class="badge bg-warning">{{ r.status }}</span></td>
+                <td><a href="{% url 'renum/add_renum_admin' %}" class="btn btn-info btn-sm"><i class="bi bi-cash"></i> Rénumérer</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

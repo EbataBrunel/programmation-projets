@@ -1,0 +1,22 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ salle }}</h5>
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th>Noms</th>
+                    <th>Prénoms</th>
+                    <th>Sexe</th>
+                </tr>
+                {% for inscription in inscriptions %}
+                <tr>
+                    <td class="white-space">{{ inscription.student.lastname|title }}</td>
+                    <td class="white-space">{{ inscription.student.firstname|title }}</td>
+                    <td>{{ inscription.student.gender }}</td>
+                </tr>
+                {% endfor%}
+            </table>
+        </div>
+    </div>
+</div>

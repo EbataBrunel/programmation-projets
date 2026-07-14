@@ -1,0 +1,19 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ parent.lastname|title }} {{ parent.firstname|title }}</h5>
+        {% if parent.status_access %}
+        <div class="text-center">
+            <p>Voulez-vous vraiment désactiver le droit d'accès de ce parent ?</p>
+            <hr>
+            <a href="#" class="btn btn-primary btn-sm access-parent" id="{{ parent.id }}"><i class="bi bi-check"></i> Valider</a>
+        </div>
+        {% else %}
+        <div class="text-center" id="content-access-{{ parent.id }}">
+            <p>Voulez-vous vraiment activer le droit d'accès de ce parent ?</p>
+            <hr>
+            <a href="#" class="btn btn-primary btn-sm access-parent" id="{{ parent.id }}"><i class="bi bi-check"></i>Valider</a>
+        </div>
+        {% endif %}
+    </div>
+</div>

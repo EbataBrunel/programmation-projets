@@ -1,0 +1,87 @@
+{% load crypto_filters %}
+<h5><b>{{ c.user.last_name|title }} {{ c.user.first_name|title }}</b></h5>
+{% for t in contrats %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Contrat du {{ t.contrat.date_contrat|date:"d/m/Y" }} </h5>
+        <table class="table">
+            <tr>
+                <th>TypeContrat</th><td> : {{ t.contrat.type_contrat }}</td>
+            </tr>
+            <tr>
+                <th>Poste</th> <td> : {{ t.contrat.poste }}</td>
+            </tr>
+            <tr>
+                <th>Description</th><td> : {{ t.contrat.description }}</td>
+            </tr>
+            <tr>
+                <th class="white-space">Date début</th><td> : {{ t.contrat.date_debut|date:"d/m/Y" }}</td> 
+            </tr>
+            <tr>
+                <th class="white-space">Date fin</th><td> : {{ t.contrat.date_fin|date:"d/m/Y" }}</td> 
+            </tr>
+            {% if t.contrat.type_contrat == "Admin" %}
+            <tr>
+                <th>Montant ({{ setting.devise }})</th> <td> : {{ t.contrat.amount }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <th>Coût par heure ({{ setting.devise }})</th><td>  : {{ t.contrat.amount }}</td>
+            </tr>
+            {% endif %}
+
+            {% if t.status == "En attente" %}
+            <th>Statut</th><td> : <span class="badge rounded-pill bg-secondary">{{ t.status }}</span></td>
+            {% elif t.status == "En cours" %}
+            <th>Statut</th><td> : <span class="badge rounded-pill bg-success">{{ t.status }}</span></td>
+            {% else %}
+            <th>Statut</th><td> : <span class="badge rounded-pill bg-danger">{{ t.status }}</span></td>
+            {% endif %}
+        </table>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Signatures</h5>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <br>
+                        <h5>{{ t.contrat.admin.last_name|title }} {{ t.contrat.admin.first_name|title }}</h5>
+                        <p>Date : {{ t.contrat.date_contrat|date:"d/m/Y" }}</p>
+                    </div>
+                </div>
+            </div>
+            {% if t.contrat.status_signature %}
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <br>
+                        <h5>{{ t.contrat.admin.last_name|title }} {{ t.contrat.admin.first_name|title }}</h5>
+                        <p>Date : {{ t.contrat.date_signature|date:"d/m/Y" }}</p>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <br>
+                        <p><i class="bi bi-circle-fill text-warning"></i> En attente de la signature de </p>
+                        <h5>{{ t.contrat.user.last_name|title }} {{ t.contrat.user.first_name|title }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% if anneeacademique.status_cloture %}
+<p class="text-center">
+    <a href="{% url 'contrat/edit_contrat' t.contrat.id|crypter_id %}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Modifier </a>
+    <a class="btn btn-danger btn-sm delete-contrat" id="{{ t.contrat.id }}"><i class="bi bi-trash"></i> Supprimer </a>
+</p>
+{% endif %}
+<hr>
+{% endfor%}

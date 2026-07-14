@@ -1,0 +1,18 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ inscription.student.lastname|title }} {{ inscription.student.firstname|title }}</h5>
+        {% if inscription.status_block %}
+        <div class="text-center" id="content-account-block-{{ inscriprion.id }}">
+            <p>Voulez-vous vraiment désactiver le blocage du compte de cet élève ?</p>
+            <p><b class="text-danger">Attention :</b> la désactivation de ce compte entraînera la fermeture de toutes les activités liées à celui-ci. Veuillez donc vous assurer de vouloir le désactiver, car pour le réactiver, il faudra contacter le super utilisateur, ce qui peut prendre un certain temps.</p>
+            <hr>
+            <a href="#" class="btn btn-primary btn-sm block-account-student" id="{{ inscription.id }}"><i class="bi bi-check"></i> Valider</a> 
+        </div>
+        {% else %}
+        <p>Vous n'avez pas les droits nécessaires pour activer le blocage de ce compte. Veuillez contacter un super utilisateur pour effectuer cette opération.</p>
+        <p><b>Bloquer par : </b>{{ inscription.responsable.last_name|title }} {{ inscription.responsable.first_name|title }}</p>
+        <p><b>Date : </b> {{ inscription.date_block|date:"d/m/Y h:m" }}</p>
+        {% endif %}
+    </div>
+</div>

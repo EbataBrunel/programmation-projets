@@ -1,0 +1,32 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ salle }}</h5>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Trimestre</th>
+                        <th class="white-space">Moyenne validation</th>
+                        <th>Clôture</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for deliberation in deliberations %}
+                    <tr>
+                        <td class="white-space">{{ deliberation.trimestre }}</td>
+                        <td>{{ deliberation.moyennevalidation }}</td>
+                        <td>
+                            {% if deliberation.status_cloture %}
+                                <a href="{% url 'deliberation/detail_deliberation' deliberation.id %}" class="btn btn-success btn-sm">Activé</a>
+                            {% else %}
+                                <a href="{% url 'deliberation/detail_deliberation' deliberation.id %}" class="btn btn-danger btn-sm">Désactivé</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

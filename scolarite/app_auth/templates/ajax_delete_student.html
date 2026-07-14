@@ -1,0 +1,10 @@
+{% load crypto_filters %}
+<div class="text-center">
+    {% if student.gender == "Masculin" %}
+    <p class="text-center">Voulez-vous vraiment supprimer cet élève ?</p>
+    {% else %}
+    <p class="text-center">Voulez-vous vraiment supprimer cette élève ?</p>
+    {% endif %}
+    <p>{{ student.lastname|title }} {{ student.firstname|title }}</p>
+    <a href="{% url 'del_student' student.id|crypter_id %}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Supprimer</a>
+</div>

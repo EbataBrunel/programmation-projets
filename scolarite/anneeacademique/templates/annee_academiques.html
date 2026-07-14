@@ -1,0 +1,99 @@
+{% extends 'global/base_sup_admin.html' %}
+{% block title %} {{ setting.appname }} | Années académiques {% endblock %}
+{% block content %}
+{% load static %}
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Années académiques</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'settings/db' %}">Tableau de bord</a></li>
+          <li class="breadcrumb-item active">Années scolaires</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Liste des années scolaires</h5>
+                <div align="right">
+                    {% if setting.theme == "bg-default" %}
+                    <a href="{% url 'add_anneeacademique' %}" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle"></i> Enregistrer une année scolaire</a>
+                    {% else %}
+                    <a href="{% url 'add_anneeacademique' %}" class="btn btn-default btn-sm {{ setting.theme }} {{ setting.text_color }}"><i class="bi bi-plus-circle"></i> Enregistrer une année scolaire</a>
+                    {% endif %}
+                </div>
+                
+                <!-- Table with stripped rows -->
+                <div class="table-responsive">
+                    <table class="table datatable">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>AnnéeDébut</th>
+                                <th>AnnéeFin</th>
+                                <th>Séparateur</th>
+                                <th>DateDébut</th>
+                                <th>DateFin</th>
+                                <th>Cloture</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for anneeacademique in anneeacademiques %}
+                            <tr>
+                                <td>{{ anneeacademique.id }}</td>
+                                <td>{{ anneeacademique.annee_debut }}</td>
+                                <td>{{ anneeacademique.annee_fin }}</td>
+                                <td>{{ anneeacademique.separateur }}</td>
+                                <td>{{ anneeacademique.start_date|date:"d/m/Y" }}</td>
+                                <td>{{ anneeacademique.end_date|date:"d/m/Y" }}</td>
+                                <td>
+                                  {% if anneeacademique.status_cloture %}
+                                    <span class="badge rounded-pill bg-success"> Clôturer </span>
+                                  {% else %}
+                                    <a href="{% url 'cloture_anneeacademique' anneeacademique.id %}" class="btn btn-primary btn-sm">A Clôturer</a>
+                                  {% endif %}
+                                </td>
+                                <td>
+                                    <a href="#"  data-bs-toggle="modal" data-bs-target="#deleteModal{{ anneeacademique.id }}" title="Supprimer" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></a>
+                                    <a href="{% url 'edit_anneeacademique' anneeacademique.id %}" title="Modifier" class="btn btn-warning btn-sm"><i class="bi bi-pencil "></i></a>
+                                    <!-- Start de delete Modal -->
+                                    <div class="modal fade" id="deleteModal{{ anneeacademique.id }}" tabindex="-1">
+                                        <div class="modal-dialog modal-sm">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title">Suppression</h5>
+                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                              <p class="text-center">Voulez-vous vraiment supprimer cette année académique ?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Fermer</button>
+                                              <a href="{% url 'delete_anneeacademique' anneeacademique.id %}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Supprimer</a>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div><!-- Fin de delete Modal-->
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End Table with stripped rows -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+{% endblock %}

@@ -1,0 +1,83 @@
+{% if request.session.group_name == "Promoteur" and status %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Contrat du {{ contrat.date_contrat|date:"d/m/Y" }} </h5>
+        <p>{{ contrat.description }}</p>
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th class="white-space">Etablissement </th><td class="white-space"> : {{ contrat.etablissement }}</td>
+                </tr>
+                <tr>
+                    <th class="white-space">Montant par élève ({{ setting.devise }})</th><td> : {{ contrat.amount|floatformat:2 }}</td>
+                </tr>
+                <tr>
+                    <th class="white-space">Date début</th><td class="white-space"> : {{ contrat.start_date|date:"d/m/Y" }}</td>
+                </tr>
+                <tr>
+                    <th class="white-space">Date fin</th><td class="white-space"> : {{ contrat.end_date|date:"d/m/Y" }}</td>
+                </tr>
+                <tr>
+                    <th class="white-space">Super utilisateur </th><td class="white-space"> : {{ contrat.user.last_name|title }} {{ contrat.user.first_name|title }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <br>
+                {% if request.session.classe_id %}
+                <p class="text-center"><a href="{% url 'contrat/contrats_user' %}" class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> J'accepte de signer ce contrat</a></p>
+                {% else %}
+                <p class="text-center"><a href="{% url 'contrat_etablissement/mes_contrats_promoteur' %}" class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> J'accepte de signer ce contrat</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+    {% if contrat %}
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Contrat du {{ contrat.date_contrat|date:"d/m/Y" }} </h5>
+            <hr>
+            <h4>{{ contrat.type_contrat }}</h4>
+            <hr>
+            <p>{{ contrat.description }}</p>
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <th class="white-space">Montant estimé par heure ({{ setting.devise }})</th><td class="white-space"> : {{ contrat.amount|floatformat:2 }}</td>
+                    </tr>
+                    <tr>
+                        <th class="white-space">Date début</th><td class="white-space"> : {{ contrat.date_debut|date:"d/m/Y" }}</td>
+                    </tr>
+                    <tr>
+                        <th class="white-space">Date fin</th><td class="white-space"> : {{ contrat.date_fin|date:"d/m/Y" }}</td>
+                    </tr>
+                    <tr>
+                        <th class="white-space">Enregistrer par </th><td class="white-space"> : {{ contrat.admin.last_name|title }} {{ contrat.admin.first_name|title }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <br>
+                    <p class="text-center"><a href="{% url 'contrat/contrats_user' %}" class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> J'accepte de signer ce contrat</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="card">
+        <div class="card-body">
+            <p class="text-center">Enregistrez d'abord votre contrat, puis procédez à la signature.</p>
+            <div class="card">
+                <div class="card-body">
+                    <br>
+                    <p class="text-center"><a href="{% url 'contrat/add_contrat' %}" class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> J'enregistre le contrat</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}

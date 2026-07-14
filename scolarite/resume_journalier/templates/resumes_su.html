@@ -1,0 +1,113 @@
+{% extends 'global/base.html' %}
+{% block title %} {{ setting.appname }} | Résumés journaliers {% endblock %}
+{% block content %}
+{% load static %}
+{% load crypto_filters %}
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Résumés</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'settings/dashboard' request.session.classe_id|crypter_id %}">Tableau de bord</a></li>
+          <li class="breadcrumb-item active">Résumés</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Liste des résumés journaliers</h5>
+                {% if messages %}
+                  {% for message in messages %}
+                  <div class="row">
+                    <div class="col-md-8"></div>
+                    <div class="col-md-4">
+                      <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                {% endif %}
+                <!-- Table with stripped rows -->
+                <div class="table-responsive">
+                    <table class="table datatable">
+                        <thead>
+                            <tr>
+                                <th>Administrateur</th>
+                                <th class="white-space">Nombre résumés</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in resumes %}
+                            <tr>
+                                <td class="white-space">{{ r.user.last_name|title }} {{ r.user.first_name|title }}</td>
+                                <td><span class="badge rounded-pill bg-secondary">{{ r.nombre_resumes }}</span></td>
+                                <td>
+                                  <a class="btn btn-info btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#detailModal{{ r.user.id }}" title="Détail"><i class="bi bi-eye"></i></a>
+                                  <!-- debut detail modal -->
+                                  <div class="modal fade" id="detailModal{{ r.user.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+                                          <div class="modal-content">
+                                              <div class="modal-header bg-info">
+                                                  <h5 class="modal-title" id="exampleModalLabel"><b class="text-center"> Liste des résumés journaliers </b></h5>
+                                              </div>
+                                              <div class="modal-body">
+                                                <div class="card">
+                                                  <div class="card-body">
+                                                    {% for m in r.months %}
+                                                      <h5 class="card-title">{{ m.month }}</h5>
+                                                      {% for resume in m.resumes %}
+                                                        <h6>Résumé du <b>{{ resume.date_resume|date:"d/m/Y" }}</b></h6>
+                                                        <p>{{ resume.content }}</p>
+                                                        <hr>
+                                                      {% endfor %}
+                                                    {% endfor %}
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="modal-footer">
+                                                  <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fermer</button>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <!-- end modal detail -->
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End Table with stripped rows -->
+
+                <!-- Start delete Modal -->
+                <div class="modal fade" id="content_delete" tabindex="-1">
+                  <div class="modal-dialog modal-dialog-centered modal-sm">
+                    <div class="modal-content">
+                      <div class="modal-header bg-danger text-light">
+                        <h5 class="modal-title">Avertissement</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true" class="badge bg-dark">x</span>
+                        </button>
+                      </div>
+                      <div class="modal-body" id="content-delete-item"></div>
+                    </div>
+                  </div>
+                </div><!-- End delete Modal-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+{% endblock %}

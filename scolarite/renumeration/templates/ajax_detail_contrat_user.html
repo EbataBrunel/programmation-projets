@@ -1,0 +1,93 @@
+{% load crypto_filters %}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Contrat du {{ contrat.date_contrat|date:"d/m/Y" }} </h5>
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th class="white-space">Type contrat</th><td class="white-space"> : {{ contrat.type_contrat }}</td>
+                </tr>
+                <tr>
+                    <th>Poste</th> <td class="white-space"> : {{ contrat.poste }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th><td> : {{ contrat.description }}</td>
+                </tr>
+                <tr>
+                    <th class="white-space">Date début/ Date fin</th><td class="white-space"> : {{ contrat.date_debut|date:"d/m/Y" }} / {{ contrat.date_fin|date:"d/m/Y" }}</td> 
+                </tr>
+                {% if contrat.type_contrat == "Admin" %}
+                <tr>
+                    <th class="white-space">Montant ({{ setting.devise }})</th> <td class="white-space"> : {{ contrat.amount }}</td>
+                </tr>
+                <tr>
+                    {% if status == "En attente" %}
+                        <th>Statut</th><td class="white-space"> : <span class="badge rounded-pill bg-secondary">{{ status }}</span></td>
+                    {% elif status == "En cours" %}
+                        <th>Statut</th><td class="white-space"> : <span class="badge rounded-pill bg-success">{{ status }}</span></td>
+                    {% else %}
+                        <th>Statut</th><td class="white-space"> : <span class="badge rounded-pill bg-danger">{{ status }}</span></td>
+                    {% endif %}
+                </tr>
+                {% else %}
+                <tr>
+                    <th>Coût par heure ({{ setting.devise }})</th><td class="white-space">  : {{ contrat.amount }}</td>
+                </tr>
+                <tr>
+                    {% if status == "En attente" %}
+                        <th>Statut</th><td class="white-space"> : <span class="badge rounded-pill bg-secondary">{{ status }}</span></td>
+                    {% elif status == "En cours" %}
+                        <th>Statut</th><td class="white-space"> : <span class="badge rounded-pill bg-success">{{ status }}</span></td>
+                    {% else %}
+                        <th>Statut</th><td class="white-space"> : <span class="badge rounded-pill bg-danger">{{ status }}</span></td>
+                    {% endif %}
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+            <h5 class="card-title">Signatures</h5>
+            <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <br>
+                                <h5>{{ contrat.admin.last_name|title }} {{ contrat.admin.first_name|title }}</h5>
+                                <p>Date : {{ contrat.date_signature|date:"d/m/Y" }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% if contrat.status_signature %}
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <br>
+                                <h5>{{ contrat.user.last_name|title }} {{ contrat.user.first_name|title }}</h5>
+                                <p>Date : {{ contrat.date_signature|date:"d/m/Y" }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <br>
+                                <div id="content-signature-contrat{{ contrat.id }}">
+                                    <p class="text-center">
+                                        <a href="#" class="btn btn-primary btn-sm signer-contrat" id="{{ contrat.id }}">Je signe ce contrat</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+            </div>
+    </div>
+</div>
+
+    

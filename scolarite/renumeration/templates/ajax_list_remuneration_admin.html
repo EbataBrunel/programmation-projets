@@ -1,0 +1,43 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title"><b>{{ user.last_name|title }} {{ user.first_name|title }}</b></h5>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Mois</th>
+                        <th class="white-space">Montant ({{ setting.devise }})</th>
+                        <th class="white-space">Indemnité ({{ setting.devise }})</th>
+                        <th class="white-space">Net à payer ({{ setting.devise }})</th>
+                        <th class="white-space">Mode paiement</th>
+                        <th class="white-space">Date paye</th>
+                        <th>Gestionnaire</th>
+                        {% if anneeacademique.status_cloture %}
+                        <th>Actions</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for remuneration in renumerations %}
+                    <tr>
+                        <td>{{ remuneration.month }}</td>
+                        <td>{{ remuneration.amount }}</td>
+                        <td>{{ remuneration.indemnite }}</td>
+                        <td>{{ remuneration.total_amount }}</td>
+                        <td>{{ remuneration.mode_payment }}</td>
+                        <td class="white-space">{{ remuneration.date|date:"d/m/Y" }}</td>
+                        <td class="white-space">{{ remuneration.responsable.last_name|title }} - {{ remuneration.responsable.first_name|title }}</td>
+                        {% if anneeacademique.status_cloture %}
+                        <td class="white-space">
+                            <a class="btn btn-danger btn-sm delete-renum-admin" id="{{ remuneration.id }}"><i class="bi bi-trash"></i></a>
+                            <a href="{% url 'renum/edit_renum_admin' remuneration.id|crypter_id %}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ cycle }}</h5>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th class="white-space">Nombre salles</th>
+                        {% if anneeacademique.status_cloture %}
+                        <th>Action</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in classes %}
+                    <tr>
+                        <td class="white-space">{{ c.classe.libelle }}</td>
+                        <td><span class="badge rounded-pill bg-secondary">{{ c.nombre_salles }}</td>
+                        {% if anneeacademique.status_cloture %}
+                        <td>
+                            <a href="{% url 'detail_salle' c.classe.id|crypter_id %}" title="Détail" class="btn btn-info btn-sm"><i class="bi bi-eye"></i></a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                   {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

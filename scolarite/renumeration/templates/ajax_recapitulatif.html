@@ -1,0 +1,249 @@
+
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body height_min_max_card">
+              <h5 class="card-title text-center">Récette totale</h5>
+              <h1 class="text-success text-center">{{ recette_month }}{{ setting.devise }}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+<br>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Détails</h5>
+
+            <!-- Accordion without outline borders -->
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingOne">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                    Cliquez ici pour voir plus
+                  </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Récapitulatif de paiements des élèves et de rénumerations des enseignants</h5>
+                            <!-- Table with stripped rows -->
+                            <div class="table-responsive">
+                                        <table class="table datatable">
+                                            <thead>
+                                                <tr>
+                                                    <th class="{{ setting.theme }} {{ setting.text_color }}">Salles</th>
+                                                    <th class="{{ setting.theme }} {{ setting.text_color }}">PaiementElèves</th>
+                                                    <th class="{{ setting.theme }} {{ setting.text_color }}">RénumerationEns</th>
+                                                    <th class="{{ setting.theme }} {{ setting.text_color }}">Restes</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% if salles %}
+                                                    {% for s in salles %}
+                                                    <tr>
+                                                        <td>{{ s.salle }}</td>
+                                                        <td>{{ s.sum_payment }}{{ setting.devise }}</td>
+                                                        <td>{{ s.sum_renum }}{{ setting.devise }}</td>
+                                                        {% if s.reste < 0 %}
+                                                        <td class="text-danger"><b>{{ s.reste }}{{ setting.devise }}</b></td>
+                                                        {% elif s.reste == 0 %}
+                                                        <td><b>{{ s.reste }}{{ setting.devise }}</b></td>
+                                                        {% else %}
+                                                        <td class="text-success"><b>{{ s.reste }}{{ setting.devise }}</b></td>
+                                                        {% endif %}
+                                                    </tr>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <tr>
+                                                        <td colspan="4">Aucune donnée n'a été enregistrée</td>
+                                                    </tr>
+                                                {% endif %}
+                    
+                                            </tbody>
+                                            {% if salles %}
+                                            <tfooter>
+                                                <tr>
+                                                    <th class="{{ setting.theme }} {{ setting.text_color }}">Total</th>
+                                                    <th class="{{ setting.theme }} {{ setting.text_color }}">{{ total_paiement_student }}</th>
+                                                    <th class="{{ setting.theme }} {{ setting.text_color }}">{{ total_renum_enseignant }}</th>
+                                                    <th class="{{ setting.theme }} {{ setting.text_color }}">{{ total_reste }}</th>
+                                                </tr>
+                                            </tfooter>
+                                            {% endif %}
+                                        </table>
+                            </div>
+                            <!-- End Table with stripped rows -->
+                        </div>
+                    </div>
+                    
+                    <br>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total des indemnité des enseignants</h5>
+                            <!-- Table with stripped rows -->
+                            <div class="table-responsive">
+                                        <table class="table datatable">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="{{ setting.theme }} {{ setting.text_color }}">Total</td>
+                                                    <td class="{{ setting.theme }} {{ setting.text_color }}">{{ sum_indemnite }}{{ setting.devise }}</td>
+                                                    <td class="{{ setting.theme }} {{ setting.text_color }}">
+                                                        <a href="#"  data-bs-toggle="modal" data-bs-target="#indemniteModal" title="Détail" class="btn btn-info btn-sm text-center"><i class="bi bi-eye"></i> Voir plus </a>
+                                                        <!-- Start de delete Modal -->
+                                                        <div class="modal fade" id="indemniteModal" tabindex="-1">
+                                                            <div class="modal-dialog modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header {{ setting.theme }} {{ setting.text_color }}">
+                                                                    <h5 class="modal-title text-center">Détails des indemnité de <span>{{ month }}</span></h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="table-responsive">
+                                                                            <table class="table table-bordered">
+                                                                                <tr>
+                                                                                    <th>Noms</th>
+                                                                                    <th>Prénoms</th>
+                                                                                    <th>Indemnité</th>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    {% for renumeration in renumerations %}
+                                                                                    <td>{{ renumeration.user.last_name|title }} </td>
+                                                                                    <td>{{ renumeration.user.first_name|title }} </td>
+                                                                                    <td>{{ renumeration.indeminte }}{{ setting.devise }}</td>
+                                                                                    {% endfor %}
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th colspan="2"><b>Total<b></th>
+                                                                                    <th>{{ sum_indemnite|floatformat:2 }}{{ setting.devise }}</th>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Fermer la fênetre</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div><!-- Fin de delete Modal-->
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                            </div>
+                            <!-- End Table with stripped rows -->
+                        </div>
+                    </div>
+                           
+                    
+                    <br>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total de rénumerations des administrateurs</h5>
+                            <!-- Table with stripped rows -->
+                            <div class="table-responsive">
+                                <table class="table datatable">
+                                    <tbody>
+                                        <tr>
+                                            <th class="{{ setting.theme }} {{ setting.text_color }}"><b>Total</b></th>
+                                            <th class="{{ setting.theme }} {{ setting.text_color }}"><b>{{ total_renum_admin }}{{ setting.devise }}</b></th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- End Table with stripped rows -->
+                        </div>
+                    </div>
+                    
+                    
+                    <br>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total des dépenses</h5>
+                            <!-- Table with stripped rows -->
+                            <div class="table-responsive">
+                                <table class="table datatable">
+                                    <thead>
+                                        <tr>
+                                            <th class="{{ setting.theme }} {{ setting.text_color }}">Dépenses</th>
+                                            <th class="{{ setting.theme }} {{ setting.text_color }}">Montants</th>
+                                            <th class="{{ setting.theme }} {{ setting.text_color }}">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if depenses %}
+                                            {% for d in depenses %}
+                                            <tr>
+                                                <td>{{ d.signe }}</td>
+                                                <td>{{ d.sum_depense }}{{ setting.devise }}</td>
+                                                <td>
+                                                    <a href="#"  data-bs-toggle="modal" data-bs-target="#depenseModal{{ d.signe }}" title="Détail" class="btn btn-info btn-sm text-center"><i class="bi bi-eye"></i> Voir plus </a>
+                                                    <!-- Start de delete Modal -->
+                                                    <div class="modal fade" id="depenseModal{{ d.signe }}" tabindex="-1">
+                                                        <div class="modal-dialog modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header {{ setting.theme }} {{ setting.text_color }}">
+                                                                    <h5 class="modal-title text-center">Détails des <span>{{ d.signe }}s</span></h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="table-responsive">
+                                                                        <table class="table table-bordered">
+                                                                            <tr>
+                                                                                <th>TypeDepense</th>
+                                                                                <th>Montant</th>
+                                                                                <th>Date</th>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                {% for depense in d.depenses %}
+                                                                                <td>{{ depense.type_depense }}</td>
+                                                                                <td>{{ depense.amount }}{{ setting.devise }}</td>
+                                                                                <td>{{ depense.date_depense|date:"d/m/Y" }} </td>
+                                                                                {% endfor %}
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th><b>Total</b> </th>
+                                                                                <th colspan="2">{{ d.sum_depense|floatformat:2 }}{{ setting.devise }}</th>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Fermer la fênetre</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div><!-- Fin de delete Modal-->
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="3" class="text-center">Aucune dépense n'a été enregistrée</td>
+                                            </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- End Table with stripped rows -->
+                        </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div><!-- End Accordion without outline borders -->
+          </div>
+        </div>
+
+    </div>
+</div>
+
+
+       

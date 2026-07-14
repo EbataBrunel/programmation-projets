@@ -1,0 +1,45 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title"><b>{{ user.last_name|title }} {{ user.first_name|title }}</b></h5>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Mois</th>
+                        <th class="white-space">Montant ({{ setting.devise }})</th>
+                        <th class="white-space">Indemnité ({{ setting.devise }})</th>
+                        <th class="white-space">Salaire net ({{ setting.devise }})</th>
+                        <th class="white-space">Date paye</th>
+                        <th class="white-space">Mode paiement</th>
+                        <th>Gestionnaire</th>
+                        <th>Bulletin</th>
+                        {% if anneeacademique.status_cloture %}
+                        <th>Actions</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for remuneration in remunerations %}
+                    <tr>
+                    <td>{{ remuneration.month }}</td>
+                    <td>{{ remuneration.amount }}</td>
+                    <td>{{ remuneration.indemnite }}</td>
+                    <td>{{ remuneration.total_amount|floatformat }}</td>
+                    <td class="white-space">{{ remuneration.date|date:"d/m/Y" }}</td>
+                    <td>{{ remuneration.mode_payment }}</td>
+                    <td class="white-space">{{ remuneration.responsable.last_name|title }} - {{ remuneration.responsable.first_name|title }}</td>
+                    <td><a href="{% url 'bulletin_paie_enseignant' remuneration.id|crypter_id %}" class="btn btn-dark btn-sm"><i class="bi bi-file-earmark-pdf"></i></a></td>
+                    {% if anneeacademique.status_cloture %}
+                    <td class="white-space">
+                        <a class="btn btn-danger btn-sm delete-renum" id="{{ remuneration.id }}"><i class="bi bi-trash"></i></a>
+                        <a href="{% url 'remun_enseignant/edit_remun_teacher' remuneration.id|crypter_id %}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
+                    </td>
+                    {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

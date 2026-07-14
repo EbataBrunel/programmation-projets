@@ -1,0 +1,35 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ group.name }}</h5>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Noms</th>
+                        <th>Prénoms</th>
+                        <th>Email</th>
+                        {% if anneeacademique.status_cloture %}
+                            <th class="white-space">Actions</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for role in roles %}
+                        <tr>
+                            <td class="white-space">{{ role.user.last_name|title }}</td>
+                            <td class="white-space">{{ role.user.first_name|title }}</td>
+                            <td>{{ role.user.email }}</td>
+                            {% if anneeacademique.status_cloture %}
+                                <td class="white-space">
+                                    <a class="btn btn-danger btn-sm delete-role" id="{{ role.id }}"><i class="bi bi-trash"></i></a>
+                                    <a href="{% url 'role/edit_role' role.id|crypter_id %}" title="Modifier" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

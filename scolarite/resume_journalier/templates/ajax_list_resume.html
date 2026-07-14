@@ -1,0 +1,17 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ month }}</h5>
+        {% for resume in resumes %}
+            <h6>Résumé du <b>{{ resume.date_resume|date:"d/m/Y" }}</b></h6>
+            <p>{{ resume.content }}</p>
+            {% if anneeacademique.status_cloture %}
+            <p>
+                <a class="btn btn-danger btn-sm delete_resume" id="{{ resume.id }}"><i class="bi bi-trash"></i> Supprimer </a>
+                <a href="{% url 'edit_resume' resume.id|crypter_id %}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Modifier </a>
+            </p>
+            {% endif %}
+            <hr>
+        {% endfor %}
+    </div>
+</div>

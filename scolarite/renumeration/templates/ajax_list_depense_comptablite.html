@@ -1,0 +1,26 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title"><b>{{ month }}</b></h5>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <tr>
+                    <th>Type dépenses</th>
+                    <th class="white-space">Montant ({{ setting.devise }})</th>
+                    <th>Date</th>
+                </tr>
+                <tr>
+                {% for depense in depenses %}
+                    <td>{{ depense.type_depense }}</td>
+                    <td>{{ depense.amount }}</td>
+                    <td>{{ depense.date_depense|date:"d/m/Y" }} </td>
+                {% endfor %}
+                </tr>
+                <tr>
+                    <th class="white-space"><b>Total ({{ setting.devise }})</b> </th>
+                    <th colspan="2">{{ sum_depense|floatformat:2 }}</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

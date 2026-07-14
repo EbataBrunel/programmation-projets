@@ -1,0 +1,38 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        {% if cycle == "Secondaire" %}
+        <h5 class="card-title">{{ student.lastname|title }} {{ student.firstname|title }}<br><hr>{{ matiere }}</h5>
+        {% else %}
+        <h5 class="card-title">{{ student.lastname|title }} {{ student.firstname|title }}<br><hr>{{ month }}</h5>
+        {% endif %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Crénaux</th>
+                        <th>Séance</th>
+                        <th>Titre</th>
+                        <th>Date</th>
+                        <th class="white-space">Statut d'absence</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for absence in absences %}
+                    <tr>
+                        <td class="white-space">{{ absence.emargement.heure_debut }}-{{ absence.emargement.heure_fin }}</td>
+                        <td class="white-space">{{ absence.emargement.seance }}</td>
+                        <td class="white-space">{{ absence.emargement.titre }}</td>
+                        <td class="white-space">{{ absence.emargement.date_emargement|date:"d/m/Y" }}</td>
+                        {% if absence.motif %}
+                        <td><span class="badge rounded-pill bg-success">Justifiée</span></td>
+                        {% else %}
+                        <td><span class="badge rounded-pill bg-warning white-space">Non récevable</span></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

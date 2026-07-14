@@ -1,0 +1,95 @@
+{% extends 'global/base.html' %}
+{% block title %} {{ setting.appname }} | Résumé des émargements des enseignants du cycle fondamental {% endblock %}
+{% block content %}
+{% load static %}
+{% load crypto_filters %}
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Rémunérations</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'settings/dashboard' request.session.classe_id|crypter_id %}">Tableau de bord</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'remun_enseignant/remunerations_enseignants' %}">Rémunérations</a></li>
+          <li class="breadcrumb-item active">Résumé</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Résumé des émargements des enseignants du cycle fondamental</h5>
+                
+                <!-- Table with stripped rows -->
+                <div class="table-responsive">
+                    <table class="table datatable">
+                        <thead>
+                            <tr>
+                                <th>Mois</th>
+                                <th class="white-space">Nombre enseignants</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in emargements %}
+                            <tr>
+                                <td>{{ e.month }}</td>
+                                <td><span class="badge rounded-pill bg-secondary">{{ e.nombre_enseignants_impayes }}</span></td>
+                                <td>
+                                  <a class="btn btn-info btn-sm list_remun_teachers_fondamental" title="Liste" id="{{ e.month }}"><i class="bi bi-eye"></i> </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End Table with stripped rows -->
+
+                <!-- Start groupe Modal -->
+                <div class="modal fade" id="content_list" tabindex="-1">
+                  <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header bg-info text-dark">
+                        <h5 class="modal-title">Liste des enseignants imapyés du cycle fondamental </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true" class="badge bg-dark">x</span>
+                        </button>
+                      </div>
+                      <div class="modal-body" id="content-list-item"></div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Fermer</button>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- End group Modal-->
+
+                <!-- Start groupe Modal -->
+                <div class="modal fade" id="content_detail" tabindex="-1">
+                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+                      <div class="modal-header bg-info">
+                        <h5 class="modal-title">Détail des émargements</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true" class="badge bg-dark">x</span>
+                        </button>
+                      </div>
+                      <div class="modal-body" id="content-detail-emargement-teacher"></div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Fermer</button>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- End group Modal-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+{% endblock %}

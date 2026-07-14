@@ -1,0 +1,26 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">
+            {{ salle }}<hr>
+            Liste des mois que <b>{{ student.lastname|title }} {{ student.firstname|title }}</b> n'est pas autorisé à payer
+        </h5>
+        {% for autorisation in autorisations %}
+        <div class="card">
+            <div class="card-body">
+                <br>
+                <h5><b>mois : </b> {{ autorisation.month }}</h5>
+                <p><b>Justification : </b> {{ autorisation.justification }}</p>
+                <p><b>Administrateur : </b> {{ autorisation.user.last_name|title }} {{ autorisation.user.first_name|title }}</p>
+                <p><b>Date autorisation: </b>{{ autorisation.date_autorisation|date:"d/m/Y" }}</p> 
+                {% if anneeacademique.status_cloture %}
+                    <p>
+                        <a href="{% url 'autorisation/edit_autorisation_payment' autorisation.id|crypter_id %}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Modifier </a>
+                        <a class="btn btn-danger btn-sm delete-autorisation-student" id="{{ autorisation.id }}"><i class="bi bi-trash"></i> Supprimer </a>
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor%}
+    </div>
+</div>

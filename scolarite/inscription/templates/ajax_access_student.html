@@ -1,0 +1,19 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ inscription.student.lastname|title }} {{ inscription.student.firstname|title }}</h5>
+        {% if inscription.status_access %}
+        <div class="text-center" id="content-access-{{ inscriprion.id }}">
+            <p>Voulez-vous vraiment désactiver le droit d'accès de cet élève ?</p>
+            <hr>
+            <a href="#" class="btn btn-primary btn-sm access-student" id="{{ inscription.id }}"><i class="bi bi-check"></i> Valider</a>
+        </div>
+        {% else %}
+        <div class="text-center" id="content-access-{{ inscriprion.id }}">
+            <p>Voulez-vous vraiment activer le droit d'accès de cet élève ?</p>
+            <hr>
+            <a href="#" class="btn btn-primary btn-sm access-student" id="{{ inscription.id }}"><i class="bi bi-check"></i>Valider</a>
+        </div>
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,35 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ salle }}</h5>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Horaire</th>
+                        <th>Jour</th>
+                        <th>Date</th>
+                        {% if anneeacademique.status_cloture %}
+                        <th>Actions</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for emargement in emargements %}
+                        <tr>
+                            <td>{{ emargement.heure_debut }}-{{ emargement.heure_fin }}</td>
+                            <td>{{ emargement.jour }}</td>
+                            <td>{{ emargement.date_emargement|date:"d/m/Y" }}</td>
+                            {% if anneeacademique.status_cloture %}
+                            <td style="width:5px; min-width:5px; max-width:5px; white-space: nowrap;">
+                                <a class="btn btn-danger btn-sm delete-emargement" id="{{ emargement.id }}"><i class="bi bi-trash"></i></a>
+                                <a href="{% url 'edit_emargement' emargement.id|crypter_id %}" title="Modifier" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
+                            </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

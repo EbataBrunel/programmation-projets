@@ -1,0 +1,74 @@
+{% load crypto_filters %}
+
+<div class="card">
+    <div class="card-body">
+            <h5 class="card-title">Contrat du {{ contrat.date_contrat|date:"d/m/Y" }} </h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <th>Etablissement</th><td class="white-space"> : {{ contrat.etablissement }}</td>
+                    </tr>
+                    <tr>
+                        <th class="white-space">Montant par élève ({{ setting_supuser.devise }})</th> <td> : {{ contrat.amount }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th><td> : {{ contrat.description }}</td>
+                    </tr>
+                    <tr>
+                        <th class="white-space">Date début</th><td class="white-space"> : {{ contrat.start_date|date:"d/m/Y" }}</td>
+                    </tr>
+                    <tr>
+                        <th class="white-space">Date fin</th><td class="white-space"> : {{ contrat.end_date|date:"d/m/Y" }}</td>
+                    </tr>
+                    {% if contrat.status_signature %}
+                        <th>Statut</th><td class="white-space"> : <i class="bi bi-check-circle"></i> <span class="badge rounded-pill bg-success">Contrat signé</span></td>
+                    {% else %}
+                        <th>Statut</th><td class="white-space"> : <span class="content-status-contrat{{ contrat.id }}"><i class="bi bi-pencil"></i> <span class="badge rounded-pill bg-warning">Contrat à signer</span></span></td>
+                    {% endif %}
+                </table>
+            </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Signatures</h5>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Super admin</h3>
+                        <h5>{{ contrat.user.last_name|title }} {{ contrat.user.first_name|title }}</h5>
+                        <p>Date : {{ contrat.date_signature|date:"d/m/Y" }}</p>
+                    </div>
+                </div>
+            </div>
+            {% if contrat.status_signature %}
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Promoteur</h3>
+                        <h5>{{ contrat.etablissement.promoteur.last_name|title }} {{ contrat.etablissement.promoteur.first_name|title }}</h5>
+                        <p>Date : {{ contrat.date_signature|date:"d/m/Y" }}</p>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="content-signature-contrat{{ contrat.id }}">
+                            <br>
+                            <p>Cliquez sur le bouton suivant pour valider le contrat.</p>
+                            <p class="text-center">
+                                <a href="#" class="btn btn-primary btn-sm signer-contrat-etablissement" id="{{ contrat.id }}">Je signe ce contrat</a>
+                            </b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+    

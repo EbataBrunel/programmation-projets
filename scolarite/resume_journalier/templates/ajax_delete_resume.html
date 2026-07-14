@@ -1,0 +1,6 @@
+{% load crypto_filters %}
+<div class="text-center">
+    <p>Voulez-vous vraiment supprimer ce résumé journalier ?</p>
+    <p>{{ resume.date_resume|date:"d/m/Y" }}</p>
+    <a href="{% url 'del_resume' resume.id|crypter_id %}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Supprimer </b>
+</div>

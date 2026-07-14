@@ -1,0 +1,37 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ cycle }}</h5>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Libellé</th>
+                        <th>Abréviation</th>
+                        <th class="white-space">Fond text</th>
+                        <th class="white-space">Couleur text</th>
+                        {% if anneeacademique.status_cloture %}
+                        <th>Actions</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for matiere in matieres %}
+                    <tr>
+                        <td class="white-space">{{ matiere.libelle }}</td>
+                        <td class="white-space">{{ matiere.abreviation }}</td>
+                        <td class="white-space">{{ matiere.theme }}</td>
+                        <td class="white-space">{{ matiere.text_color }}</td>
+                        {% if anneeacademique.status_cloture %}
+                        <td class="white-space">
+                            <a href="{% url 'delete_matiere' matiere.id|crypter_id %}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></a>
+                            <a href="{% url 'edit_matiere' matiere.id|crypter_id %}" title="Modifier" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

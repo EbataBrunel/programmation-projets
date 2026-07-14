@@ -1,0 +1,11 @@
+{% load crypto_filters %}
+<div class="text-center">
+    <p>Voulez-vous vraiment supprimer cette publication ?</p>
+    <p>{{ publication.title }}</p>
+    {% if publication.file.url %}
+                                                <iframe src="{{ publication.file.url }}" width="100%" height="700px"></iframe>
+                                              {% else %}
+                                                <img src="{{ publication.file.url }}" style="max-width: 100%;" />
+                                              {% endif %}
+    <a href="{% url 'del_publication' publication.id|crypter_id %}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Supprimer </b>
+</div>

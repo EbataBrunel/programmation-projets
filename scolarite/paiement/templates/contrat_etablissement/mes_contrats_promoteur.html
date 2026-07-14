@@ -1,0 +1,83 @@
+{% extends 'global/base_sup_admin.html' %}
+{% block title %} {{ setting.appname }} | Mes contrats {% endblock %}
+{% block content %}
+{% load static %}
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Contrats</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'settings/db_supuser' %}">Tableau de bord</a></li>
+          <li class="breadcrumb-item active">Contrats</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Liste de mes contrats</h5>
+                <!-- Table with stripped rows -->
+                <div class="table-responsive">
+                    <table class="table datatable">
+                        <thead>
+                            <tr>
+                                <th>Etablissement</th>
+                                <th class="white-space">Date contrat</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for contrat in contrats %}
+                            <tr>
+                                <td class="white-space">{{ contrat.etablissement }}</td>
+                                <td>{{ contrat.date_contrat|date:"d/m/Y" }}</td>
+                                <td class="white-space">
+                                    <a class="btn btn-info btn-sm list_detail_contrat_promoteur" title="liste" id="{{ contrat.id }}">
+                                      {% if contrat.status_signature %}
+                                        <i class="bi bi-check-circle"></i>
+                                        <span class="badge rounded-pill bg-success">Contrat signé</span>
+                                      {% else %}
+                                        <i class="bi bi-pencil"></i>
+                                        <span class="content-status-contrat{{ contrat.id }}"><span class="badge rounded-pill bg-warning">Contrat à signer </span></span>
+                                      {% endif %}
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End Table with stripped rows -->
+
+                <!-- Start info Modal -->
+                <div class="modal fade" id="content_list" tabindex="-1">
+                  <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header bg-info text-dark">
+                        <h5 class="modal-title">Détail du contrat</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true" class="badge bg-dark">x</span>
+                        </button>
+                      </div>
+                      <div class="modal-body" id="content-list-item"></div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Fermer</button>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- End group Modal-->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+{% endblock %}

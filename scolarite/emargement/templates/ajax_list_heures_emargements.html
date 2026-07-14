@@ -1,0 +1,26 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ salle }}</h5>
+        <p class="text-center">Heure totale : <span class="badge bg-warning">{{ e.total_time }}</span></p>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Matières</th>
+                        <th class="white-space">Heure totale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in e.matieres %}
+                        <tr>
+                            <td>{{ m.matiere.id }}</td>
+                            <td>{{ m.matiere }}</td>
+                            <td><span class="badge bg-warning">{{ m.total_time_matiere }}</span></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

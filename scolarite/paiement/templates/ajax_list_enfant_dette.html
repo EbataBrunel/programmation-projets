@@ -1,0 +1,30 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title"><b>{{ parent.lastname|title }} {{ parent.firstname|title }}</b></h5>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Noms</th>
+                        <th>Prénoms</th>
+                        <th class="white-space">Dette ({{ setting.devise }})</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in students %}
+                    <tr>
+                        <td class="white-space">{{ s.student.lastname|title }}</td>
+                        <td class="white-space">{{ s.student.firstname|title }}</td>
+                        <td><span class="text-danger">{{ s.dette|floatformat:2 }}</span></td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <th colspan="2">Total ({{ setting.devise }})</th>
+                        <th><span class="text-danger">{{ dette_totale|floatformat:2 }}</span></th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ inscription.student.lastname|title }} {{ inscription.student.firstname|title }}</h5>
+        <div class="text-center">
+            <p>
+                <img src="{{ inscription.photo.url }}" alt="Photo" width="230" height="230" class="img-responsive"/>
+            </p>
+        </div>
+    </div>
+</div>

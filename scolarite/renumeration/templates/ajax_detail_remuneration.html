@@ -1,0 +1,37 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ month }}</h5>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                {% for remuneration in remunerations %}
+                <thead>
+                    <tr>
+                        <th colspan="5" class="text-center {{ setting.theme }} {{ setting.text_color }}"><h3>{{ remuneration.type_renumeration }}</h3></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th class="white-space">Salaire de base ({{ setting.devise }})</th>
+                        <th class="white-space">Indemnité ({{ setting.devise }})</th>
+                        <th class="white-space"> Salaire net ({{ setting.devise }})</th>
+                        <th class="white-space"> Date</th>
+                        <th class="white-space">Bulletin de paye</th>
+                    </tr>
+                    <tr>
+                        <td>{{ remuneration.amount|floatformat:2 }}</td>
+                        <td>{{ remuneration.indemnite|floatformat:2 }}</td>
+                        <td>{{ remuneration.total_amount|floatformat:2 }}</td>
+                        <td class="white-space">{{ remuneration.date|date:"d/m/Y" }}</td>
+                        <td class="white-space text-center">
+                            <a href="{% url 'bulletin_paie_enseignant' renumeration.id|crypter_id %}" class="btn btn-dark btn-sm"><i class="bi bi-file-earmark-pdf"></i></a>
+                        </td> 
+                    </tr>
+                </tbody>
+                {% endfor %}  
+            </table>
+        </div>
+        <br>
+        <h4 class="text-center"><b>Total ({{ setting.devise }}) : <span class="text-success">{{ montant_total|floatformat:2 }}</span></b></h4>
+    </div>
+</div>

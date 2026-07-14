@@ -1,0 +1,39 @@
+{% load static %}
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ salle }}</h5>
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th class="white-space">Noms</th>
+                    <th class="white-space">Prénoms</th>
+                    <th>Sexe</th>
+                    <th>Blocage</th>
+                    <th>Droit</th>
+                </tr>
+                {% for inscription in inscriptions %}
+                <tr>
+                    <td>{{ inscription.student.lastname|title }}</td>
+                    <td>{{ inscription.student.firstname|title }}</td>
+                    <td>{{ inscription.student.gender }}</td>
+                    <td>
+                    {% if inscription.status_block %}
+                        <span class="badge rounded-pill bg-success"><i class="bi bi-check-circle"></i></span>
+                    {% else %}
+                        <span class="badge rounded-pill bg-danger"><i class="bi bi-x-circle"></i></span>
+                    {% endif %}
+                    </td>
+                    <td>
+                    {% if inscription.status_access %}
+                        <span class="badge rounded-pill bg-success"><i class="bi bi-check-circle"></i></span>
+                    {% else %}
+                        <span class="badge rounded-pill bg-danger"><i class="bi bi-x-circle"></i></span>
+                    {% endif %}
+                    </td>
+                </tr>
+                {% endfor%}
+            </table>
+        </div>
+    </div>
+</div>

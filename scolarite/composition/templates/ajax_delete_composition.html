@@ -1,0 +1,6 @@
+{% load crypto_filters %}
+<div class="text-center">
+    <p>Voulez-vous vraiment supprimer cette composition ?</p>
+    <p>{{ composition.matiere }}</p>
+    <a href="{% url 'del_composition' composition.id|crypter_id %}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Supprimer </b>
+</div>

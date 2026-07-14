@@ -1,0 +1,26 @@
+{% load crypto_filters %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title"><b>{{ month }}</b></h5>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <tr>
+                    <th>Noms</th>
+                    <th>Prénoms</th>
+                    <th class="white-space">Indemnité ({{ setting.devise }})</th>
+                </tr>
+                <tr>
+                {% for remuneration in remunerations %}
+                    <td>{{ remuneration.user.last_name|title }} </td>
+                    <td>{{ remuneration.user.first_name|title }} </td>
+                    <td>{{ remuneration.indemnite|floatformat:2 }}</td>
+                {% endfor %}
+                </tr>
+                <tr>
+                    <th colspan="2"><b>Total ({{ setting.devise }})<b></th>
+                    <th>{{ sum_indemnite|floatformat:2 }}</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

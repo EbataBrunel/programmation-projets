@@ -1,0 +1,177 @@
+{% extends 'global/base.html' %}
+{% block title %} {{ setting.appname }} | Rémunérations des enseignants {% endblock %}
+{% block content %}
+{% load static %}
+{% load crypto_filters %}
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Rémunérations</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'settings/dashboard' request.session.classe_id|crypter_id %}">Tableau de bord</a></li>
+          <li class="breadcrumb-item active">Rémunérations des enseignants</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section profile">
+      <div class="row">
+
+        <div class="col-xl-12">
+
+          <div class="card">
+            <div class="card-body pt-3">
+              
+              <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <h3 class="card-title">Rémunérations des enseignants </h3>
+                      <!-- Bordered Tabs -->
+                      <ul class="nav nav-tabs nav-tabs-bordered">
+                        <li class="nav-item">
+                          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Cycle fondamental</button>
+                        </li>
+                        <li class="nav-item">
+                          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Cycle secondaire</button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4"></div>
+              </div>
+              <div class="tab-content pt-2">
+
+                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                    <h5 class="card-title">Liste des rénumérations des enseignants du cycle fondamental</h5>
+                    {% if anneeacademique.status_cloture %}
+                      <div align="right">
+                        {% if setting.theme == "bg-default" %}
+                        <a href="{% url 'remun_enseignant/resume_remu_enseignant_fondamental' %}" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle"></i> Enregistrer une rémunération</a>
+                        {% else %}
+                        <a href="{% url 'remun_enseignant/resume_remu_enseignant_fondamental' %}" class="btn btn-default btn-sm {{ setting.theme }} {{ setting.text_color }}"><i class="bi bi-plus-circle"></i> Enregistrer une rémunération</a>
+                        {% endif %}
+                      </div>
+                    {% endif%}
+                    <!-- Table with stripped rows -->
+                    <div class="table-responsive">
+                        <table class="table datatable">
+                            <thead>
+                                <tr>
+                                    <th>Noms</th>
+                                    <th>Prénoms</th>
+                                    <th class="white-space">Nombre rémunérations</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for re in remunerations_enseignants_fondamental %}
+                                <tr>
+                                    <td class="white-space">{{ re.user.last_name|title }}</td>
+                                    <td class="white-space">{{ re.user.first_name|title }}</td>
+                                    <td><span class="badge rounded-pill bg-secondary">{{ re.nombre_renumerations }}</span></td>
+                                    <td>
+                                      <a class="btn btn-info btn-sm list_remuneration_fondamental" title="Liste" id="{{ re.user.id }}"><i class="bi bi-eye"></i> </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End Table with stripped rows -->
+
+                </div>
+
+
+
+                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                  <h5 class="card-title">Liste des rémunérations des enseignant du cycle secondaire</h5>
+                  {% if anneeacademique.status_cloture %}
+                    <div align="right">
+                      {% if setting.theme == "bg-default" %}
+                      <a href="{% url 'remun_enseignant/resume_remu_enseignant_seondaire' %}" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle"></i> Enregistrer une rémunération</a>
+                      {% else %}
+                      <a href="{% url 'remun_enseignant/resume_remu_enseignant_seondaire' %}" class="btn btn-default btn-sm {{ setting.theme }} {{ setting.text_color }}"><i class="bi bi-plus-circle"></i> Enregistrer une rémunération</a>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                    <!-- Table with stripped rows -->
+                    <div class="table-responsive">
+                        <table class="table datatable">
+                            <thead>
+                                <tr>
+                                    <th>Noms</th>
+                                    <th>Prénoms</th>
+                                    <th class="white-space">Nombre rémunérations</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for re in remunerations_enseignants_secondaire %}
+                                <tr>
+                                    <td class="white-space">{{ re.user.last_name|title }}</td>
+                                    <td class="white-space">{{ re.user.first_name|title }}</td>
+                                    <td><span class="badge rounded-pill bg-secondary">{{ re.nombre_renumerations }}</span></td>
+                                    <td>
+                                      <a class="btn btn-info btn-sm list_remuneration_secondaire" title="Liste" id="{{ re.user.id }}"><i class="bi bi-eye"></i> </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End Table with stripped rows -->
+
+                </div>
+
+              </div><!-- End Bordered Tabs -->
+
+              <!-- Start groupe Modal -->
+                <div class="modal fade" id="content_list" tabindex="-1">
+                  <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header bg-info text-dark">
+                        <h5 class="modal-title">liste des rémunérations</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true" class="badge bg-dark">x</span>
+                        </button>
+                      </div>
+                      <div class="modal-body" id="content-list-item"></div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Fermer</button>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- End group Modal-->
+
+              <!-- Start groupe Modal -->
+                    <div class="modal fade" id="content_delete" tabindex="-1">
+                      <div class="modal-dialog modal-dialog-centered modal-sm">
+                        <div class="modal-content">
+                          <div class="modal-header bg-danger text-light">
+                            <h5 class="modal-title">Avertissement</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true" class="badge bg-dark">x</span>
+                            </button>
+                          </div>
+                          <div class="modal-body" id="content-delete-item"></div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fermer</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div><!-- End group Modal-->
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+{% endblock %}
