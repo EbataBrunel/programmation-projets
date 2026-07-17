@@ -1,0 +1,3 @@
+{% for contribution in contributions %}
+	<option value="{{ contribution.actionnaire.id }}">{{ contribution.actionnaire.last_name|title }} {{ contribution.actionnaire.first_name|title }}</option>
+{% endfor %}

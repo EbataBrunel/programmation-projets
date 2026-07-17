@@ -1,0 +1,87 @@
+{% extends 'global/base.html' %}
+{% block title %} {{ setting.appname }} | Liste des utilisateurs {% endblock %}
+{% block content %}
+{% load static %}
+{% load crypto_filters %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Utilisateurs</h1>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Liste des utilisateurs </h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Noms</th>
+                            <th>Prénoms</th>
+                            <th>Email</th>
+                            <th>NomUtil</th>
+                            <th>Permission</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td class="white-space">{{ user.last_name|title }}</td>
+                            <td class="white-space">{{ user.first_name|title }}</td>
+                            <td>{{ user.email}}</td>
+                            <td>{{ user.username }}</td>
+                            <td>
+                                <a href="{% url 'user/permission' user.id|crypter_id %}" class="btn btn-primary btn-sm">Permission</a>
+                            </td>
+                            <td>
+                                {% if request.user.is_superuser %}
+                                <a class="btn btn-danger btn-sm delete-user" id="{{ user.id }}" title="Supprimer"><i class="fa fa-trash"></i></a>&nbsp;
+                                {% endif %}
+                                <a class="btn btn-info btn-sm detail-user" id="{{ user.id }}" title="Info"><i class="fa fa-eye"></i></a>
+                            </td>
+                        </tr> 
+                        {% endfor %}
+                    </tbody>  
+                </table>
+            </div>  
+            
+            <!-- Delete Modal-->
+            <div class="modal fade" id="content-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-light">
+                            <h5 class="modal-title" id="exampleModalLabel"><span align="center"> Suppression</span></h5>
+                        </div>
+                        <div class="modal-body" id="content-delete-item"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal delete -->
+
+            <!-- Info Modal-->
+            <div class="modal fade" id="show-detail-user" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-light">
+                            <h5 class="modal-title" id="exampleModalLabel"><span align="center"> Détail </span></h5>
+                        </div>
+                        <div class="modal-body" id="content-detail-user"></div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Fermer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end modal info -->
+
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

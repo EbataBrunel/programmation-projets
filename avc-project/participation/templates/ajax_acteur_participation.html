@@ -1,0 +1,3 @@
+{% for acteur in acteurs %}
+<option value="{{ acteur.id }}">{{ acteur.last_name|title }} {{ acteur.first_name|title }}</option>
+{% endfor %}

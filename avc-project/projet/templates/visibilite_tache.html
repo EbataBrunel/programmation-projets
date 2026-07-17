@@ -1,0 +1,5 @@
+{% if projet.visibilite_tache %}
+    <button class="btn btn-success btn-sm visibilite-tache" id="{{ projet.id }}">Visible</button>
+{% else %}
+    <button class="btn btn-danger btn-sm visibilite-tache" id="{{ projet.id }}">Non visible</button>
+{% endif %}

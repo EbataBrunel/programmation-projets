@@ -1,0 +1,124 @@
+{% extends 'global/base.html' %}
+{% block title %} {{ setting.appname}} | Mon profil {% endblock %}
+{% block content %}
+{% load static %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Tableau de bord</h1>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Mon Profil </h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4" align="center">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {{ message.tags }} text-center">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <strong>{{ message }}</strong>
+                            </div> 
+                        {% endfor %}
+                    {% endif %}
+                    <a href="#" data-toggle="modal" data-target="#profileModal" style="text-decoration: none; color: black;">
+                        {% if profile.photo %}
+                        <img class="img-circle img-fluid" width="200px" height="250px" src="{{ profile.photo.url }}">
+                        <p><span align="center">Membre depuis le <b>{{ request.user.date_joined|date:"d/m/Y" }}</b></span></p>
+                        {% else %}
+                        <img class="img-circle img-fluid" width="300px" src="{% static 'img/user.png' %}">
+                        <p><span align="center">Membre depuis le <b>{{ request.user.date_joined|date:"d/m/Y" }}</b></span></p>
+                        {% endif %}
+                    </a>
+                    <!-- Profile Modal-->
+                    <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content {{ setting.theme }}">
+                                <div class="modal-header text-light">
+                                    <h3 class="modal-title" id="exampleModalLabel"><span align="center">Photo de profil</span></h3>
+                                </div>
+                                <div class="modal-body">
+                                    {% if profile.photo %}
+                                        <img class="img-circle img-fluid" width="300px" height="350px" src="{{ profile.photo.url }}">
+                                        {% else %}
+                                        <img class="img-circle img-fluid" width="300px" height="350px" src="{% static 'dist/img/user.png' %}">
+                                    {% endif %}
+                                </div>
+                                <div class="modal-footer">
+                                    <form method="POST" action="" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <button class="btn btn-danger btn-sm pull-left" type="button" data-dismiss="modal"> Fermer</button>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-1">
+                                                    <input type="file" name="photo" class="form-control"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button class="btn btn-primary btn-sm pull-right">Valider</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <table class="table">
+                        <tr>
+                            <th>Noms : </th>
+                            <td>{{ request.user.last_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Prénom : </th>
+                            <td>{{ request.user.first_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Nom utilisateur : </th>
+                            <td>{{ request.user.username }}</td>
+                        </tr>
+                        <tr>
+                            <th>Sexe </th>
+                            <td>{{ profile.gender }}</td>
+                        </tr>
+                        <tr>
+                            <th>Adresse </th>
+                            <td>{{ profile.address }}</td>
+                        </tr>
+                        <tr>
+                            <th>Téléphone <i class="fa fa-phone"></i> </th>
+                            <td>{{ profile.phone }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email <i class="fa fa-envelope"></i> </th>
+                            <td>{{ request.user.email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Profession  </th>
+                            <td>{{ profile.profession }}</td>
+                        </tr>
+                        <tr>
+                            <th>Pays de résidence  </th>
+                            <td>{{ profile.country }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div> 
+            
+            <div>
+                <a href="{% url 'user/edit_profile' %}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> Mise à jour du profile</a>&nbsp;
+                <a href="{% url 'password_change' %}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Changer le mot de passe</a>
+            </diV>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

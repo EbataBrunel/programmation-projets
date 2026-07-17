@@ -1,0 +1,69 @@
+{% extends 'global/base.html' %}
+{% block title %} {{ setting.appname }} | Ajout d'une dévise {% endblock %}
+{% block content %}
+{% load static %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Dévises</h1>
+    <ol class="breadcrumb">
+        <li><a href="{% url 'index' %}" style="text-decoration:none"><i class="fas fa-fw fa-tachometer-alt"></i> Tableau de bord </a> < </li> 
+        <li><a href="{% url 'devises' %}" style="text-decoration:none"> Dévises </a> < </li> 
+        <li class="active">Ajout</li>
+    </ol>
+    
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Enregistrer une dévise</h6>
+        </div>
+        <div class="card-body">
+            <!-- On inclut l'image de chargement -->
+            {% include 'global/_loading.html' %}
+            <form method="post" action="" id="formDevise">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="nom">Nom *</label>
+                           <input type="text" name="nom" id="nom" class="form-control" required> 
+                        </div>
+                        <div class="form-group">
+                            <label for="symbole">Symbole *</label>
+                           <input type="text" name="symbole" id="symbole" class="form-control" required> 
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>    
+                <br>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="{% url 'devises' %}" class="btn btn-secondary btn-sm"><i class="fa fa-arrow-circle-left"></i> Retour</a>&nbsp;
+                        <button class="btn btn-primary btn-sm"><i class="fa fa-check"></i> Valider</button>
+                    </div>
+                </div>
+            </form>   
+            
+            <!-- Start message Modal -->
+            <div class="modal fade" id="message" tabindex="-1">
+                <div class="modal-dialog modal-sm">
+                  <div class="modal-content bg-gradient-dark">
+                    <div class="modal-header">
+                      <h5 class="modal-title text-light"><i class="fa fa-info-circle"></i> Information</h5>
+                    </div>
+                    <div class="modal-body" id="content-message"></div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary btn-sm text-center" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Fermer</button>
+                    </div>
+                  </div>
+                </div>
+            </div><!-- End message Modal-->
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

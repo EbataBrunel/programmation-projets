@@ -1,0 +1,5 @@
+{% if projet.visibilite_progres %}
+    <button class="btn btn-success btn-sm visibilite-progres" id="{{ projet.id }}">Visible</button>
+{% else %}
+    <button class="btn btn-danger btn-sm visibilite-progres" id="{{ projet.id }}">Non visible</button>
+{% endif %}

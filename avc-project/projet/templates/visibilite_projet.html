@@ -1,0 +1,28 @@
+{% if projet.visibilite_projet %}
+<a class="btn btn-success btn-sm" href="#" data-toggle="modal" data-target="#visibiliteModal{{ projet.id }}" title="Visibilié">Visible</a>
+{% else %}
+<a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#visibiliteModal{{ projet.id }}" title="Visibilié">Non visible</a>
+{% endif %}
+<!-- Visibilité Modal-->
+<div class="modal fade" id="visibiliteModal{{ projet.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-light {{ setting.theme }}">
+                <h5 class="modal-title" id="exampleModalLabel"><span align="center"> Visibilité du projet</span></h5>
+            </div>
+            <div class="modal-body text-center">
+                <p>{{ projet }}</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Fermer</button>
+                {% if projet.visibilite_projet %}
+                <button class="btn btn-danger btn-sm visibilite-projet" id="{{ projet.id }}"><i class="fa fa-check"></i> Annuler la visibilité</button>
+                {% else %}
+                <button class="btn btn-primary btn-sm visibilite-projet" id="{{ projet.id }}"><i class="fa fa-check"></i> Rendre public</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal Visibilité -->

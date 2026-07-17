@@ -1,0 +1,50 @@
+{% load static %}
+<div class="row">
+    <div class="col-md-4">
+        {% if user.profile.photo %}
+            <img class="img-responsive rounded-circle" width="300px" height="350px" src="{{ user.profile.photo.url }}">
+            <p class="text-center">Membre depuis le <b>{{ user.date_joined|date:"d/m/Y" }}</b></p>
+        {% else %}
+            <img class="img-responsive rounded-circle" width="300px" src="{% static 'img/user.png' %}">
+            <p class="text-center">Membre depuis le <b>{{ user.date_joined|date:"d/m/Y" }}</b></p>
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th>NOMS : </th>
+                    <td>{{ user.last_name }}</td>
+                </tr>
+                <tr>
+                    <th>PRENOMS : </th>
+                    <td>{{ user.first_name }}</td>
+                </tr>
+                <tr>
+                    <th>NOM UTILISATEUR : </th>
+                    <td>{{ user.username }}</td>
+                </tr>
+                <tr>
+                    <th>SEXE </th>
+                    <td>{{ user.profile.gender }}</td>
+                </tr>
+                <tr>
+                    <th>ADRESSE </th>
+                    <td>{{ user.profile.address }}</td>
+                </tr>
+                <tr>
+                    <th>TELEPHONE <i class="fa fa-phone"></i> </th>
+                    <td>{{ user.profile.phone }}</td>
+                </tr>
+                <tr>
+                    <th>EMAIL <i class="fa fa-envelope"></i> </th>
+                    <td>{{ user.email }}</td>
+                </tr>
+                <tr>
+                    <th>PROFESSION </th>
+                    <td>{{ user.profile.profession }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

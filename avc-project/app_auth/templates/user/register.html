@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Créer un compte</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+
+</head>
+
+<body class="{{ setting.theme }}">
+
+    <div class="container">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="p-5">
+                            {% if setting.logo %}
+                                <img class="img-circle" width="300px" height="350px" src="{{ setting.logo.url }}">
+                            {% else %}
+                                <img class="img-circle" width="300px" src="{% static 'img/user.png' %}">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Créer un compte</h1>
+                            </div>
+                            <form class="user" method="post" action="">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <span class="lbl">{{ form.username.label }} *</span><br>
+                                            {{ form.username }}
+                                        </div>
+                                        <div class="form-group">
+                                            <span class="lbl">{{ form.last_name.label }} *</span><br>
+                                            {{ form.last_name }}
+                                        </div>
+                                        <div class="form-group">
+                                            <span class="lbl">{{ form.first_name.label }} *</span><br>
+                                            {{ form.first_name }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <span class="lbl">{{ form.email.label }} *</span><br>
+                                            {{ form.email }}
+                                        </div>
+                                        <div class="form-group">
+                                            <span class="lbl">{{ form.password1.label }} *</span><br>
+                                            {{ form.password1 }}
+                                        </div>
+                                        <div class="form-group">
+                                            <span class="lbl">{{ form.password2.label }} *</span><br>
+                                            {{ form.password2 }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check"></i><span class="lbl"> Créer un compte</span></button>
+                                </div>
+                            </form>
+                            <hr>
+                            <div class="text-center">
+                                <a class="small" href="forgot-password.html">Forgot Password?</a>
+                            </div>
+                            <div class="text-center">
+                                Avez-vous déjà un compte ? <a class="small" href="{% url 'connection/login' %}" style="text-decoration:none"> Se connecter !</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+</body>
+
+</html>

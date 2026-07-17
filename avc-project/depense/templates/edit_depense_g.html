@@ -1,0 +1,109 @@
+{% extends 'global/base.html' %}
+{% block title %} {{ setting.appname }} | Edition d'une dépense {% endblock %}
+{% block content %}
+{% load static %}
+{% load crypto_filters %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Dépenses</h1>
+    <ol class="breadcrumb">
+        <li><a href="{% url 'index' %}" style="text-decoration:none"><i class="fas fa-fw fa-tachometer-alt"></i> Tableau de bord </a> < </li> 
+        <li><a href="{% url 'depense_projet_g' %}" style="text-decoration:none"> Projets </a> < </li> 
+        <li><a href="{% url 'depense_tache_p' depense.projet.id %}" style="text-decoration:none"> Tâches </a> < </li>
+        <li class="active">Tâches</li>
+    </ol>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Edition d'une dépense du projet en commun</h6>
+        </div>
+        <div class="card-body">
+            <!-- On inclut l'image de chargement -->
+            {% include 'global/_loading.html' %}
+            <form method="post" action="" id="formUpdateDepensePersonnelle">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="text" name="id" value="{{ depense.id }}" hidden="True" required="True">
+                        <div class="form-group">
+                            <label for="projet">Projet *</label>
+                            <select name="projet" id="projet" class="form-control" required>
+                               <option value="{{ depense.projet.id }}">{{ depense.projet }}</option>
+                               {% for projet in projets %}
+                               <option value="{{ projet.id }}">{{ projet }}</option>
+                               {% endfor %}
+                            </select>
+                        </div>
+                        <div class="viewtache">
+                            <div class="form-group">
+                                <label for="tache">Tâche *</label>
+                                <select name="tache" id="tache" class="form-control" required>
+                                    <option value="{{ depense.tache.id }}">{{ depense.tache }}</option>
+                                    {% for tache in taches %}
+                                    <option value="{{ tache.id }}">{{ tache }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description *</label>
+                            <textarea name="description" id="description" class="form-control" placeholder="Saisir la description ici" rows="6">{{ depense.description }}</textarea> 
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="montant">Montant <span class="content_devise">({{ depense.projet.devise }})</span> *</label>
+                           <input type="text" name="montant" id="montant" value="{{ depense.montant }}" class="form-control" required> 
+                        </div>
+                        <div class="form-group">
+                            <label for="date_paiement">Date de paiement *</label>
+                           <input type="date" name="date_paiement" id="date_paiement" value="{{ depense.date_paiement|date:"Y-m-d"}}" class="form-control" required> 
+                        </div>
+                        <div class="viewtache">
+                            <div class="form-group">
+                                <label for="type_depense">Type de dépense *</label>
+                                <select name="type_depense" id="type_depense" class="form-control" required>
+                                    <option value="{{ depense.type_depense }}">{{ depense.type_depense }}</option>
+                                    {% for type in type_depenses %}
+                                    <option value="{{ type }}">{{ type }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div id="content_other_type"></div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="{% url 'depense_tache_g' depense.projet.id|crypter_id %}" class="btn btn-secondary btn-sm"><i class="fa fa-arrow-circle-left"></i> Retour</a>&nbsp;
+                        <button class="btn btn-primary btn-sm"><i class="fa fa-check"></i> Valider</button>
+                    </div>
+                </div>
+            </form>   
+            
+            <!-- Start message Modal -->
+            <div class="modal fade" id="message" tabindex="-1">
+                <div class="modal-dialog modal-sm">
+                  <div class="modal-content bg-gradient-dark">
+                    <div class="modal-header">
+                      <h5 class="modal-title text-light"><i class="fa fa-info-circle"></i> Information</h5>
+                    </div>
+                    <div class="modal-body" id="content-message"></div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary btn-sm text-center" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Fermer</button>
+                    </div>
+                  </div>
+                </div>
+            </div><!-- End message Modal-->
+
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

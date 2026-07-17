@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document du projet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%; /* Assure une hauteur minimale */
+            box-sizing: border-box; /* Pour inclure les bordures et paddings dans la taille */
+            overflow-x: hidden; /* Empêche le défilement horizontal si le contenu dépasse */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cv-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .header {
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+        }
+
+        .content {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            font-size: 1.5em;
+            color: rgb(63, 109, 159);
+            border-bottom: 2px solid rgb(63, 109, 159);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .section ul li {
+            margin-bottom: 10px;
+        }
+
+        .section ul li strong {
+            color: #333;
+        }
+
+        .skills span {
+            display: inline-block;
+            background: rgb(63, 109, 159);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 5px 5px 0 0;
+            font-size: 0.9em;
+        }
+
+        .footer {
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 10px;
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        .footer a {
+            color: rgb(63, 109, 159);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .bg-gradient-primary{
+            background-color: #4e73df;
+        }
+
+        .bg-gradient-success{
+            background-color: #1cc88a;
+        }
+
+        .bg-gradient-info{
+            background-color: #36b9cc;
+        }
+        .bg-gradient-warning{
+            background-color: #f6c23e;
+        }
+        .bg-gradient-danger{
+            background-color: #e74a3b;
+        }
+        .bg-gradient-secondary{
+            background-color: #858796;
+        }
+
+        .bg-gradient-dark{
+            background-color: #5a5c69;
+        }
+
+        .text-primary
+        {
+            color: #4e73df;
+        }
+
+        .logo_contrat {
+            width:100px; 
+            height:auto; 
+            display:block; 
+            margin:20px auto;
+        }
+
+        .content_cout{
+            padding:20px;
+            text-align: center;
+            float: right;
+            text-color: white
+        }
+    </style>
+</head>
+<body>
+    <div class="cv-container">
+        <div class="header {{ setting.theme }}">
+            <h3>Décharge</h3>
+        </div>
+
+        {% if setting.logo %}
+            <div class="section">
+                <img src="data:image/png;base64,{{ base64_image }}" class="logo_contrat" alt="Logo de {{ setting.appname }}">
+            </div>
+        {% endif %}
+
+        <div class="content">
+
+            {% if contratremboursement %}
+                <div class="section">
+                    <h2></h2>
+                    <p>Je sousigné Monsieur {{ projet.responsable.first_name|title }} {{ projet.responsable.last_name|title }}, je reconnais de pouvoir remboursé une somme de {{ contratremboursement.montant_remboursement }}{{ projet.devise }} du projet {{ projet }}.</p>
+                    <p>Cette somme serait absolument remboursé dans un intervalle du {{ contratremboursement.date_debut|date:"d/m/Y" }} au {{ contratremboursement.date_fin|date:"d/m/Y" }}.</p>
+                </div>
+            {% endif %}
+            
+            {% if signatures %}
+                <div class="section">
+                    <h2>Liste des actionnaires</h2>
+                    <ul>
+                        {% for signature in signatures %}
+                            <li>{{ signature.membre.first_name|title }} {{ signature.membre.last_name|title }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 Brunel EBATA-ATIPO. Tous droits réservés. <a href="#">Contactez-moi</a></p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{% extends 'global/base.html' %}
+{% block title %} {{ setting.appname }} | Edition d'un projet {% endblock %}
+{% block content %}
+{% load static %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Tableau de bord</h1>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Edition d'un projet</h6>
+        </div>
+        <div class="card-body">
+            <form method="post" action="" id="formUpdateProjet">
+                {% csrf_token %}
+                <div class="row">
+                    <input type="text" name="id" value="{{ projet.id }}" hidden="True" required="True">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="nom">Nom *</label>
+                           <input type="text" name="nom" id="nom" value="{{ projet.nom }}" class="form-control" required> 
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description *</label>
+                            <input type="text" name="description" id="description" value="{{ projet.description }}" class="form-control"> 
+                        </div>
+                        <div class="form-group">
+                            <label for="date_debut">Date de début *</label>
+                           <input type="date" name="date_debut" id="date_debut" value="{{ projet.date_debut|date:"Y-m-d" }}" class="form-control" required> 
+                        </div>
+                        <div class="form-group">
+                            <label for="date_fin">Date de fin *</label>
+                           <input type="date" name="date_fin" id="date_fin" value="{{ projet.date_fin|date:"Y-m-d" }}" class="form-control" required> 
+                        </div>
+                        <div class="form-group">
+                            <label for="type_projet">Type de projet *</label>
+                            <select name="type_projet" class="form-control" required>
+                                <option value="{{ projet.type }}">{{ projet.type }}</option>
+                                {% for type in types %}
+                                    <option value="{{ type }}">{{ type }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="cout_estime">Cout estimé *</label>
+                           <input type="text" name="cout_estime" id="cout_estime" class="form-control" required> 
+                        </div>
+                        <div class="form-group">
+                            <label for="cout_reel">Cout réel *</label>
+                           <input type="text" name="cout_reel" id="cout_reel" class="form-control" required> 
+                        </div>
+                        <div class="form-group">
+                            <label for="responsable">Responsable *</label>
+                            <select name="responsable" class="form-control" required>
+                                <option value="{{ projet.responsable.id }}">{{ projet.responsable.last_name|title }} {{ projet.responsable.first_name|title }}</option>
+                                {% for responsable in responsables %}
+                                    <option value="{{ responsable.id }}">{{ responsable.last_name|title }} {{ responsable.first_name|title }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="{% url 'user/profile' %}" class="btn btn-secondary btn-sm"><i class="fa fa-arrow-circle-left"></i> Retour</a>&nbsp;
+                        <button class="btn btn-primary btn-sm"><i class="fa fa-check"></i> Valider</button>
+                    </div>
+                </div>
+            </form>         
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

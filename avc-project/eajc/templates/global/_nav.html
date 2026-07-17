@@ -1,0 +1,166 @@
+<!-- Sidebar -->
+{% if setting.theme %}
+<ul class="navbar-nav {{ setting.theme }} sidebar sidebar-dark accordion" id="accordionSidebar">
+{% else %}
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+{% endif %}
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'index' %}">
+        <div class="sidebar-brand-icon rotate-n-15">
+                {% if setting.logo %}
+                <img style="border-radius:100%" src="{{ setting.logo.url }}" width="{{ setting.width_logo }}" height="{{ setting.height_logo }}" alt="EAJC">
+                {% else %}
+                <h3><b>{{ setting.appname }}</b></h3>
+                {% endif %}
+        </div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item {% if request.path == '/' or 'index' in request.path %}active{% else %}{% endif %}">
+        <a class="nav-link" href="{% url 'index' %}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Tableau de bord</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Interface
+    </div>
+
+    <!-- Nav Item - Charts -->
+    <li class="nav-item {% if 'user/users' in request.path or 'user/permission' in request.path %}active{% else %}{% endif %}">
+        <a class="nav-link" href="{% url 'user/users' %}">
+            <i class="fas fa-fw fa-user"></i>
+            <span>Utilisateurs</span></a>
+    </li>
+
+    {% if request.user.is_superuser %}
+    <li class="nav-item {% if 'devises' in request.path or 'add_devise' in request.path or 'edit_devise' in request.path %}active{% else %}{% endif %}">
+        <a class="nav-link" href="{% url 'devises' %}">
+            <i class="fas fa-fw fa-list"></i>
+            <span>Dévises</span></a>
+    </li>
+    {% endif %}
+    <!-- Nav Item - Utilities Collapse Menu -->
+    <li class="nav-item {% if 'proj_p' in request.path or 'add_pp' in request.path or 'edit_pp' in request.path or 'proj_g' in request.path or 'add_pg' in request.path or 'edit_pg' in request.path or 'proj_perso_partage' in request.path %}active{% else %}{% endif %}">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+            aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Gestion des projets</span>
+        </a>
+        <div id="collapseUtilities" class="collapse {% if 'proj_p' in request.path or 'add_pp' in request.path or 'edit_pp' in request.path or 'proj_g' in request.path or 'add_pg' in request.path or 'edit_pg' in request.path or 'proj_perso_partage' in request.path %}show{% endif %}" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Type de projets:</h6>
+                <a class="collapse-item" href="{% url 'proj_p' %}">Projets personnels</a>
+                <a class="collapse-item" href="{% url 'proj_g' %}">Projets en commun</a>
+                <a class="collapse-item" href="{% url 'proj_perso_partage' %}">Projets perso partagés</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Addons
+    </div>
+
+    <li class="nav-item {% if 'participations' in request.path or 'add_participation' in request.path or 'contributions' in request.path or 'add_contribution' in request.path in 'edit_contribution' in request.path %}active{% else %}{% endif %}">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages"
+            aria-expanded="true" aria-controls="collapsePages">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Acteurs et actionnaires</span>
+        </a>
+        <div id="collapsePages" class="collapse {% if 'participations' in request.path or 'add_participation' in request.path or 'edit_participation' in request.path or 'contributions' in request.path or 'add_contribution' in request.path or 'edit_contribution' in request.path %}show{% endif %}" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Les acteurs:</h6>
+                <a class="collapse-item" href="{% url 'participations' %}">Acteurs</a>
+                <a class="collapse-item" href="{% url 'contributions' %}">Actionnaires</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item {% if 'contratremboursement/contrats_remboursements' in request.path or 'contratremboursement/add_contrat_remboursement' in request.path or 'contratremboursement/edit_contrat_remboursement' in request.path or 'remboursement/remboursements' in request.path or 'remboursement/add_remboursement' in request.path or 'remboursement/edit_remboursement' in request.path %}active{% else %}{% endif %}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseContrats"
+            aria-expanded="true" aria-controls="collapseContrats">
+            <i class="fas fa-fw fa-tags"></i>
+            <span>Gestion des contrats</span>
+        </a>
+        <div id="collapseContrats" class="collapse {% if 'contratremboursement/contrats_remboursements' in request.path or 'contratremboursement/add_contrat_remboursement' in request.path or 'contratremboursement/edit_contrat_remboursement' in request.path or 'remboursement/remboursements' in request.path or 'remboursement/add_remboursement' in request.path or 'remboursement/edit_remboursement' in request.path %}show{% endif %}" aria-labelledby="headingContrats" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Type de Contrats:</h6>
+                <a class="collapse-item" href="{% url 'contratremboursement/contrats_remboursements' %}">Contrat de remb</a>
+                <a class="collapse-item" href="{% url 'remboursement/remboursements' %}">Remboursements</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item {% if 'taches_p' in request.path or 'add_tp' in request.path or 'edit_tp' in request.path or 'taches_g' in request.path or 'add_tg' in request.path or 'edit_tg' in request.path %}active{% else %}{% endif %}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTasks"
+            aria-expanded="true" aria-controls="collapseTasks">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Gestion des tâches</span>
+        </a>
+        <div id="collapseTasks" class="collapse {% if 'taches_p' in request.path or 'add_tp' in request.path or 'edit_tp' in request.path or 'taches_g' in request.path or 'add_tg' in request.path or 'edit_tg' in request.path %}show{% endif %}" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Type de taches:</h6>
+                <a class="collapse-item" href="{% url 'taches_p' %}">Tâches personnelles</a>
+                <a class="collapse-item" href="{% url 'taches_g' %}">Tâches en commun</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item {% if 'depense_projet_p' in request.path or 'add_depense_p' in request.path or 'edit_depense_p' in request.path or 'depense_tache_p' in request.path or 'depense_projet_g' in request.path or 'add_depense_g' in request.path or 'edit_depense_g' in request.path or 'depense_tache_g' in request.path %}active{% else %}{% endif %}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cogs"></i>
+            <span>Gestion de dépenses</span>
+        </a>
+        <div id="collapseTwo" class="collapse {% if 'depense_projet_p' in request.path or 'add_depense_p' in request.path or 'edit_depense_p' in request.path or 'depense_tache_p' in request.path or 'depense_projet_g' in request.path or 'add_depense_g' in request.path or 'edit_depense_g' in request.path or 'depense_tache_g' in request.path %}show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Dépense de prjets:</h6>
+                <a class="collapse-item" href="{% url 'depense_projet_p' %}">Dépenses personnelles</a>
+                <a class="collapse-item" href="{% url 'depense_projet_g' %}">Dépenses en commun</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item {% if 'progres_p' in request.path or 'add_prog_p' in request.path or 'edit_prog_p' in request.path or 'progres_g' in request.path or 'add_prog_g' in request.path or 'edit_prog_g' in request.path %}active{% else %}{% endif %}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProgress"
+            aria-expanded="true" aria-controls="collapseProgress">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Gestion des progrès</span>
+        </a>
+        <div id="collapseProgress" class="collapse {% if 'progres_p' in request.path or 'add_prog_p' in request.path or 'edit_prog_p' in request.path or 'progres_g' in request.path or 'add_prog_g' in request.path or 'edit_prog_g' in request.path %}show{% endif %}" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Les progrès:</h6>
+                <a class="collapse-item" href="{% url 'progres_p' %}">Progrès proj personnels</a>
+                <a class="collapse-item" href="{% url 'progres_g' %}">Progrès proj en commun</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>
+<!-- End of Sidebar -->

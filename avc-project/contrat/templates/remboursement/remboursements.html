@@ -1,0 +1,245 @@
+{% extends 'global/base.html' %}
+{% block title %} {{ setting.appname }} | Liste des remboursements {% endblock %}
+{% block content %}
+{% load static %}
+{% load crypto_filters %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Contrats</h1>
+    <ol class="breadcrumb">
+        <li><a href="{% url 'index' %}" style="text-decoration:none"><i class="fas fa-fw fa-tachometer-alt"></i> Tableau de bord </a> < </li> 
+        <li class="active">Contrats</li>
+    </ol>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Liste des remboursements</h6>
+        </div>
+        <div class="card-body">
+            {% if request.user.is_superuser%}
+            <div align="right">
+                <a href="{% url 'remboursement/add_remboursement' %}" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Enregistrer un remboursement</a>
+            </div>
+            <br>
+            {% endif %}
+            
+            {% if contrats %}
+                {% for c in contrats %}
+                    <div class="col-md-12 col-lg-12">
+                        <div class="card mb-4 py-3 border-bottom-dark">
+                            <div class="card-body">
+                                <h5><b>Projet</b></h5>
+                                <p>{{ c.contratremboursement.projet }}</p>
+                                <p><b>Responsable : </b> {{ c.contratremboursement.projet.responsable.last_name|title }} {{ c.contratremboursement.projet.responsable.first_name|title }}</p>
+                                <p><b>Montant à rembourser : </b><span class="text-primary">{{ c.contratremboursement.montant_remboursement }}{{ c.contratremboursement.projet.devise }}</span></p>
+                                <p>
+                                    <a class="btn btn-info btn-sm" href="#" data-toggle="modal" data-target="#detailModal{{ c.contratremboursement.id }}" title="Détail"><i class="fa fa-eye"></i> Détail</a>
+                                    <!-- debut detail modal -->
+                                    <div class="modal fade" id="detailModal{{ c.contratremboursement.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                    aria-hidden="true">
+                                        <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-info text-light">
+                                                    <h5 class="modal-title" id="exampleModalLabel"><b class="text-center"> Liste des remboursements </b></h5>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div style="border-radius:10px; padding: 10px" class="{{ setting.theme }} text-light">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <h5>Projet :</h5>
+                                                                <p>{{ c.contratremboursement.projet }}</p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <h5>Responsable :</h5>
+                                                                <p>{{ c.contratremboursement.projet.responsable.last_name|title }} {{ c.contratremboursement.projet.responsable.first_name|title }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <p>Montant à rembourser : <span class="text-primary">{{ c.contratremboursement.montant_remboursement }}{{ c.contratremboursement.projet.devise }}</span></p>
+                                                                <p>Montant remboursé : <span class="text-primary">{{ c.remboursement_total }}{{ c.contratremboursement.projet.devise }}</span></p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p>Montant restant : <span class="text-primary">{{ c.reste_remboursement }}{{ c.contratremboursement.projet.devise }}</span></p>
+                                                                {% if c.contratremboursement.statut == "Non commencé" %}
+                                                                    <p><b>Statut : </b> <span class="text-primary">Non commencé</span></p>
+                                                                {% elif c.contratremboursement.statut == "En cours" %}
+                                                                    <p><b>Statut : </b> <span class="text-warning">En cours ...</span></p>
+                                                                {% else %}
+                                                                    <p><b>Statut : </b> <span class="text-success">Terminé</span></p>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    {% for r in c.remboursements %}
+                                                        <div class="card mb-4 py-3 border-bottom-dark">
+                                                            <div class="card-body">
+                                                                <h5><b>Description</b></h5>
+                                                                <p>{{ r.remboursement.justification }}</p>
+                                                                <p><b>Montant de remboursement : </b>{{ r.remboursement.montant_remboursement }}{{ c.contratremboursement.projet.devise }}</p>
+                                                                <span id="content_statut{{ r.remboursement.id }}">
+                                                                {% if r.remboursement.statut == "En attente" %}
+                                                                <p><b>Statut : </b> <span class="text-primary">{{ r.remboursement.statut }}</span></p>
+                                                                {% elif r.remboursement.statut == "Approuvé" %}
+                                                                <p><b>Statut : </b> <span class="text-success">Approuvé ...</span></p>
+                                                                {% else %}
+                                                                <p><b>Statut : </b> <span class="text-danger">Refusé</span></p>
+                                                                {% endif %}
+                                                                </span>
+                                                                <p><b>Date de remboursement : </b>{{ r.remboursement.date_remboursement|date:"d/m/Y" }} </p>
+                                                                <p><b>Actionnaire : </b>{{ r.remboursement.actionnaire.last_name|title }} {{ r.remboursement.actionnaire.first_name|title }}</p>
+                                                                <p><b>Mode de paiement : </b>{{ r.remboursement.mode_paiement|date:"d/m/Y" }} </p>
+                                                                <p>
+                                                                    {% if request.user.is_superuser %}
+                                                                        <a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#delModal{{ r.remboursement.id }}" title="Supprimer"><i class="fa fa-trash"></i> Supprimer</a>&nbsp;
+                                                                        <a href="{% url 'remboursement/edit_remboursement' r.remboursement.id|crypter_id %}" title="Modifier" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> Modifier</a>&nbsp;
+                                                                        {% if r.signatures %}
+                                                                        <a class="btn btn-dark btn-sm" href="#" data-toggle="modal" data-target="#signatureModal{{ r.remboursement.id }}" title="Confirmer"><i class="fa fa-file"></i> Signature</a>&nbsp;
+                                                                        {% endif %}
+                                                                    {% endif %}
+                                                                    <span id="button-statut">
+                                                                    {% if r.remboursement.actionnaire.id == request.user.id and r.remboursement.statut == "En attente" %}
+                                                                    <a class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#confirmModal{{ r.remboursement.id }}" title="Confirmer"><i class="fa fa-check"></i> Confirmer le remboursement</a> 
+                                                                    {% else %}
+                                                                        {% if c.existence_signature %}
+                                                                            <a class="btn btn-dark btn-sm" href="{% url 'document_decharge_remboursement' r.remboursement.id|crypter_id %}"><i class="fa fa-download"></i> Télécharger la décharge</a>   
+                                                                        {% endif %} 
+                                                                    {% endif %}
+                                                                    </span>
+                                                                    <!-- Delete Modal-->
+                                                                    <div class="modal fade" id="delModal{{ r.remboursement.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                                    aria-hidden="true">
+                                                                        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header bg-danger text-light">
+                                                                                    <h5 class="modal-title" id="exampleModalLabel"><span align="center"> Suppression</span></h5>
+                                                                                </div>
+                                                                                <div class="modal-body text-center">Voulez-vous vraiment supprimer ce remboursement ?</div>
+                                                                                <div class="modal-footer">
+                                                                                    <button class="btn btn-secondary btn-sm close-modal" id="{{ r.remboursement.id }}"><b>X</b> Annuler</button>
+                                                                                    <a class="btn btn-danger btn-sm" href="{% url 'del_remboursement' r.remboursement.id|crypter_id %}"><i class="fa fa-trash"></i> Supprimer</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- end modal Delete -->
+
+                                                                    <!-- Confirm Modal-->
+                                                                    <div class="modal fade" id="confirmModal{{ r.remboursement.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                                    aria-hidden="true">
+                                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header bg-primary text-light">
+                                                                                    <h5 class="modal-title" id="exampleModalLabel"><span align="center"> confirmation</span></h5>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    <p class="text-center">Approuver si vous avez reçu l'argent ou réjeter sinon.</p>
+                                                                                    <form method="post" action="" id="formUpdateStatutRemboursement">
+                                                                                        {% csrf_token %}
+                                                                                        <input type="text" name="id" value="{{ r.remboursement.id }}" hidden="True" required="True">
+                                                                                        <div class="form-group">
+                                                                                            <label for="statut">Selectionner un statut *</label>
+                                                                                            <select name="statut" id="statut" class="form-control" required>
+                                                                                                <option value=""> -- Selectionnez un statut </option>
+                                                                                                <option value="Approuvé">Approuvé</option>
+                                                                                                <option value="Refusé">Refusé</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                        <p class="text-center">
+                                                                                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check-circle"></i> Valider</button>
+                                                                                        </p>
+                                                                                    </form>
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button class="btn btn-secondary btn-sm close-modal-statut" id="{{ r.remboursement.id }}"><b>X</b> Annuler</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- end modal Confirm -->
+
+                                                                    <!-- Signature Modal-->
+                                                                    <div class="modal fade" id="signatureModal{{ r.remboursement.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                                    aria-hidden="true">
+                                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header bg-dark text-light">
+                                                                                    <h5 class="modal-title" id="exampleModalLabel"><span align="center"> Décharge</span></h5>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    <div>
+                                                                                        {% for signature in r.signatures %}
+                                                                                        <h5><b>Actionnaire : </b>{{ signature.membre.last_name|title }} {{ signature.membre.first_name|title }}</h5>
+                                                                                        <p><b>Date de la signature : </b> {{ signature.date_signature|date:"d/m/Y" }}</p>
+                                                                                        <p><a class="btn btn-dark btn-sm" href="{% url 'document_decharge_remboursement' r.remboursement.id|crypter_id %}"><i class="fa fa-download"></i> Télécharger la décharge</a></p>
+                                                                                        <hr>
+                                                                                        {% endfor %}
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button class="btn btn-secondary btn-sm close-modal-signature" id="{{ r.remboursement.id }}"><b>X</b> Annuler</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- end modal Signature -->
+
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Fermer</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end modal detail -->
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %} 
+                
+            {% else %}
+                <h4 class="text-center">Aucun remboursement n'a été enregistré.</h4>
+            {% endif %}
+                
+                <!--Pagination-->
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4 text-center">
+                        <ul class="pagination">
+                            {% if contrats.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ contrats.previous_page_number }}"><i class="fa fa-arrow-circle-left"></i></a>
+                                </li>
+                            {% endif %}
+
+                            <li class="page-item active">
+                                <a class="page-link bg-primary" href="?page={{ contrats.number }}">{{ contrats.number }}</a>
+                            </li>
+
+                            {% if contrats.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ contrats.next_page_number }}"><i class="fa fa-arrow-circle-right"></i></a>
+                            {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+                <!--End pagination-->
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

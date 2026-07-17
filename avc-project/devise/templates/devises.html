@@ -1,0 +1,65 @@
+{% extends 'global/base.html' %}
+{% block title %} {{ setting.appname }} | Liste des dévises {% endblock %}
+{% block content %}
+{% load static %}
+{% load crypto_filters %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Dévises</h1>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Liste des dévises </h6>
+        </div>
+        <div class="card-body">
+            <div align="right">
+                <a href="{% url 'add_devise' %}" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Enregistrer une dévise</a>
+            </div>
+            <br>
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Symbole</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for devise in devises %}
+                        <tr>
+                            <td>{{ devise.nom }}</td>
+                            <td>{{devise.symbole }}</td>
+                            <td>
+                                <a class="btn btn-danger btn-sm delete-devise" id="{{ user.id }}" title="Supprimer"><i class="fa fa-trash"></i></a>&nbsp;
+                                <a href="{% url 'edit_devise' devise.id|crypter_id %}" title="Modifier" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>  
+            
+            <!-- Delete Modal-->
+            <div class="modal fade" id="content-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-light">
+                            <h5 class="modal-title" id="exampleModalLabel"><span align="center"> Suppression</span></h5>
+                        </div>
+                        <div class="modal-body" id="content-delete-item"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal delete -->
+
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

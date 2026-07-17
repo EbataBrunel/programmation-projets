@@ -1,0 +1,167 @@
+{% extends 'global/base.html' %}
+{% block title %} {{ setting.appname }} | Liste de contributions {% endblock %}
+{% block content %}
+{% load static %}
+{% load crypto_filters %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Acteurs et Actionnaires</h1>
+    <ol class="breadcrumb">
+        <li><a href="{% url 'index' %}" style="text-decoration:none"><i class="fas fa-fw fa-tachometer-alt"></i> Tableau de bord </a> < </li> 
+        <li class="active">Contributions</li>
+    </ol>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Liste des contributions </h6>
+        </div>
+        <div class="card-body">
+            <div align="right">
+                <a href="{% url 'add_contribution' %}" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Enregistrer une contribution</a>
+              </div>
+              <br>
+              {% for p in projets %}
+                <div class="col-md-12 col-lg-12">
+                    <div class="card mb-4 py-3 border-bottom-dark">
+                        <div class="card-body">
+                          <h5><b>Projet</b></h5>
+                          <p>{{ p.projet }}</p>
+                          <p><b>Responsable : </b> {{ p.projet.responsable.last_name|title }} {{ p.projet.responsable.first_name|title }}</p>
+                          <p><b>Coût estimé : </b><span class="text-primary">{{ p.projet.cout_estime }}{{ p.projet.devise }}</span></p>
+                          <p><b>Montant du responsable : </b> {{ p.projet.montant_responsable }}{{ p.projet.devise }}</p>
+                          <p><b>Montant total des actionnaires : </b> {{ p.total_montant_actionnaire }}{{ p.projet.devise }}</p>
+                          <p><b>Coût total enregistré | reste : </b> <span class="text-primary">{{ p.cout_total_enregistre }}{{ p.projet.devise }}</span> | <span class="text-danger">{{ p.cout_reste }}{{ p.projet.devise }}</b>
+                          <p>
+                            <a class="btn btn-info btn-sm" href="#" data-toggle="modal" data-target="#detailModal{{ p.projet.id }}" title="Supprimer"><i class="fa fa-eye"></i> Détail</a>
+                            <!-- debut detail modal -->
+                            <div class="modal fade" id="detailModal{{ p.projet.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-info text-light">
+                                            <h5 class="modal-title" id="exampleModalLabel"><b class="text-center"> Liste des actionnaires </b></h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div style="border-radius:10px; padding: 10px" class="{{ setting.theme }}">
+                                                <h5 class="text-light">Projet :</h5>
+                                                <p class="text-light">{{ p.projet }}</p>
+                                            </div>
+                                            <br>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Actionnaires</th>
+                                                            <th>Montants</th>
+                                                            <th>Date</th>
+                                                            {% if request.user.is_superuser %}
+                                                            <th>Actions</th>
+                                                            {% endif %}
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for contribution in p.contributions %}
+                                                            <tr>
+                                                                <td>{{ contribution.actionnaire.last_name|title }} {{ contribution.actionnaire.first_name|title }}</td>
+                                                                <td>{{ contribution.montant_contribution }}{{ p.projet.devise }}</td>
+                                                                <td>{{ contribution.date_contribution|date:"d/m/Y" }}</td>
+                                                                {% if request.user.is_superuser %}
+                                                                <td>
+                                                                    <a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#delModal{{ contribution.id }}" title="Supprimer"><i class="fa fa-trash"></i></a>&nbsp;
+                                                                    <a href="{% url 'edit_contribution' contribution.id|crypter_id %}" title="Modifier" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+
+                                                                    <!-- Delete Modal-->
+                                                                    <div class="modal fade" id="delModal{{ contribution.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                                    aria-hidden="true">
+                                                                        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header bg-danger text-light">
+                                                                                    <h5 class="modal-title" id="exampleModalLabel"><span align="center"> Suppression</span></h5>
+                                                                                </div>
+                                                                                <div class="modal-body text-center">Voulez-vous vraiment supprimer cette contributions ?</div>
+                                                                                <div class="modal-footer">
+                                                                                    <button class="btn btn-secondary btn-sm close-modal" id="{{ contribution.id }}"><i class="fa fa-remove"></i><b>X</b> Annuler</button>
+                                                                                    <a class="btn btn-danger btn-sm" href="{% url 'del_contribution' contribution.id|crypter_id %}"><i class="fa fa-trash"></i> Supprimer</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- end modal Delete -->
+                                                                </td>
+                                                                {% endif %}
+                                                            </tr> 
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <br>
+                                            <div style="border-radius:10px; padding: 10px" class="{{ setting.theme }}">
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <tr class="text-light">
+                                                            <th>Coût estimé</th>
+                                                            <th>Montant responsable</th>
+                                                            <th>Montant total des actionnaires</th>
+                                                            <th>Coût total enregistré</th>
+                                                            <th>Coût restant</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-info"><b>{{ p.projet.cout_estime }}{{ p.projet.devise }}</b></td>
+                                                            <td class="text-light">{{ p.projet.montant_responsable }}{{ p.projet.devise }}</td>
+                                                            <td class="text-light">{{ p.total_montant_actionnaire }}{{ p.projet.devise }}</td>
+                                                            <td class="text-info"><b>{{ p.cout_total_enregistre }}{{ p.projet.devise }}</b></td>
+                                                            <td class="text-warning"><b>{{ p.cout_reste }}{{ p.projet.devise }}</b></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Fermer</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <!-- end modal detail -->
+                          </p>
+                      </div>
+                  </div>
+                </div>
+              {% endfor %} 
+              
+              
+              <!--Pagination-->
+              <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4 text-center">
+                    <ul class="pagination">
+                        {% if projets.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ projets.previous_page_number }}"><i class="fa fa-arrow-circle-left"></i></a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item active">
+                            <a class="page-link bg-primary" href="?page={{ projets.number }}">{{ projets.number }}</a>
+                        </li>
+
+                        {% if projets.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ projets.next_page_number }}"><i class="fa fa-arrow-circle-right"></i></a>
+                        {% endif %}
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <!--End pagination-->
+
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

@@ -1,0 +1,3 @@
+{% for actionnaire in actionnaires %}
+<option value="{{ actionnaire.id }}">{{ actionnaire.last_name|title }} {{ actionnaire.first_name|title }}</option>
+{% endfor %}

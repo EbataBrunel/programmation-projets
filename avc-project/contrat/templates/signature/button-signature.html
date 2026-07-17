@@ -1,0 +1,5 @@
+{% if statut == "success" %}
+    <a class="btn btn-success btn-sm" href="{% url 'document_signature_contrat' contratremboursement_id %}"><i class="fa fa-download"></i> Télécharger le contrat</a> 
+{% else %}
+    <a class="btn btn-danger btn-sm" href="#"> L'opération à échouée, revenir plus tard.</a>
+{% endif %}

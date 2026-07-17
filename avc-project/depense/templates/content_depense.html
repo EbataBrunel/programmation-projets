@@ -1,0 +1,60 @@
+{% if projets %}
+    {% for p in projets %}
+                        <div class="card mb-4 py-3 border-bottom-dark">
+                            <div class="card-body">
+                            <h5><b>Projet</b></h5>
+                            <p>{{ p.projet.nom }}</p>
+                            <h5><b>Nombre de tâches</b></h5>
+                            <p><span class="badge badge-primary">{{ p.nb_taches }}</span></p>
+                            <p>
+                                <a href="{% url 'depense_tache_p' p.projet.id %}" title="Voir plus" class="btn btn-info btn-sm"><i class="fa fa-eye"></i> Voir plus</a>
+                                <a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#delModal{{ p.projet.id }}" title="Supprimer"><i class="fa fa-trash"></i> Supprimer</a>
+                                <!-- Delete Modal-->
+                                <div class="modal fade" id="delModal{{ p.projet.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                    <div class="modal-dialog modal-sm" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-red">
+                                                <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5>
+                                            </div>
+                                            <div class="modal-body text-center">Voulez-vous vraiment supprimer ce projet ?</div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Annuler</button>
+                                                <a class="btn btn-danger btn-sm" href="{% url 'del_depense_p' p.projet.id %}"><i class="fa fa-trash"></i> Supprimer</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p>
+                        </div>
+                {% endfor %} 
+              
+              
+                <!--Pagination-->
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4 text-center">
+                        <ul class="pagination">
+                            {% if projets.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ projets.previous_page_number }}"><i class="fa fa-arrow-circle-left"></i></a>
+                                </li>
+                            {% endif %}
+
+                            <li class="page-item active">
+                                <a class="page-link bg-primary" href="?page={{ projets.number }}">{{ projets.number }}</a>
+                            </li>
+
+                            {% if projets.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ projets.next_page_number }}"><i class="fa fa-arrow-circle-right"></i></a>
+                            {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+                <!--End pagination-->
+{% else %}
+    <h5 class="text-center">Aucune dépense n'a été enregistrée.</h5>
+{% endif %}

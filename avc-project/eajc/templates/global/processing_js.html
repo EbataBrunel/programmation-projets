@@ -1,0 +1,369 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        hideViewTache();
+        hideViewActionnaire();
+        hideContentOtherTypeDepense();
+        update_satus_project_and_task();
+        
+        $('#projet').on('change', function(){
+            var projet = $(this).val();
+            if(projet){
+                $.get("ajax_depense_projet/"+projet,
+                    {projet:projet},
+                    function(data){
+                        $('#tache').html(data); 
+                        $('#viewtache').show();
+                    }
+                );
+
+            }else{
+                $('#viewtache').hide();  
+            }
+        });
+
+        $('#projet').on('change', function(){
+            var projet = $(this).val();
+            if(projet){
+                $.get("ajax_actionnaire_contribution/"+projet,
+                    {projet:projet},
+                    function(data){
+                        $('#actionnaire').html(data); 
+                        $('#viewActionnaire').show();
+                    }
+                );
+
+            }else{
+                $('#viewActionnaire').hide();  
+            }
+        });
+
+        $('#projet').on('change', function(){
+            var projet = $(this).val();
+            if(projet){
+                $.get("ajax_acteur_participation/"+projet,
+                    {projet:projet},
+                    function(data){
+                        $('#acteur').html(data); 
+                        $('#viewActeur').show();
+                    }
+                );
+
+            }else{
+                $('#viewActionnaire').hide();  
+            }
+        });
+
+        $('#projet').on('change', function(){
+            var projet = $(this).val();
+            if(projet){
+                $.get("ajax_devise/"+projet,
+                    {},
+                    function(data){
+                        $('.content_devise').html(data); 
+                    }
+                );
+
+            }
+        });
+
+        $('#contratremboursement').on('change', function(){
+            var contrat = $(this).val();
+            if(contrat){
+                $.get("ajax_contrat_remboursement/"+contrat,
+                    {contrat:contrat},
+                    function(data){
+                        $('#actionnaire').html(data); 
+                        $('#viewActionnaire').show();
+                    }
+                );
+
+            }else{
+                $('#viewActionnaire').hide();  
+            }
+        });
+
+        function hideContentOtherTypeDepense(){
+            $('#content_other_type').hide();
+        }
+
+        function hideViewTache(){
+            $('#viewtache').hide();
+        }
+
+        function hideViewActionnaire(){
+            $('#viewActionnaire').hide();
+        }
+
+        //Remplir le champs niveau du parcours
+        $('#type_depense').on('change', function(){
+            var type_depense = $(this).val()
+            if (type_depense == "Autre"){
+                $.get("autre_type_depense/"+type_depense,
+                {type_depense:type_depense},
+                function(data){
+                    $('#content_autre_type_depense').html(data)
+                });
+            }else{
+                $('#content_autre_type_depense').html("")
+            }
+        });
+
+        $(document).on('click','.tri_projet',function(){
+            $('#spinner-loading').css('display', 'block');
+            var action = $(this).attr("id");
+
+            if(action){
+                $.get(`tri_projet/${action}`,
+                    {},
+                    function(data){
+                        $('#spinner-loading').css('display', 'none');
+                        $('#content-projet').html(data); 
+                        // Retirer la classe "bg-primary" de toutes les divs
+                        $('.desp').removeClass('btn-primary');
+                        // Ajouter la classe "bg-primary" uniquement à l'élément cliqué
+                        if (action == "Individuel"){
+                        $(".activated_Individuel").addClass("btn-primary");
+                        }else{
+                            $(".activated_Groupe").addClass("btn-primary");
+                        }
+                    }
+                );
+
+            }
+        });
+
+
+        $(document).on('click','.tri_tache',function(){
+            $('#spinner-loading').css('display', 'block');
+            var action = $(this).attr("id");
+
+            if(action){
+                $.get(`tri_tache/${action}`,
+                    {},
+                    function(data){
+                        $('#spinner-loading').css('display', 'none');
+                        $('#content-tache').html(data); 
+                        // Retirer la classe "bg-primary" de toutes les divs
+                        $('.desp').removeClass('btn-primary');
+                        // Ajouter la classe "bg-primary" uniquement à l'élément cliqué
+                        if (action == "Individuel"){
+                            $(".activated_Individuel").addClass("btn-primary");
+                        }else{
+                            $(".activated_Groupe").addClass("btn-primary");
+                        }
+                    }
+                );
+
+            }
+        });
+
+        $(document).on('click','.tri_depense',function(){
+            $('#spinner-loading').css('display', 'block');
+            var action = $(this).attr("id");
+
+            if(action){
+                $.get(`tri_depense/${action}`,
+                    {},
+                    function(data){
+                        $('#spinner-loading').css('display', 'none');
+                        $('#content-depense').html(data); 
+                        // Retirer la classe "bg-primary" de toutes les divs
+                        $('.desp').removeClass('btn-primary');
+                        // Ajouter la classe "bg-primary" uniquement à l'élément cliqué
+                        if (action == "Individuel"){
+                            $(".activated_Individuel").addClass("btn-primary");
+                        }else{
+                            $(".activated_Groupe").addClass("btn-primary");
+                        }
+                    }
+                );
+
+            }
+        });
+
+        $(document).on('click','.tri_progres',function(){
+            $('#spinner-loading').css('display', 'block');
+            var action = $(this).attr("id");
+
+            if(action){
+                $.get(`tri_progres/${action}`,
+                    {},
+                    function(data){
+                        $('#spinner-loading').css('display', 'none');
+                        $('#content-progres').html(data); 
+                        // Retirer la classe "bg-primary" de toutes les divs
+                        $('.desp').removeClass('btn-primary');
+                        // Ajouter la classe "bg-primary" uniquement à l'élément cliqué
+                        if (action == "Individuel"){
+                            $(".activated_Individuel").addClass("btn-primary");
+                        }else{
+                            $(".activated_Groupe").addClass("btn-primary");
+                        }
+                    }
+                );
+
+            }
+        });
+
+        function update_satus_project_and_task(){
+            const fresh = "{{ fresh_dashbord }}";
+            var ur = "http://127.0.0.1:8000/eajc/"
+            if (fresh){
+                setInterval(function(){
+                    $.ajax({
+                        type: 'GET',
+                        url : ur+"update_satus_project_and_task",
+                        success: function(response){
+                            
+                        },
+                });
+                },100);
+            }
+        }
+
+        /*===================== Activation des messages =============*/
+        $(document).on('click','.close-modal',function(){
+            var id = $(this).attr("id");
+            if(id){
+                $('#delModal'+id).modal('hide');
+            }
+        });
+
+        $(document).on('click','.close-modal-info',function(){
+            var id = $(this).attr("id");
+            if(id){
+                $('#infoModal'+id).modal('hide');
+            }
+        });
+
+        $(document).on('click','.close-modal-signature',function(){
+            var id = $(this).attr("id");
+            if(id){
+                $('#signatureModal'+id).modal('hide');
+            }
+        });
+
+        $(document).on('click','.close-modal-projet-termine',function(){
+            var id = $(this).attr("id");
+            if(id){
+                $('#projetTermineModal'+id).modal('hide');
+            }
+        });
+
+        $(document).on('click','.close-modal-projet-encours',function(){
+            var id = $(this).attr("id");
+            if(id){
+                $('#projetEncoursModal'+id).modal('hide');
+            }
+        });
+
+        $(document).on('click','.close-modal-projet-planifie',function(){
+            var id = $(this).attr("id");
+            if(id){
+                $('#projetPlanifieModal'+id).modal('hide');
+            }
+        });
+
+        /*===================== Activation des messages =============*/
+        $(document).on('click','.close-modal-statut',function(){
+            var id = $(this).attr("id");
+            if(id){
+                $('#confirmModal'+id).modal('hide');
+            }
+        });
+
+        
+        $(document).on('click','.visibilite-tache',function(){
+            var id = $(this).attr("id");
+            if (id){
+                $.get("visibilite_tache/"+id,
+                {},
+                function(data){
+                    $('.content-visibilite-tache'+id).html(data)
+                });
+            }
+        });
+
+        $(document).on('click','.visibilite-depense',function(){
+            var id = $(this).attr("id");
+            if (id){
+                $.get("visibilite_depense/"+id,
+                {},
+                function(data){
+                    $('.content-visibilite-depense'+id).html(data)
+                });
+            }
+        });
+
+        $(document).on('click','.visibilite-progres',function(){
+            var id = $(this).attr("id");
+            if (id){
+                $.get("visibilite_progres/"+id,
+                {},
+                function(data){
+                    $('.content-visibilite-progres'+id).html(data)
+                });
+            }
+        });
+
+        /* ============================= Permission ==================== */
+       $(document).on('click','#actif',function(){
+            var isChecked = $(this).prop('checked'); // true ou false
+            var actif = isChecked ? 'on' : null;
+            var user_id = $("#user_id").val()
+
+            if(user_id){
+                    $.get(`ajax_active_permission/${actif}`,
+                        {},
+                        function(data){
+                            $('#content-permission').html(data);
+                        }
+                    );
+            }
+        });
+
+        $(document).on('click','#staff',function(){
+            var isChecked = $(this).prop('checked'); // true ou false
+            var staff = isChecked ? 'on' : null;
+            var user_id = $("#user_id").val()
+
+            if(user_id){
+                    $.get(`ajax_staff_permission/${staff}`,
+                        {},
+                        function(data){
+                            $('#content-permission').html(data);
+                        }
+                    );
+            }
+        });
+
+        $(document).on('click','#superuser',function(){
+            var isChecked = $(this).prop('checked'); // true ou false
+            var superuser = isChecked ? 'on' : null;
+
+            $.get(`ajax_superuser_permission/${superuser}`,
+                        {},
+                        function(data){
+                            $('#content-permission').html(data);
+                        }
+            );
+            
+        });
+
+        // Fenêtre du detail de l'utilisateur
+        $(document).on('click','.detail-user', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("ajax_detail_user/"+id,
+                    {id:id},
+                    function(data){
+                        $('#show-detail-user').modal('show');
+                        $('#content-detail-user').html(data);
+                    }
+                );
+            }
+        });
+
+    });
+</script>

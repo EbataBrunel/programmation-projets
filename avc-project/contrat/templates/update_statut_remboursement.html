@@ -1,0 +1,7 @@
+{% if statut == "En attente" %}
+    <p><b>Statut : </b> <span class="text-primary">{{ remboursement.statut }}</span></p>
+{% elif statut == "Approuvé" %}
+    <p><b>Statut : </b> <span class="text-success">Approuvé ...</span></p>
+{% else %}
+    <p><b>Statut : </b> <span class="text-danger">Refusé</span></p>
+{% endif %}

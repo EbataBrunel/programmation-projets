@@ -1,0 +1,101 @@
+{% extends 'global/base.html' %}
+{% block title %} {{ setting.appname }} | Ajout d'un remboursement {% endblock %}
+{% block content %}
+{% load static %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Contrats</h1>
+    <ol class="breadcrumb">
+        <li><a href="{% url 'index' %}" style="text-decoration:none"><i class="fas fa-fw fa-tachometer-alt"></i> Tableau de bord </a> < </li> 
+        <li><a href="{% url 'remboursement/remboursements' %}" style="text-decoration:none"> Remboursements </a> < </li> 
+        <li class="active">Ajout</li>
+    </ol>
+    
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Ajout d'un remboursement</h6>
+        </div>
+        <div class="card-body">
+            <!-- On inclut l'image de chargement -->
+            {% include 'global/_loading.html' %}
+            <form method="post" action="" id="formRemboursement">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="contratremboursement">Contrat *</label>
+                            <select name="contratremboursement" id="contratremboursement" class="form-control" required>
+                               <option value="">-- Selectionnez --</option>
+                               {% for contrat in contratremboursements %}
+                               <option value="{{ contrat.id }}">{{ contrat }}</option>
+                               {% endfor %}
+                            </select>
+                        </div>
+                        <div class="viewactionnaire">
+                            <div class="form-group">
+                                <label for="actionnaire">Actionnaires *</label>
+                                <select name="actionnaire" id="actionnaire" class="form-control" required>
+                                    <option value="">-- Selectionnez --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="justification">justification *</label>
+                            <textarea name="justification" id="justification" class="form-control" placeholder="Saisir la description ici" rows="6"></textarea> 
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="montant_remboursement">Montant de remboursement <span class="content_devise"></span> *</label>
+                           <input type="text" name="montant_remboursement" id="montant_remboursement" class="form-control" required> 
+                        </div>
+                        <div class="form-group">
+                            <label for="date_remboursement">Date de remboursement *</label>
+                           <input type="date" name="date_remboursement" id="date_remboursement" class="form-control" required> 
+                        </div>
+                        <div class="form-group">
+                            <label for="mode_paiement">Mode de paiement *</label>
+                            <select name="mode_paiement" id="mode_paiement" class="form-control" required>
+                               <option value="">-- Selectionnez --</option>
+                               {% for mode in modes_paiements %}
+                               <option value="{{ mode }}">{{ mode }}</option>
+                               {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="{% url 'remboursement/remboursements' %}" class="btn btn-secondary btn-sm"><i class="fa fa-arrow-circle-left"></i> Retour</a>&nbsp;
+                        <button class="btn btn-primary btn-sm"><i class="fa fa-check"></i> Valider</button>
+                    </div>
+                </div>
+            </form>   
+            
+            <!-- Start message Modal -->
+            <div class="modal fade" id="message" tabindex="-1">
+                <div class="modal-dialog modal-sm">
+                  <div class="modal-content bg-gradient-dark">
+                    <div class="modal-header">
+                      <h5 class="modal-title text-light"><i class="fa fa-info-circle"></i> Information</h5>
+                    </div>
+                    <div class="modal-body" id="content-message"></div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary btn-sm text-center" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Fermer</button>
+                    </div>
+                  </div>
+                </div>
+            </div><!-- End message Modal-->
+
+
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+{% endblock %}
