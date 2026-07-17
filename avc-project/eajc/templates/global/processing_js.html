@@ -244,6 +244,21 @@
             }
         });
 
+        // ===================== Opération sur le projet =======================
+        // Fenêtre du detail de projet
+        $(document).on('click','.detail-projet', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("ajax_detail_projet/"+id,
+                    {id:id},
+                    function(data){
+                        $('#show-detail-projet').modal('show');
+                        $('#content-detail-projet').html(data);
+                    }
+                );
+            }
+        });
+
         $(document).on('click','.close-modal-projet-termine',function(){
             var id = $(this).attr("id");
             if(id){

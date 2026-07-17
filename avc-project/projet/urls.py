@@ -21,6 +21,7 @@ urlpatterns = [
     path("document-projet/<int:projet_id>", document_projet, name="document_projet"),
     path("document-projet-partage/<int:projet_id>", document_projet_partage, name="document_projet_partage"),
     path("configuration", configuration, name="configuration"),
+    path("ajax_detail_projet/<int:id>", ajax_detail_projet, name="ajax_detail_projet"),
     path("visibilite_projet/<int:id>", visibilite_projet, name="visibilite_projet"),
     path("visibilite_tache/<int:id>", visibilite_tache, name="visibilite_tache"),
     path("visibilite_depense/<int:id>", visibilite_depense, name="visibilite_depense"),

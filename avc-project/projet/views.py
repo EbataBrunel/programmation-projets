@@ -584,21 +584,28 @@ def configuration(request):
     if setting is None:
         return redirect("settings/maintenance")
     
-    liste_projets = Projet.objects.filter(type_projet="Personnel", statut="Terminé", responsable_id=request.user.id)
-    projets = []
-    for projet in liste_projets:
-        dic = {}
-        dic["projet"] = projet
-        dic["taches"] = projet.taches.all()
-        dic["depenses"] = projet.depenses.all()
-        dic["progres"] = projet.progres.all()
-        projets.append(dic)
+    projets = Projet.objects.filter(type_projet="Personnel", statut="Terminé", responsable_id=request.user.id)
         
     context = {
         "setting": setting,
         "projets": projets
     } 
     return render(request, "configuration.html", context)
+
+def ajax_detail_projet(request,id):
+    projet = Projet.objects.get(id=id)
+    
+    taches = projet.taches.all()
+    depenses = projet.depenses.all()
+    progres = projet.progres.all()
+        
+    context = {
+        "projet": projet,
+        "taches": taches,
+        "depenses": depenses,
+        "progres": progres
+    }
+    return render(request, "ajax_detail_projet.html", context)
 
 def  visibilite_projet(request, id): 
     projet = get_object_or_404(Projet, id=id)
