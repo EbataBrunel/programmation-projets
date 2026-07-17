@@ -1,0 +1,78 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Mode de paiements {% endblock %}
+{% block content %}
+{% load static %}
+{% load crypto_filters %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            <i class="fa fa-tags"></i> Gestion
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+            <li class="active">Mode de paiements</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-xs-12">
+
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title text-info"><i class="fa fa-table"></i> <b>Liste des modes de paiements</b></h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <div align="right">
+                    <a href="{% url 'mode-paiement/add-mode' %}" class="btn btn-default btn-sm"><i class="fa fa-plus"></i> Ajouter un mode de paiement</a>
+                  </div>
+                  <br>
+                  <div class="table-responsive">
+                    <table id="example1" class="table table-bordered table-striped">
+                      <thead>
+                        <tr class="bg-{{parametre.theme }}">
+                          <th>Type</th>
+                          <th>Libellé</th>
+                          <th>Numéro</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for mode in modes %}
+                        <tr>
+                          <td>{{ mode.typepaiement }}</td>
+                          <td>{{ mode.libelle }}</td>
+                          <td>{{ mode.numero }}</td>
+                          <td>
+                            <a class="btn btn-default btn-xs delete_mode_payment" id="{{ mode.id }}"> <i class="fa fa-trash"></i> </a>&nbsp;
+                            <a href="{% url 'mode-paiement/edit-mode' mode.id|crypter_id %}" title="Modifier" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+
+                   <!-- Delete Modal-->
+                  <div class="modal fade" id="content_delete" tabindex="-1" style="border-radius: 10px;">
+                    <div class="modal-dialog modal-sm" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header danger">
+                          <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5>
+                        </div>
+                        <div class="modal-body" id="content-delete-item"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+{% endblock %}

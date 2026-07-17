@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static  %}
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>PDF</title>
+    <!-- Logo du titre -->
+    <!-- Custom fonts for this template-->
+
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <style>
+        html{
+            min-height: 100%;
+        }
+        body{
+            margin: 0;
+            padding: 0;
+            position: relative;
+            min-height: 100%;
+            border-radius: 5px;
+            padding:35px;
+        }
+        .container
+        {
+            width:100%;
+            margin: auto;
+        }
+        .danger{
+            color:red;
+        }
+        .primary{
+            color:blue;
+        }
+        .right_column
+        {
+            width: 50%;
+            float: right;
+        }
+        .left_column
+        {
+            width: 50%;
+            float: left;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            font-size: 1.4em;
+            color: rgb(63, 109, 159);
+            border-bottom: 2px solid rgb(63, 109, 159);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .content
+        {
+            width:100%;
+        }
+        .center{
+            text-align: center;
+        }
+
+        .float-right{
+            float:right
+        }
+
+        table {
+            table-layout: fixed;
+            width: 100%;
+            border-bottom: 3px solid black;
+            }
+
+            thead th:nth-child(1) {
+            width: 25%;
+            }
+
+            thead th:nth-child(2) {
+            width: 25%;
+            }
+
+            thead th:nth-child(2) {
+            width: 35%;
+            }
+
+            thead th:nth-child(3) {
+            width: 5%;
+            }
+
+            thead th:nth-child(4) {
+            width: 15%;
+            }
+
+            th, td {
+            padding: 15px;
+            }
+            .entete{
+              padding-top:5px;
+              padding-bottom: 10px;
+              background-color:rgb(63, 109, 159);
+            }
+
+            .photo {
+                width:100px; 
+                height:auto; 
+                border-radius:50%; 
+                display:block; 
+            }
+    </style>
+</head>
+
+<body>
+    <!-- Begin Page Content -->
+        <div class="container">
+            <div class="section">
+                <div class="content">
+                    <div class="left_column">
+                        {% if parametre.logo %}
+                        <img src="data:image/png;base64,{{ base64_image }}" class="photo" alt="Logo de {{ parametre.appname }}">
+                        {% else %}
+                        <p> <b>{{ parametre.appname }}</b></p>
+                        {% endif %}
+                        <p> {{ parametre.phone }}</p>
+                        <p> {{ parametre.email }}</p>
+                    </div>
+                    <div class="right_column">
+                        <p>FACTURE n° <b class="primary">{{ commande.id }}</b></p>
+                        <p>Date de la commande : {{ commande.datecommande|date:"d/m/Y" }}</p>
+                        <p>Transaction : EAJC0{{ commande.transaction_id }}</p>
+                    </div>
+                </div>
+            </div>
+            <br><br><br><br><br><br><br>
+            <div class="section" style="margin-top: 40px">
+                    <h2>Informations personnelles</h2>
+                    <p><b>{{ commande.user.last_name }} {{ commande.user.first_name }}</b></p>
+                    <p>{{ commande.user.profile.address }}</p>
+                    <p>{{ commande.user.profile.phone }}</p>
+                    <p>{{ commande.user.email }}</p>
+            </div>
+            <br>
+            <hr>
+            <div class="section" style="margin-top: 50px;">
+                <p>Bonjour {{ commande.user.first_name }},<br>
+                    Nous vous remercions pour votre achat à {{ parametre.appname }}. Voici un récapitulatif de votre achat :</p>
+                <br>
+                <table>
+                    <tr class="entete">
+                        <th>Thèmes</th>
+                        <th>Composents</th>
+                        <th>Titres</th>
+                        <th>Qté</th>
+                        <th>Prix </th>
+                    </tr>
+                    {% for achat in achats %}
+                    <tr>
+                        <td>{{ achat.discipline }}</td>
+                        <td>{{ achat.composant }}</td>
+                        <td>{{ achat.title }}</td>
+                        <td>{{ achat.quantite }}</td>
+                        <td class="danger">{{ achat.price }} {{ parametre.devise }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="3"><span class="center"><b>Total</b></span></td>
+                        <td><b>{{ qtetotal }}</b></td>
+                        <td class="danger"><b>{{ total }} {{ parametre.devise }}</b></td>
+                    </tr>
+                </table>
+            </div>
+            {% if commande.modepaiement == "Mobile" %}
+            <p>Méthode de paiement choisie : {{commande.modepaiement.libelle}}.</p>
+            {% else %}
+            <p>Méthode de paiement choisie : {{commande.modepaiement.typepaiement}}.</p>
+            {% endif %}
+            <p>Cette facture ne peut pas être utilisée pour demander des déductions de TVA et autres. L’achat a été effectué pour un usage personnel uniquement.</p>
+            <br>
+            <p class="float-right">A bientôt sur eajc.com ! Votre équipe <b>{{ parametre.appname }}</b></p>
+        </div>
+    <!-- /.container-fluid -->
+
+</body>
+
+</html>

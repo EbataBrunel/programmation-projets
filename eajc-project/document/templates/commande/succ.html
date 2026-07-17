@@ -1,0 +1,38 @@
+{% extends 'global/base0.html' %}
+{% block title %} {{ parametre.appname }} | Succès {% endblock %}
+{% block content %}
+{% load static %}
+<!-- Page Content-->
+<div class="content-wrapper">
+    <div class="container">
+        <section class="content">
+            <div class="box box-default">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <div class="succ">
+                            <div class="box-header with-border">
+                                <h4 align="center" class="mt-4">Bravo !!!</h4>
+                            </div>
+                            <div class="box-body">
+                                <br>
+                                <h3 class="text-success text-center">Opération éfféctuée avec succès.</h3>
+                                <p class="text-success text-center"><i class="fa fa-check-circle font-size"></i></p>
+                                <p class="text-center">Un message contenant un lien a été envoyé à votre adresse e-mail. Cliquez sur ce lien pour télécharger le(s) document(s)..</p>
+                                {% for course in cours %}
+                                <p class="text-center"><a class="btn btn-primary btn-sm" href="{{ course.file.url }}"><i class="fa fa-download"></i> Telecharger le document </a></p>
+                                {% endfor %}
+                                <p>
+                                    <a href="{% url 'cours/cours' %}" class="btn btn-default btn-sm"><i class="fa fa-arrow-circle-left"></i> Retour à l'accueil</a>
+                                    <span class="pull-right"><a href="{% url 'commande/facture' commande.id %}" title="Facture" class="btn btn-default btn-sm bg-black"><i class="fa fa-upload"></i> Télécharger la facture </a></span>
+                                </p>
+                            </div>
+                        </div> 
+                    </div>
+                </div> 
+            </div>
+            <!-- Call to Action-->
+        </section>
+    </div>
+</div>
+{% endblock %}
+        

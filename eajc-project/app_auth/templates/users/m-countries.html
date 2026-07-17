@@ -1,0 +1,115 @@
+
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Membres par pays {% endblock %}
+{% block content %}
+{% load static %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            <i class="fa fa-dashboard"></i> Tableau de bord
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+            <li class="active">Membres</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title text-info"><i class="fa fa-table"></i> <b>Tous les membres</b> </h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <div class="row">
+                    {% for c in tabCountries %}
+                    <div class="col-md-2 col-xs-6">
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                          <div class="row">
+                            <p class="text-center"><a href="#" data-toggle="modal" data-target="#detailModal{{ c.id }}" title="Détails" class="btn btn-default btn-xs bg-black">{{ c.country.country }} ({{c.country.effectif}})</a></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- details Modal-->
+                    <div class="modal fade" id="detailModal{{ c.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true" style="border-radius: 10px;">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary">
+                                    <h5 class="modal-title" id="exampleModalLabel"><span align="center"><b> {{c.country.country}}</b></span></h5>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="table table-responsive">
+                                                <table id="example1" class="table table-bordered table-striped">
+                                                  <thead>
+                                                    <tr class="bg-{{ parametre.theme }}">
+                                                      <th>Noms</th>
+                                                      <th>Prénoms</th>
+                                                      <th>Professions</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    <p>{{c.country.profile}}</p>
+                                                      {% for profil in c.profils %}
+                                                          <tr>
+                                                              <td>{{ profil.user.last_name|upper }}</td>
+                                                              <td>{{ profil.user.first_name }}</td>
+                                                              <td>{{ profil.profession }}</td>
+                                                          </tr>
+                                                      {% endfor %}
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Fermer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                  <!--Pagination-->
+                  <div class="row">
+                    <div class="col-lg-4 col-lg-offset-4 text-center">
+                        <ul class="pagination">
+                            {% if countries.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link text-dark" href="?page={{ countries.previous_page_number }}"><i class="fa-arrow-circle-left"></i></a>
+                                </li>
+                            {% endif %}
+                            <li class="page-item active">
+                                <a class="page-link bg-dark" href="?page={{ countries.number }}">{{ countries.number }}</a>
+                            </li>
+                            {% if countries.has_next %}
+                            <li class="page-item">
+                                <a class="page-link text-dark" href="?page={{ countries.next_page_number }}"><i class="fa-arrow-circle-right"></i></a>
+                            {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!--End pagination-->
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+{% endblock %}
+
+
+
+
+

@@ -1,0 +1,107 @@
+{% extends 'global/base0.html' %}
+{% block title %} {{ parametre.appname }} | Panier {% endblock %}
+{% block content %}
+{% load static %}
+<!-- Page Content-->
+<div class="content-wrapper">
+    <div class="container">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+              <i class="fa fa-book"></i> Documents
+            </h1>
+            <ol class="breadcrumb">
+              <li><a href="{% url 'home' %}"><i class="fa fa-home"></i>Accueil</a></li>
+              <li><a href="{% url 'cours/cours' %}">Documents</a></li>
+              <li class="active">Panier</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <p class="text-center" id="panier">
+                        <span class="btn btn-default btn-sm" style="background-color: rgb(21, 139, 142); color:white; border-radius:20px"><i class="fa fa-shopping-cart"></i> Panier <b class="badge badge-danger" style="color: yellow;">{{ count }}</b></span>
+                    </p>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <h3 align="center"><b> Détails de votre panier</b></h3>
+                        <div class="row">
+                            <div class="col-md-10 col-md-offset-1">
+                                <div class="card h-100">
+                                    <div class="panel-header"><h4 class="text-center"><b><i class="fa fa-table"></i> Liste des documents selectionnés</b></h4></div>
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <tr>
+                                                    <th>Discipline</th>
+                                                    <th>Composant</th>
+                                                    <th>Titre</th>
+                                                    <th>Quantité</th>
+                                                    <th>Prix</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                                {% for panier in paniers %}
+                                                <tr>
+                                                    <td>{{ panier.discipline }}</td>
+                                                    <td>{{ panier.composant }}</td>
+                                                    <td>{{ panier.title }}</td>
+                                                    <td>{{ panier.quantite }}</td>
+                                                    <td class="text-danger">{{ panier.price }} {{ parametre.devise }}</td>
+                                                    <td>
+                                                        <a class="btn btn-default btn-xs delete_cart" id="{{ panier.id }}"> <i class="fa fa-trash"></i> </a>&nbsp;
+                                                        <a class="btn btn-default btn-xs detail_cart" id="{{ panier.id }}"> <i class="fa fa-eye"></i> </a>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                                <tr>
+                                                    <td colspan="4" class="text-center">Total</td>
+                                                    <td class="text-primary"><b>{{ quantitetotale }}</b></td>
+                                                    <td colspan="2" class="text-primary"><b>{{ prixtotal }} {{ parametre.devise }}</b></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <a href="{% url 'cours/cours' %}" class="btn btn-default btn-xs"><i class="fa fa-arrow-circle-left"></i> Retour</a>&nbsp;
+                                        {% if count %}
+                                        <a href="{% url 'commande/md_paiement' %}" class="btn btn-primary btn-xs pull-right"><i class="fa fa-check"></i> Acheter </a>
+                                        {% endif %}
+
+                                        <!-- Delete Modal-->
+                                        <div class="modal fade" id="content_delete" tabindex="-1" style="border-radius: 10px;">
+                                            <div class="modal-dialog modal-sm" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header danger">
+                                                <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5>
+                                                </div>
+                                                <div class="modal-body" id="content-delete-item"></div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <!-- End Delete Modal-->
+
+                                        <!-- Detail Modal-->
+                                        <div class="modal fade" id="show-content-detail" tabindex="-1" style="border-radius: 10px;">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-primary">
+                                                <h3 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-shopping-cart"></i> Détail du panier</span></h3>
+                                                </div>
+                                                <div class="modal-body" id="content-detail"></div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <!-- End Detail Modal-->
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Call to Action-->
+        </section>
+    </div>
+</div>
+{% endblock %}
+        

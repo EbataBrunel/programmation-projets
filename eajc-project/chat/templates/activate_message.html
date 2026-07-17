@@ -1,0 +1,7 @@
+{% if activate %}
+    <p>0 nouveau chat</p>
+    <a href="{% url 'message/chat' roomId %}" class="btn btn-primary">Réjoindre</a>&nbsp;
+    <button id="{{ roomId }}" class="btn btn-default activate_msg">Désactiver le chat</button>
+{% else %}
+    <button id="{{ roomId }}" class="btn btn-default activate_msg">Activer le chat</button>
+{% endif %}

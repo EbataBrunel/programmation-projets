@@ -1,0 +1,36 @@
+{% extends 'global/base0.html' %}
+{% block title %} {{parametre.appname}} | Success {% endblock %}
+{% block content %}
+{% load static %}
+<!-- Full Width Column -->
+<div class="content-wrapper">
+    <div class="container">
+        <!-- Main content -->
+        <section class="content">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h4 align="center" class="mt-4">Merci <b>{{ user.last_name|upper }} {{ user.first_name|title }}</b></h4>
+                    <p class="text-center text-success">Votre compte a été crée avec succès <br>
+                        <i class="fa fa-check-circle"  style='font-size:50px'></i>
+                    </p>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <h4>Verifier votre adresse e-mail <span class="text-info">{{ user.email }}</span> </h4>
+                            <p>1. Allez dans votre messagerie et rechercher le message de <b>{{ parametre.appname }}</b></p>
+                            <p>Cliquez sur le lien d'activation contenu dans l'e-mail que nous vous avons envoyé</p>
+                            <br>
+                            <h4>Vous n'avez pas reçu l'e-mail ?</h4>
+                            <p>2. Consultez votre dossier de courrier indesirable (spam).</p>
+                            <p>S'il n y a rien, il se peut que vous avez mal renseigné l'adresse e-mail lors de la création du compte. Dans ce cas envoyez nous votre adresse e-mail depuis la page <a href="{% url 'contact/contact' %}">contact</a>, en mentionnant votre nom et prenom pour qu'on le verifie de notre côté.</p>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
+        

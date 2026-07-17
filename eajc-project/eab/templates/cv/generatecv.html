@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static  %}
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>PDF</title>
+    <!-- Logo du titre -->
+    <!-- Custom fonts for this template-->
+
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        html{
+            min-height: 100%;
+        }
+        body{
+            margin: 0;
+            padding: 0;
+            position: relative;
+            min-height: 100%;
+            color:black;
+            border-radius: 5px;
+            line-height:1.5em;
+            font-size:15px;
+        }
+        .container
+        {
+            width:100%;
+            margin: auto;
+        }
+        #content1
+        {
+            width: 70%;
+            float: left;
+        }
+        #content2
+        {
+            width: 30%;
+            float: right;
+        }
+        #content3
+        {
+            width: 60%;
+            float: left;
+        }
+        #content4
+        {
+            width: 40%;
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Begin Page Content -->
+        <div class="container">
+            <div style="padding-left: 0px; padding-right: 0px;">
+                <div class="row mb-2">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-7" id="content1">
+                                <h3 align="center"><b>{{ user.last_name }} {{ user.first_name }}</b></h3>
+                                {% if user.profile.nature_recherche and user.profile.profession %}
+                                <p align="center" style="font-size: 15;">{{ user.profile.nature_recherche }} | {{ user.profile.profession }}</p>
+                                {% elif user.profile.nature_recherche %}
+                                <p align="center" style="font-size: 15;">{{ user.profile.nature_recherche }} </p>
+                                {% elif user.profile.profession %}
+                                <p align="center" style="font-size: 15;">{{ user.profile.profession }}</p>
+                                {% else %}
+                                <span></span>
+                                {% endif %}
+                                <div style="border-radius:10px; padding-left: 5px;padding-right: 5px; background-color: rgb(0, 98, 98);
+                                color:white;">
+                                    <div style="padding: 15px;" class="mb-2">
+                                        {{ user.profile.apropos|truncatewords:100 }}
+                                    </div>
+                                    <!-- Formation -->
+                                    {% if user.profile.vform == "Visible" %}
+                                        {% if parcours or baccalaureat %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="text-center mt-2 mb-2" style="border-bottom: 3px solid white; color:white; border-radius: 10px; padding: 10px; margin-left: 15px; margin-right: 15px;"><b>FORMATION</b></div>
+                                                {% for par in parcours %}
+                                                    {% if par.status == 1 %}
+                                                    <p style="margin-left: 15px;">
+                                                        {% if par.niveau == "3ème année Ingénieur"%}
+                                                        <spam><b class="text-white"> {{ par.annee }} -  {{ par.annee1 }}</b> : {{ par.formation }} | {{ par.niveau }}(Bac + 5)</spam><br>
+                                                        {% elif par.niveau == "Bac + 5" %}
+                                                        <spam><b class="text-white"> {{ par.annee }} -  {{ par.annee1 }}</b> : {{ par.formation }} | {{ par.niveau }}(Master 2)</spam><br>
+                                                        {% else %}
+                                                        <spam><b class="text-white"> {{ par.annee }} -  {{ par.annee1 }}</b> : {{ par.formation }} | {{ par.niveau }}</spam><br>
+                                                        {% endif %}
+                                                        <span style="padding-left: 35px;">
+                                                            <strong>{{ par.etablissement }}, </strong> {{ par.etablissement.city }} ({{ par.etablissement.country }}) 
+                                                            {% if par.statusan == "Oui" %}  
+                                                            | <b class="text-white"> Année en cours ...</b>
+                                                            {% endif %} 
+                                                        </span>
+                                                    </p>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if baccalaureat %}
+                                                    <p style="margin-left: 15px;">
+                                                        <spam><b class="text-white"> {{ baccalaureat.annee.libelle }} </b> : Obtention du baccalauréat | <b>{{ baccalaureat.diplome }}</b></spam><br>
+                                                        <span style="padding-left: 35px;">
+                                                            <strong>{{ baccalaureat.etablissement.name }}, </strong> {{ baccalaureat.etablissement.city }} ({{ baccalaureat.etablissement.country }})  
+                                                        </span>
+                                                    </p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    {% endif %}
+                                    <!-- Experience professionnelle -->
+                                    {% if user.profile.vep == "Visible" %}
+                                        {% if experiences or experiencesProjetA or experiencesProjetP %}
+                                        <div class="row mt-0 mb-3">
+                                            <div class="col-md-12">
+                                                <div class="text-center mb-2" style="border-bottom: 3px solid white; color:white; border-radius: 10px; padding: 10px; margin-left: 15px; margin-right: 15px;"><b>EXPERIENCES PROFESSIONNELLES</b></div>
+                                                {% for experience in experiences %}
+                                                    <p style="padding-left: 15px;">
+                                                        <span>
+                                                            <b class="text-white"> {{ experience.experience.posteoccupe }} | {{experience.experience.type_exp}} |</b>
+                                                            {{ experience.experience.date_debut }} au {{ experience.experience.date_fin}}
+                                                        </span><br>
+                                                    
+                                                        <strong style="padding-left: 15px;">{{ experience.experience.entreprise }}</strong>, {{ experience.experience.entreprise.city }} ({{ experience.experience.entreprise.country }})<br>
+                                                        <span>{{ experience.experience.projet }} </span><br>
+                                                        {% for k,v in experience.taches.items %}
+                                                        <span>
+                                                            <b>. </b>{{ v }} <br>
+                                                        </span>
+                                                        {% endfor %}
+                                                        {% if experience.experience.lien  %}
+                                                        Lien : <a href="{{experience.experience.lien}}" style="text-decoration:none">{{ experience.experience.lien }}</a>
+                                                        {% endif %} 
+                                                    </p>
+                                                {% endfor %}
+                                                {% if experiencesProjetA %}
+                                                    <p style="padding-left: 15px; padding-right:15px">
+                                                        {% for experience in experiencesProjetA %}
+                                                            <span>
+                                                                <b class="text-white" style="font-size: 18px;">{{ experience.experience.type_exp }}</b>
+                                                            </span>
+                                                            <br><span><b>- {{ experience.experience.projet }}</b> : 
+                                                            {% for k,v in experience.taches.items %}
+                                                                    {% if v == experience.dernieretache %}
+                                                                    <spam>{{ v }}. </spam>
+                                                                    {% else %}
+                                                                    <spam>{{ v }}, </spam>
+                                                                    {% endif %}
+                                                            {% endfor %}
+                                                            </span>
+                                                        {% endfor %}
+                                                    </p>
+                                                {% endif %}
+                                                {% if experiencesProjetP %}
+                                                    <p style="padding-left: 15px; padding-right:15px">
+                                                        <span>
+                                                            <b class="text-white" style="font-size: 18px;">Projet</b>
+                                                        </span>
+                                                        {% for experience in experiencesProjetP %}
+                                                            <br><span><b>- {{ experience.experience.projet }}</b> :   
+                                                            {% for k,v in experience.taches.items %}
+                                                                    {% if v == experience.dernieretache %}
+                                                                    <spam>{{ v }}. </spam>
+                                                                    {% else %}
+                                                                    <spam>{{ v }}, </spam>
+                                                                    {% endif %}
+                                                            {% endfor %}
+                                                            </span>
+                                                        {% endfor %}
+                                                    </p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    {% endif %}
+                                    <br>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5 mt-2" id="content2">
+                                <div align="center">
+                                    <!-- IMAGE -->
+                                    {% if user.profile.photo %}
+                                    <div class="col-lg-5 text-center"><img class="img-profile rounded-circle mb-2 mb-lg-0" width="130px" height="150px" src="http://{{ domain }}/media/{{ user.profile.photo }}" alt="..." /></div>
+                                    {% endif %}
+                                </div>
+                                <table>
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+                                            <b style="font-size: 20px"> Coordonnées </b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding-left: 5px;"><i class="bi-house"></i></th>
+                                        <td style="padding-left: 5px;">{{ user.profile.address }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding-left: 5px;"><i class="bi-phone"></i></th>
+                                        <td style="padding-left: 5px;"> {{ user.profile.phone }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding-left: 5px;"><i class="bi-envelope"></i></th>
+                                        <td style="padding-left: 5px;"> {{ user.email }} </td>
+                                    </tr>
+                                </table>
+                                <!-- Competence -->
+                                {% if user.profile.vcomp == "Visible" %}
+                                    {% if cpData or cpLangage or cpFramework or cpSysteme or cpSystemeE or cpLogiciel or cpModelisation or cpOutilsE or cpBureautique %}
+                                    <div class="row mt-2">
+                                        <div class="col-md-12">
+                                            <div class="text-center" style="border-bottom: 3px solid green;border-radius: 10px; margin-left: 3px; padding:3px; margin-right: 3px;"><b>COMPETENCES</b></div>
+                                            {% if cpData %}
+                                                <p style="padding-left: 5px;"><b>Data : </b><br>
+                                                <span style="padding-left: 5px;">
+                                                {% for competence in competenceData %}
+                                                    {% if competence.name == dernierData %}
+                                                    <small>{{ competence.name }}. </small>
+                                                    {% else %}
+                                                    <small>{{ competence.name }}, </small>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                </span>
+                                                </p>
+                                            {% endif %}
+                                            {% if cpLangage %}
+                                                <p style="padding-left: 5px;"><b>Langages de programmation : </b><br>
+                                                <span style="padding-left: 5px;">
+                                                {% for competence in competenceLangages %}
+                                                    {% if competence.name == dernierLangage %}
+                                                    <small>{{ competence.name }}. </small>
+                                                    {% else %}
+                                                    <small>{{ competence.name }}, </small>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                </span>
+                                                </p>
+                                            {% endif %}
+                                            {% if cpFramework %}
+                                                <p style="padding-left: 5px;"><b>Framework : </b><br>
+                                                <span style="padding-left: 5px;">
+                                                {% for competence in competenceFrameworks %}
+                                                    {% if competence.name == dernierFramework %}
+                                                    <small>{{ competence.name }}. </small>
+                                                    {% else %}
+                                                    <small>{{ competence.name }}, </small>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                </span>
+                                                </p>
+                                            {% endif %}
+                                            {% if cpSysteme %}
+                                                <p style="padding-left: 5px;"><b>Bases de données: </b><br>
+                                                <span style="padding-left: 5px;">
+                                                    {% for competence in competenceSystemes %}
+                                                        {% if competence.name == dernierSysteme %}
+                                                            <small>{{ competence.name }}. </small>
+                                                        {% else %}
+                                                            <small>{{ competence.name }}, </small>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </span>
+                                                </p>
+                                            {% endif %}
+                                            {% if cpSystemeE %}
+                                                <p style="padding-left: 5px;"><b>Système d'exploitation: </b><br>
+                                                <span style="padding-left: 5px;">
+                                                {% for competence in competenceSE %}
+                                                    {% if competence.name == dernierSystemeE %}
+                                                        <small>{{ competence.name }}. </small>
+                                                    {% else %}
+                                                        <small>{{ competence.name }}, </small>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                </span>
+                                                </p>
+                                            {% endif %}
+                                            {% if cpLogiciel %}
+                                                <p style="padding-left: 5px;"><b>Logiciels: </b><br>
+                                                    <span style="padding-left: 5px;">
+                                                    {% for competence in competenceLogiciels %}
+                                                        {% if competence.name == dernierLogiciel %}
+                                                            <small>{{ competence.name }}. </small>
+                                                        {% else %}
+                                                            <small>{{ competence.name }}, </small>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    </span>
+                                                </p>
+                                            {% endif %}
+                                            {% if cpModelisation %}
+                                                <p style="padding-left: 5px;"><b>Modélisation: </b><br>
+                                                    <span style="padding-left: 5px;">
+                                                    {% for competence in competenceModelisations %}
+                                                        {% if competence.name == dernierModelisation %}
+                                                            <small>{{ competence.name }}. </small>
+                                                        {% else %}
+                                                            <small>{{ competence.name }}, </small>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    </span>
+                                                </p>
+                                            {% endif %}
+                                            {% if cpOutilsE %}
+                                                <p style="padding-left: 5px;"><b>Outils et environnement: </b><br>
+                                                    <span style="padding-left: 5px;">
+                                                    {% for competence in competenceOE %}
+                                                        {% if competence.name == dernierOutileE %}
+                                                            <small>{{ competence.name }}. </small>
+                                                        {% else %}
+                                                            <small>{{ competence.name }}, </small>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    </span>
+                                                </p>
+                                            {% endif %}
+                                            {% if cpBureautique %}
+                                                <p style="padding-left: 5px;"><b>Bureautique: </b><br>
+                                                    <span style="padding-left: 5px;">
+                                                    {% for competence in competenceBureautique %}
+                                                        {% if competence.name == dernierBureautique %}
+                                                            <small>{{ competence.name }}. </small>
+                                                        {% else %}
+                                                            <small>{{ competence.name }}, </small>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    </span>
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                    </div> 
+                                    {% endif %}
+                                {% endif %}
+                                <!-- Autre formation -->
+                                {% if user.profile.vaform == "Visible" %}
+                                    {% if cpLangue or cpLoisir %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="text-center" style="border-bottom: 3px solid green;border-radius: 10px; margin-left: 5px; padding:3px; margin-right: 5px;"><b>AUTRES INFORMATIONS</b></div>
+                                            {% if cpLangue %}
+                                            <b>Langues </b>
+                                                <small style="padding-left:10px">
+                                                    {% for competence in competenceLangues %}
+                                                        <li style="list-style-type: none; padding-left: 15px;">{{ competence.name}} :</li>
+                                                        <input type="range" value="{{ competence.comment }}" class="h-10" min="0" max="100" step="5">
+                                                    {% endfor %}
+                                                </small>
+                                            {% endif %}
+
+                                            {% if cpLoisir %}
+                                                <p><b>Centres d'interêt </b><br>
+                                                    {% for competence in competenceLoisirs %}
+                                                        {% if competence.name == dernierLoisir %}
+                                                            <small style="padding-left:5px">{{ competence.name }}. </small>
+                                                        {% else %}
+                                                            <small style="padding-left:5px">{{ competence.name }}, </small>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endif %}
+
+                                {% if cpReference > 0 and user.profile.vref == "Visible" %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="text-center" style="border-bottom: 3px solid green;border-radius: 10px; margin-left: 5px; padding:3px; margin-right: 5px;"><b>REFERENCES</b></div>
+                                        {% for reference in references %}
+                                        <span><b>{{ reference.entreprise.name }}</b></span><br>
+                                        {% if reference.gender == "Masculin" %}
+                                        <span>Mr {{ reference.name }}</span><br>
+                                        {% else %}
+                                        <span>Mme {{ reference.name }}</span><br>
+                                        {% endif %}
+                                        <span>{{ reference.phone }}</span><br>
+                                        <span>{{ reference.email }}</span>
+                                        <hr>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    <!-- /.container-fluid -->
+
+</body>
+
+</html>

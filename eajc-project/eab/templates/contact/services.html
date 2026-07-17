@@ -1,0 +1,85 @@
+{% extends 'global/base0.html' %}
+{% block title %} {{ parametre.appname }} | Services {% endblock %}
+{% block content %}
+{% load static %}
+<!-- Page Content-->
+<div class="content-wrapper">
+    <div class="container">
+        <section class="content">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="text-center"><b><i class="fa fa-tags"></i> Services</b></h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="text-center">
+                            <button onclick="scrollToSection('cv')" style="margin:5px"><i class="fa fa-file"></i> CV </button> |
+                            <button onclick="scrollToSection('forum')" style="margin:5px"><i class="fa fa-folder"></i> Forum </button> |
+                            <button onclick="scrollToSection('document')" style="margin:5px"><i class="fa fa-book"></i> Documents </button> |
+                            <button onclick="scrollToSection('chat')" style="margin:5px"><i class="fa fa-comments-o"></i> Chat</button> |
+                            <button onclick="scrollToSection('annonce')" style="margin:5px"><i class="fa fa-info-circle"></i> Annonces</button> |
+                            <button onclick="scrollToSection('inscription')" style="margin:5px"><i class="fa fa-key"></i> Inscription</button>
+                            </div>
+                            <hr>
+                            <p>{{ parametre.appname }} est une plateforme dédiée au partage d’informations et de savoirs scientifiques, spécialement conçue pour soutenir et guider les étudiants tout au long de leur parcours académique.</p>
+                            <h4><b>Le principe</b></h4>
+                            <p>{{ parametre.appname }} propose à ses membres un accompagnement ciblé pour surmonter des difficultés dans des domaines spécifiques. Grâce à notre forum ou au chat dédié à chaque thématique, vous pouvez poser vos questions en toute simplicité. Toutes les interrogations liées à la science sont les bienvenues, car chaque question, quelle qu’elle soit, a son importance et peut contribuer à aider la communauté.</p>
+                            <p>N’hésitez donc pas à partager la vôtre !</p>
+                            <h4><b>Composition</b></h4>
+                            <p>La plateforme {{ parametre.appname }} est organisée en cinq modules principaux : un module de gestion des Curriculum Vitae (CV), un module dédié aux forums, un module de gestion documentaire, un module consacré aux annonces, et un module de messagerie instantanée.</p>
+                            <h4 id="cv"><em><b>1. Curriculum Vitae (CV)</b></em></h4>
+                            <p>Dans cette section, si vous ne disposez pas encore d'un compte, veuillez commencer par en créer un. Une fois connecté, vous aurez la possibilité de saisir vos informations personnelles, notamment votre parcours scolaire, vos compétences, ainsi que vos expériences professionnelles. L'application se chargera ensuite de générer automatiquement votre curriculum vitae.</p>
+                            <p>Illustration : <br>
+                                <div><img class="img-responsive" width="700" height="700" src="{% static 'dist/img/image-cv.PNG' %}" alt="..." /></div>
+                            </p>
+                            <h4 id="forum"><em><b>2. Forum</b></em></h4>
+                            <p>Cette plateforme intègre un forum interactif, vous offrant la possibilité de poser vos questions et de contribuer en répondant à celles des autres membres.</p>
+                            <p>
+                                Illustration :<br>
+                                <div><img class="img-responsive" width="700" height="500" src="{% static 'dist/img/Forum.PNG' %}" alt="..." /></div>
+                            </p>
+                            <h4 id="document"><em><b>3. Documents</b></em></h4>
+                            <p>Cette plateforme vous offre un large éventail de documents, disponibles en versions gratuites et payantes. L'avantage principal réside dans le fait que la majorité des documents sont accessibles gratuitement. Les documents payants, quant à eux, sont proposés à des tarifs particulièrement abordables, reflétant notre engagement à vous accompagner efficacement.</p>
+                            <p>Ces documents sont soigneusement étudiés avant leur publication.</p>
+                            <p>
+                                Illustration :<br>
+                                <div><img class="img-responsive" width="600" height="400" src="{% static 'dist/img/doc.PNG' %}" alt="..." /></div>
+                            </p>
+                            <h4 id="chat"><em><b>4. Chat</b></em></h4>
+                                <p>La section de discussion a été conçue pour offrir aux membres une plateforme dédiée aux échanges sur des sujets spécifiques, ciblant des domaines bien précis.</p>
+                                <p>
+                                    Illustration :<br>
+                                    <div><img class="img-responsive" width="600" height="400" src="{% static 'dist/img/chat.PNG' %}" alt="..." /></div>
+                                </p>
+                            <h4 id="annonce"><em><b>5. Annonces</b></em></h4>
+                            <p>Afin de mieux vous informer, l'équipe de {{ parametre.appname }} a développé cette section intitulée "Annonces". Elle a pour vocation de vous transmettre des informations pertinentes concernant les actualités scolaires et professionnelles.</p>
+                            <p>
+                                Illustration :<br>
+                                <div><img class="img-responsive" width="600" height="400" src="{% static 'dist/img/annonce.PNG' %}" alt="..." /></div>
+                            </p>
+
+                            <h4 id="inscription"><em><b>6. Comment s'incrire ?</b></em></h4>
+                            <p>Allez sur la barre de menu, cliquez sur <b>Compte</b> puis sur créer un compte.</p>
+                            <p>
+                                <div><img class="img-responsive" width="600" height="400" src="{% static 'dist/img/connexion.PNG' %}" alt="..." /></div>
+                            </p>
+                            <p>Renseignez tous les champs du formulaire indiqués ci-dessus, puis cliquez sur<b>Créer un compte</b> pour créer votre compte.</p>
+                            <p>
+                                <div><img class="img-responsive" width="600" height="400" src="{% static 'dist/img/register.PNG' %}" alt="..." /></div>
+                            </p>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            {% include 'global/_slide.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,10 @@
+{% if statut == 2 %}
+<div class="form-group">
+    <label for="comment">Commentaire *</label>
+    <textarea name="comment" id="comment" class="form-control" rows="2"></textarea>
+</div>
+{% else %}
+<div class="form-group">
+    <input type="text" name="comment" class="form-control" readonly> 
+</div>
+{% endif %}

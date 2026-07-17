@@ -1,0 +1,95 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Tableau de bord{% endblock %}
+{% block content %}
+{% load static %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        <i class="fa fa-dashboard"></i> Tableau de bord
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-home"></i> Tableau de bord</a></li>
+        <li ><a href="{% url 'question/count_report' %}">Nombre de signales</a></li>
+        <li class="active">Questions signalées</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1 col-xs-12 col-md-12">
+                    <div class="text-center bg-black my_title">
+                        <h4><i class="fa fa-flag"></i> Nombre de réponses signalées</h4>
+                    </div>
+                </div>
+            </div>
+            <hr>
+          <div class="row">
+            {% for rq in tab_answer_report %}
+                <div class="col-lg-10 col-lg-offset-1 col-xs-12 col-md-12" id="contentra_{{rq.answer.id}}">
+                    <div class="box box-solid">
+                            <div class="box-header with-border">
+                                    <i class="fa fa-flag"></i>
+                                    {% if rq.effectif == 1 %}
+                                    <h3 class="box-title"><b class="text-danger"> 1 signal</b></h3>
+                                    {% else %}
+                                    <h3 class="box-title"><b class="text-danger">{{rq.effectif}} signals</b></h3>
+                                    {% endif %}
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-10 col-xs-10">
+                                        <dl>
+                                        <dt>Description</dt>
+                                        <dd>{{ rq.answer.content|safe }}</dd>
+                                        </dl>
+                                    </div>
+                                    <div class="col-md-2 col-xs-2">
+                                        <a href="#" data-toggle="modal" data-target="#detailAnswer{{ rq.answer.id }}" title="Vue" class="btn btn-default btn-xs" style="border-radius:20px"><i class="fa fa-eye"></i></a>&nbsp;
+                                        <button data-html=true class="btn btn-default btn-xs hide-btn_{{rq.answer.id}}" style="border-radius:20px" data-toggle="popover" data-placement="left" data-content="<button id='{{rq.answer.id}}' class='btn btn-default btn-xs delete_ra' style='margin-bottom:10px'><i class='fa fa-trash'></i> Supprimer</button><br><button id='{{rq.answer.id}}' class='btn btn-default-xs btn-xs close-popover'><i class='fa fa-remove'></i> Fermer </button>"><i class="fa fa-github-alt"></i> <i class="fa fa-chevron-down"></i></button>
+                                        <!-- details Modal-->
+                                        <div class="modal fade" id="detailAnswer{{ rq.answer.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                        aria-hidden="true" style="border-radius: 10px;">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-default">
+                                                        <h4 class="modal-title text-center" id="exampleModalLabel"><span align="center"><b> Liste des membres qui ont signalé cette réponse</b></span></h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                      <div class="row">
+                                                        <div class="col-md-12 col-xs-12">
+                                                            <table class="table">
+                                                                {% for r in rq.reportanswer %}
+                                                                <tr>
+                                                                    <th>{{ r.user.first_name }} {{ r.user.last_name }}</th>
+                                                                    <td>{{ r.justification }}</td>
+                                                                    <td>{{ r.date|date:"d/m/Y h:m" }}</td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Fermer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div><!-- ./col -->
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <!-- Main row -->
+    </section><!-- /.content -->
+  </div><!-- /.content-wrapper -->
+{% endblock %}

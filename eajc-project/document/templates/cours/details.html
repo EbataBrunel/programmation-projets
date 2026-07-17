@@ -1,0 +1,130 @@
+{% extends 'global/base0.html' %}
+{% block title %} {{parametre.appname}} | Détails {% endblock %}
+{% block content %}
+{% load static %}
+<!-- Page Content-->
+<div class="content-wrapper">
+    <div class="container">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+              <i class="fa fa-book"></i> Documents
+            </h1>
+            <ol class="breadcrumb">
+              <li><a href="{% url 'home' %}"><i class="fa fa-home"></i>Accueil</a></li>
+              <li><a href="{% url 'cours/cours' %}">Documents</a></li>
+              <li class="active">Détails</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <p class="mt-1 text-center" id="panier">
+                        {% if count %}
+                            <a href="{% url 'commande/panier' %}" class="btn btn-default btn-sm" style="background-color: rgb(21, 139, 142); color:white;"><i class="fa fa-shopping-cart"></i> Panier <b class="badge badge-danger" style="color: yellow;">{{ count }}</b></a>
+                        {% else %}
+                            <a class="btn btn-default btn-sm" style="background-color: rgb(21, 139, 142); color:white;"><i class="fa fa-shopping-cart"></i> Panier <b class="badge badge-danger">{{ count }}</b></a>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <h4 align="center" class="mt-2"><b>Détails</b></h4>
+                            <div class="panel panel-default h-100">
+                                <div class="panel-header"><h4 class="card-title text-center">{{ course.discipline }} | {{ course.composant }}</h4></div>
+                                <div class="panel-body">
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <table class="table table-bordered table-striped">
+                                                    <tr>
+                                                        <th>Titre  </th>
+                                                        <td>{{ course.title }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Niveau  </th>
+                                                        <td>{{ course.niveau }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Prix  </th>
+                                                        <td><b class="text-danger">{{ course.price }} {{ parametre.devise }}</b></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ course.comment }}</p>
+                                                <p style="float: right;"><b>{{ course.date|date:"d-m-Y"}}</b></p>
+                                            </div>
+                                        </div>
+                                </div>
+                                <div class="panel-footer">
+                                        <a href="{% url 'cours/cours' %}" class="btn btn-default btn-xs"><i class="fa fa-arrow-circle-left"></i> Retour</a>&nbsp;
+                                        {% if course.type == "Payant" %}
+                                            {% if request.user.is_authenticated %}
+                                                <button class="btn btn-default btn-xs addpanier" id="{{ course.id }}" style="background-color: rgb(21, 139, 142); color:white;" href=""><i class="fa fa-shopping-cart"></i> Ajouter au panier</button>
+                                            {% else %}
+                                                <a href="#"  data-toggle="modal" data-target="#DocPayantModal" class="btn btn-default btn-xs" style="background-color: rgb(21, 139, 142); color:white;"><i class="fa fa-shopping-cart"></i> Ajouter au panier</a>
+                                                <!-- Document payant Modal-->
+                                                <div class="modal fade" id="DocPayantModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-primary" style="color:white;">
+                                                                <h4 class="modal-title" id="exampleModalLabel"><span align="center">Information</span></h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                            <p class="text-warning"><i class="fa fa-warning"></i> Vous devez d'abord vous connecter pour ajouter ce document au panier.</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                            <a class="btn btn-primary btn-xs pull-left" href="{% url 'users/register' %}"><i class="fa fa-user"></i> Créer un compte</a>
+                                                                <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Fermer</button>
+                                                                <a class="btn btn-danger btn-xs pull-left" href="{% url 'connection/connexion' %}"><i class="fa fa-key"></i> Se connecter</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if request.user.is_authenticated %}
+                                            <a href="{{ course.file.url }}" class="btn btn-default btn-xs pull-right" style="background-color: rgb(184, 191, 45);" href=""><i class="fa fa-upload"></i> Télécharger le document</a>
+                                            {% else %}
+                                            <a href="#" data-toggle="modal" data-target="#DocGratuitModal" class="btn btn-default btn-xs pull-right" style="background-color: rgb(184, 191, 45);"><i class="fa fa-upload"></i> Télécharger le document</a>
+                                            <!-- Document gratuit Modal-->
+                                            <div class="modal fade" id="DocGratuitModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-primary" style="color:white;">
+                                                            <h4 class="modal-title" id="exampleModalLabel"><span align="center"> Information</span></h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                        <p class="text-warning"><i class="fa fa-warning"></i> Vous devez d'abord vous connecter pour télécharger ce document.</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a class="btn btn-primary btn-xs pull-left" href="{% url 'users/register' %}"><i class="fa fa-user"></i> Créer un compte</a>
+                                                            <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Fermer</button>
+                                                            <a class="btn btn-danger btn-xs pull-left" href="{% url 'connection/connexion' %}"><i class="fa fa-key"></i> Se connecter</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End modal -->
+                                            {% endif %}
+                                        {% endif%}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <br>
+                        <div class="col-md-10 col-md-offset-1">
+                            {% include 'global/_slide.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
+        

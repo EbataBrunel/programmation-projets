@@ -1,0 +1,79 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Tableau de bord{% endblock %}
+{% block content %}
+{% load static %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        <i class="fa fa-dashboard"></i> Tableau de bord
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{% url 'dashboard' %}"><i class="fa fa-home"></i> Tableau de bord</a></li>
+        <li class="active">Nombre de signales</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1 col-xs-12 col-md-12">
+                    <div class="text-center bg-black my_title">
+                        <h4><i class="fa fa-flag"></i> Nombre de questions et réponses signalées</h4>
+                    </div>
+                </div>
+            </div>
+            <hr>
+          <div class="row">
+            <div class="col-lg-6 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-default">
+                <div class="inner bg-gray">
+                  {% if countquestionreport == 0 %}
+                  <h3>{{ countquestionreport }}</h3>
+                  <p>Question signalée</p>
+                  {% elif countquestionreport == 1 %}
+                  <h3 class="text-danger">{{ countquestionreport }}</h3>
+                  <p class="text-danger">Question signalée</p>
+                  {% else %}
+                  <h3 class="text-danger">{{ countquestionreport }}</h3>
+                  <p class="text-danger">Questions signalées</p>
+                  {% endif %}
+                </div>
+                <div class="icon text-black">
+                  <i class="fa fa-flag"></i>
+                </div>
+                <a href="{% url 'question/report_questions' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+            <div class="col-lg-6 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-default">
+                <div class="inner bg-gray">
+                  {% if countanswerreport == 0 %}
+                  <h3>{{ countanswerreport }}</h3>
+                  <p>Réponse signalée</p>
+                  {% elif countanswerreport == 1 %}
+                  <h3 class="text-danger">{{ countanswerreport }}</h3>
+                  <p class="text-danger">Réponse signalée</p>
+                  {% else %}
+                  <h3 class="text-danger">{{ countanswerreport }}</h3>
+                  <p class="text-danger">Réponses signalées</p>
+                  {% endif %}
+                </div>
+                <div class="icon text-black">
+                  <i class="fa fa-flag"></i>
+                </div>
+                <a href="{% url 'question/report_answers' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+          </div>
+        </div>
+      </div>
+      <!-- Main row -->
+    </section><!-- /.content -->
+  </div><!-- /.content-wrapper -->
+{% endblock %}

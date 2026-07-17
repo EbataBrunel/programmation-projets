@@ -1,0 +1,35 @@
+
+{% extends 'global/base0.html' %}
+{% block title %} {{ parametre.appname }} | A propos {% endblock %}
+{% block content %}
+{% load static %}
+
+<!-- Full Width Column -->
+<div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+      <section class="content">
+        <div class="box box-default">
+          <div class="box-header with-border">
+            <h3 class="text-center"><b><i class="fa fa-inbox"></i> A propos</b></h3>
+          </div>
+          <div class="box-body">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1 bg-gray" style="border-radius: 10px;">
+                    <br>
+                    <p>{{ parametre.appname }} est une plateforme innovante développée par l'équipe EAJC et officiellement lancée en juillet 2023, après une phase rigoureuse de tests approfondis. Conçue avec pour objectif de favoriser le développement du secteur éducatif, cette plateforme offre aux étudiants un espace dédié aux échanges axés principalement sur les sciences, ainsi qu’un accès à des ressources documentaires pour enrichir et approfondir leurs connaissances.</p>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    {% include 'global/_slide.html' %}
+                </div>
+            </div>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+      </section><!-- /.content -->
+    </div><!-- /.container -->
+  </div><!-- /.content-wrapper -->
+{% endblock %}
+

@@ -1,0 +1,33 @@
+<div class="table-responsive">
+    <table class="table table-striped">
+        <tr>
+            <th>Thème  </th>
+            <td>{{ panier.discipline }}</td>
+        </tr>
+        <tr>
+            <th>Composant  </th>
+            <td>{{ panier.composant }}</td>
+        </tr>
+        <tr>
+            <th>Titre  </th>
+            <td>{{ panier.title }}</td>
+        </tr>
+        <tr>
+            <th>Quanité  </th>
+            <td>{{ panier.quantite }}</td>
+        </tr>
+        <tr>
+            <th>Prix  </th>
+            <td><b class="text-danger">{{ panier.price }} {{ parametre.devise }}</b></td>
+        </tr>
+    </table>
+    <hr>
+    <p>
+        <b>Description : </b><br>
+        {{ panier.comment }}
+    </p>
+</div>
+<hr>
+<p class="text-center">
+    <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Fermer</button>
+</p>

@@ -1,0 +1,83 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Portfolio {% endblock %}
+{% block content %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            <i class="fa fa-crop"></i> Portfolio
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+            <li class="active">Portfolio</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title text-info"><i class="fa fa-crop"></i> Portfolio</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="panel panel-default bg-black" style="border-radius:20px">
+                                        <div class="panel-body">
+                                            <p class="text-center" style="font-size:40px">{{ nb_projects }}</p>
+                                            {% if nb_projects > 1 %}
+                                            <p class="text-center"><a href="{% url 'projet/projects' %}" style="color:white; font-size: 30px;"><i class="fa fa-book"></i> Projets </a></p>
+                                            {% else %}
+                                            <p class="text-center"><a href="{% url 'projet/projects' %}" style="color:white; font-size: 30px;"><i class="fa fa-book"></i> Projet </a></p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="panel panel-default bg-black" style="border-radius:20px">
+                                        <div class="panel-body">
+                                            <p class="text-center" style="font-size:40px">{{ nb_theses }}</p>
+                                            {% if nb_theses > 1 %}
+                                            <p class="text-center"><a href="{% url 'these/theses' %}" style="color:white; font-size: 30px;"><i class="fa fa-book"></i> Thèses </a></p>
+                                            {% else %}
+                                            <p class="text-center"><a href="{% url 'these/theses' %}" style="color:white; font-size: 30px;"><i class="fa fa-book"></i> Thèse </a></p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="panel panel-default bg-black" style="border-radius:20px">
+                                      <div class="panel-body">
+                                          <p class="text-center" style="font-size:40px">{{ nb_articles }}</p>
+                                          {% if nb_articles > 1 %}
+                                          <p class="text-center"><a href="{% url 'article/these_article' %}" style="color:white; font-size: 30px;"><i class="fa fa-book"></i> Articles </a></p>
+                                          {% else %}
+                                          <p class="text-center"><a href="{% url 'article/these_article' %}" style="color:white; font-size: 30px;"><i class="fa fa-book"></i> Article </a></p>
+                                          {% endif %}
+                                      </div>
+                                  </div>
+                                </div>
+                            </div>
+                            {% if nb_totals > 0 %}
+                              <hr>
+                              <p class="text-center">Profil public et URL de votre portfolio : <span class="text-primary">{{ domain }}/ptf/mp/{{ param }}</span></p>
+                              
+                              <div class="text-center">
+                                <a href="{% url 'mon_portfolio' param %}" class="btn btn-primary btn-sm">Voir mon portfolio</a>
+                              </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      {% endblock %}

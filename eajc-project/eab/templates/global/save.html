@@ -1,0 +1,168 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $('.question').on('click', function(){
+            var id = $(this).attr("id");
+            $('#question').addClass("text-primary");
+        });
+
+        $('.ourview').on('click', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("ajaxCours/"+id,
+                    {id:id},
+                    function(data){
+                        $('#courseview').html(data); 
+                        // Retirer la classe "bg-primary" de toutes les divs
+                        $('.desp').removeClass('bg-gray');
+                        // Ajouter la classe "bg-primary" uniquement à l'élément cliqué
+                        $(".activated_"+id).addClass("bg-gray");
+                    }
+                );
+
+            }
+        });
+
+        // ===================== Opérations effectuées sur les documents ==============
+        // ============================================================================
+
+        /*===================== Ajout d'un article dans un panier =============*/
+        $(".addpanier").on('click', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("addPanier/"+id,
+                    {id:id},
+                    function(data){
+                        $("#panier").html(data); 
+                    }
+                );
+
+            }
+        });
+
+        // =============== Suppression d'un élement du panier ===============
+        $(document).on('click','.delete_cart', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_cart/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        /*===================== Ajout d'un autre article dans un panier =============*/
+        $(document).on('click','.addp',function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("addPanier/"+id,
+                    {id:id},
+                    function(data){
+                        $("#panier").html(data); 
+                    }
+                );
+
+            }
+        });
+
+        // Afficher le détail d'un document
+        $(document).on('click','.detail_cart', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_detail_cart/"+id,
+                        {id:id},
+                        function(data){
+                            $('#show-content-detail').modal('show');
+                            $('#content-detail').html(data);
+                        }
+                    );
+            }
+        });
+
+        // ============ Gestion Contact ==================
+        $('#formContact').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'contact/contact' %}",
+                method : "POST",
+                data:new FormData($('#formContact')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formContact')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        }); 
+
+        // ============ Contact ==================
+        $('#formContactUser').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'contact/contuser' %}",
+                method : "POST",
+                data:new FormData($('#formContactUser')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formContactUser')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });
+
+        //  récupère le chemin actuel de l’URL.
+        var path = window.location.pathname;
+        $('.nav li a').each(function() { // parcourt tous les liens du menu et ajoute la classe active si le chemin de l'URL correspond à href de l’élément <a>.
+            if ($(this).attr('href') === path) {
+                $(this).closest('li').addClass('active');
+            }
+        });
+
+    });
+    
+    function scrollToSection(id) {
+        if (id == 'cv'){
+            var element = document.getElementById("cv");
+            element.scrollIntoView({ behavior: "smooth" });
+        }else if( id == 'forum') {
+            var element = document.getElementById("forum");
+            element.scrollIntoView({ behavior: "smooth" });
+        }else if( id == 'document') {
+            var element = document.getElementById("document");
+            element.scrollIntoView({ behavior: "smooth" });
+        }else if( id == 'chat') {
+            var element = document.getElementById("chat");
+            element.scrollIntoView({ behavior: "smooth" });
+        }else if( id == 'annonce') {
+            var element = document.getElementById("annonce");
+            element.scrollIntoView({ behavior: "smooth" });
+        }else{
+            var element = document.getElementById("inscription");
+            element.scrollIntoView({ behavior: "smooth" });
+        }
+    }
+</script>

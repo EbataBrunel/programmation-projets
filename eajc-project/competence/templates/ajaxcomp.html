@@ -1,0 +1,19 @@
+
+{% if type_comp == "Langue" %}
+    <div class="form-group">
+        <div class="form-group">
+            <label for="comment">Commentaire </label>
+            <select name="comment" id="comment" class="form-control" required>
+                <option value="">-- Selectionnez --</option>
+                {% for comment in comments %}
+                <option value="{{ comment }}">{{ comment }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+{% else %}
+    <div class="form-group">
+        <label for="comment">Commentaire </label>
+        <textarea name="comment" id="comment" class="form-control" rows="2"></textarea>
+    </div>
+{% endif %}

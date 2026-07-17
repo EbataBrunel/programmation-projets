@@ -1,0 +1,147 @@
+
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Experiences {% endblock %}
+{% block content %}
+{% load static %}
+{% load crypto_filters %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            <i class="fa fa-list"></i> Expériences
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+            <li><a href="{% url 'cv/step_cv' %}"> Etapes cv</a></li>
+            <li class="active">Experiences</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="text-center">
+                <a href="{% url 'etablissements' %}" class="tag"><b><span class="step-circle"> 1 </span> Etablissements</b></a>
+                <a href="{% url 'baccalaureat' %}" class="tag"><b><span class="step-circle"> 2 </span> Baccalauréat</b></a>
+                <a href="{% url 'formations' %}" class="tag"><b><span class="step-circle"> 3 </span> Formations</b></a>
+                <a href="{% url 'parcours' %}" class="tag"><b><span class="step-circle"> 4 </span> Parcours</b></a>
+                <a href="{% url 'entreprises' %}" class="tag"><b><span class="step-circle"> 5 </span> Entreprises</b></a>
+                <a href="{% url 'experiences' %}" class="tag btn btn-primary bg-gray"><b><span class="step-circle"> 6 </span> Expériences</b></a>
+                <a href="{% url 'competences' %}" class="tag"><b><span class="step-circle"> 7 </span> Compétences</b></a>
+                <a href="{% url 'references' %}" class="tag"><b><span class="step-circle"> 8 </span> Références</b></a>
+            </div>
+            <br>
+          <div class="row">
+            <div class="col-xs-12">
+
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title text-info"><i class="fa fa-table"></i> <b>Liste des expériences</b> </h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div align="right">
+                        <a href="{% url 'add_exp' %}" class="btn btn-default btn-sm"><i class="fa fa-plus"></i> Ajouter une expérience</a>
+                    </div>
+                    <br>
+                    <div class="table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr class="bg-{{ parametre.theme }}">
+                                <th>Types</th>
+                                <th>Projet</th>
+                                <th>Entreprises</th>
+                                <th>DateDébut</th>
+                                <th>DateFin</th>
+                                <th>Visibilité</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for experience in experiences %}
+                                <tr>
+                                    {% if experience.experience.type_exp == "Employé(e)" %}
+                                        {% if request.user.profile.gender == "Masculin" %}
+                                        <td>Employé</td>
+                                        {% else %}
+                                        <td>Employée</td>
+                                        {% endif %}
+                                    {% else %}
+                                    <td>{{ experience.experience.type_exp }}</td>
+                                    {% endif %}
+                                    <td>{{ experience.experience.projet }}</td>
+                                    {% if experience.experience.entreprise %}
+                                        <td>{{ experience.experience.entreprise }}</td>
+                                    {% else %}
+                                        <td></td>
+                                    {% endif %}
+                                    <td>{{ experience.experience.date_debut|date:"d/m/Y" }}</td>
+                                    <td>{{ experience.experience.date_fin|date:"d/m/Y" }}</td>
+                                    <td class="stexp" id="{{ experience.experience.id }}">
+                                        {% if experience.experience.status %}
+                                            <a href="#" class="btn btn-success btn-circle btn-xs text-light"><i class="fa fa-check"></i></a>
+                                        {% else %}
+                                            <a href="#" class="btn btn-danger btn-circle btn-xs text-light"><i class="fa fa-remove"></i></a>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="label label-light">
+                                            <a class="btn btn-default btn-xs delete_experience" id="{{experience.experience.id }}"> <i class="fa fa-trash"></i> </a>
+                                            <a href="{% url 'edit_exp' experience.experience.id|crypter_id %}" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a>&nbsp;
+                                            <a id="{{ experience.experience.id }}" title="Vue" class="btn btn-default btn-xs detail-experience"><i class="fa fa-eye"></i></a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Delete Modal-->
+                  <div class="modal fade" id="content_delete" tabindex="-1" style="border-radius: 10px;">
+                    <div class="modal-dialog modal-sm" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header danger">
+                          <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5>
+                        </div>
+                        <div class="modal-body" id="content-delete-item"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Delete Modal-->
+
+                  <!-- details Modal-->
+                <div class="modal fade" id="show-detail-experience" tabindex="-1" role="dialog" style="border-radius: 10px;">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-primary">
+                                                        <h5 class="modal-title" id="exampleModalLabel"><span align="center"><b><i class="fa fa-eye"></i> Détails</b></span></h5>
+                                                    </div>
+                                                    <div class="modal-body" id="content-detail-experience">
+                                                    
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Fermer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                    </div>
+                    <!-- End Modal Modal-->
+
+
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+          <div class="text-center">
+            <a href="{% url 'entreprises' %}" class="btn btn-primary btn-sm" style="border-radius:20px"><i class="fa fa-arrow-circle-left"></i> Etape Précédente</a>&nbsp;&nbsp;
+            <a href="{% url 'competences' %}" class="btn btn-primary btn-sm" style="border-radius:20px">Etape Suivante <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+{% endblock %}
+
+
+
+
+

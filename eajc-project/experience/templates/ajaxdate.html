@@ -1,0 +1,31 @@
+
+{% if type_exp == "Autre type d'expérience" %}
+    <div class="form-group">
+        <label for="autre_type_exp">Préciser cet autre type d'expérience *</label>
+        <input type="text" name="autre_type_exp" id="autre_type_exp" value="{{ experience.type_exp }}" class="form-control" required> 
+    </div>
+{% endif %}
+
+{% if status == 1 %}
+    <div class="form-group">
+        <label for="entreprise">Entreprise *</label>
+        <select name="entreprise" id="entreprise" class="form-control" required>
+            {% if experience.entreprise.id %}
+            <option value="{{ experience.entreprise.id }}">{{ experience.entreprise.name }}</option>
+            {% else %}
+            <option value="">-- Selectionnez --</option>
+            {% endif %}
+            {% for entreprise in entreprises %}
+            <option value="{{ entreprise.id }}">{{ entreprise.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="date_debut">Date de début *</label>
+        <input type="date" name="date_debut" id="date_debut" value ="{{ experience.date_debut|date:"Y-m-d" }}" class="form-control " required> 
+    </div>
+    <div class="form-group">
+        <label for="date_fin">Date de fin </label>
+        <input type="date" name="date_fin" id="date_fin" value ="{{ experience.date_fin|date:"Y-m-d" }}" class="form-control"> 
+    </div>
+{% endif %}

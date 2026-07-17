@@ -1,0 +1,119 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Lettres de motivation {% endblock %}
+{% block content %}
+{% load crypto_filters %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            <i class="fa fa-download"></i> Télécharger CV & LM
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+            <li><a href="{% url 'cv_lm' %}">Télécharger CV & LM</a></li>
+            <li class="active">Mes Lettres de motivivation</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title text-info"><i class="fa fa-send"></i> Envoyer votre lettre de motivation à l'équipe de <strong>{{parametre.appname}}</strong></h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <br>
+                    <p>
+                        <a href="{% url 'p_lms' %}" class="btn btn-default btn-xs">Toutes les lettres de motivations</a>&nbsp;
+                        <a href="{% url 'lms' %}" class="btn btn-primary btn-xs">Mes lettres de motivations</a>
+                    </p>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                          <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                              <div class="text-center">
+                                    {% if messages %}
+                                        {% for message in messages %}
+                                            <div class="alert {{ message.tags }} text-center">
+                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                                <strong>{{ message }}</strong>
+                                            </div> 
+                                        {% endfor %}
+                                    {% endif %}
+                              </div>
+                              <form method="post" action="{% url 'lms' %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <select name="type" id="type" class="form-control" required>
+                                                <option value="">-- Selectionnez un type de LM --</option>
+                                                {% for type in types %}
+                                                    <option value="{{type}}">{{type}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <input type="file" name="file" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-primary btn-xs"><i class="fa fa-check"></i> Envoyer</button>
+                                    </div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <hr>
+                    {% if lms %}
+                      <h3 class="text-center"><b> Mes lettres de motivations </b></h3>
+                      <br>
+                      {% for line in lms %}
+                      <div class="border-shadow">
+                          {% if line.lm.statut == 0 %}
+                          <p>{{ line.lm.type|upper }} | <a href="{{ line.lm.file.url }}"> {{ line.lm.file }} <span style="font-size: 20px; margin-left:5px"><i class="fa fa-download"></i></span> </a> <span class="label label-warning border-radius" style="margin-left:5px; margin-right:5px"> En cours de traitement </span> | <a href="{% url 'edit_lm' line.lm.id|crypter_id %}" title="Modifier" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a> | <a class="btn btn-danger btn-xs" href="#" title="Supprimer" data-toggle="modal" data-target="#etabModal{{ line.lm.id }}"><i class="fa fa-trash"></i></a> <em style="float: right">{{ line.lm.date }}</em> </p>
+                          {% elif line.lm.statut == 1 %}
+                          <p>{{ line.lm.type|upper }} | <a href="{{ line.lm.file.url }}"> {{ line.lm.file }} <span style="font-size: 20px; margin-left:5px"><i class="fa fa-download"></i></span> </a> <span class="label label-success border-radius" style="margin-left:5px; margin-right:5px"> Publiée </span> | <a href="{% url 'edit_lm' line.lm.id|crypter_id %}" title="Modifier" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a> | <a class="btn btn-danger btn-xs" href="#" title="Supprimer" data-toggle="modal" data-target="#etabModal{{ line.lm.id }}"><i class="fa fa-trash"></i></a> <em style="float: right">{{ line.lm.date }}</em> </p>
+                          {% else %}
+                          <p>{{ line.lm.type|upper }} | <a href="{{ line.lm.file.url }}"> {{ line.lm.file }} <span style="font-size: 20px; margin-left:5px"><i class="fa fa-download"></i></span> </a> <span class="label label-danger border-radius" style="margin-left:5px; margin-right:5px"> A Corriger </span> | <a href="{% url 'edit_lm' line.lm.id|crypter_id %}" title="Modifier" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a> | <a class="btn btn-danger btn-xs" href="#" title="Supprimer" data-toggle="modal" data-target="#etabModal{{ line.lm.id }}"><i class="fa fa-trash"></i></a> | 
+                            <a class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="right" data-content="{{ line.lm.comment }}">
+                            Voir le commentaire
+                            </a> 
+                            <em style="float: right">{{ line.lm.date }}</em> 
+                          </p>
+                          {% endif %}
+                          <div class="modal fade" id="etabModal{{ line.lm.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="border-radius: 10px;">
+                                      <div class="modal-dialog modal-sm" role="document">
+                                          <div class="modal-content">
+                                              <div class="modal-header danger">
+                                                  <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5>
+                                              </div>
+                                              <div class="modal-body">Voulez-vous vraiment supprimer cette LM ?</div>
+                                              <div class="modal-footer">
+                                                  <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Annuler</button>
+                                                  <a class="btn btn-danger btn-xs" href="{% url 'del_lm' line.lm.id|crypter_id %}"><i class="fa fa-trash"></i> Supprimer</a>
+                                              </div>
+                                          </div>
+                                      </div>
+                          </div>
+                      </div>
+                      {% endfor %}
+                    {% else %}
+                      <h4 class="text-center">Aucune lettre de motivation enregistrée</h4>
+                    {% endif %}
+
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      {% endblock %}

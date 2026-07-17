@@ -1,0 +1,44 @@
+
+
+<div class="row">
+    <div class="col-md-6 col-xs-12">
+        <table class="table">
+            <tr>
+                <th>Discipline : </th>
+                <td>{{ course.discipline }}</td>
+            </tr>
+            <tr>
+                <th>Composant : </th>
+                <td>{{ course.composant }}</td>
+            </tr>
+            <tr>
+                <th>Niveau : </th>
+                <td>{{ course.niveau }}</td>
+            </tr>
+            <tr>
+                <th>Type : </th>
+                <td>{{ course.type }}</td>
+            </tr>
+            <tr>
+                <th>Prix : </th>
+                <td class="text-danger">{{ course.price }} {{parametre.devise}}</td>
+            </tr>
+            <tr>
+                <th>Titre : </th>
+                <td>{{ course.title }}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-6 col-xs-12">
+        <h4><b>Description</b></h4>
+        <p>{{course.comment}}</p>
+        <div>
+            <p>Télécharger</p>
+            <p><a href="{{ course.file.url }}" class="btn btn-default btn-sm" style="color:blue">Télecharger le PDF</a></p>
+        </div>
+    </div>
+</div>
+<hr>
+<p class="text-center">
+<button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Fermer</button>
+</p>

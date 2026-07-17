@@ -1,0 +1,77 @@
+
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Détails des documents {% endblock %}
+{% block content %}
+{% load crypto_filters %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            <i class="fa fa-book"></i> Documents
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+            <li><a href="{% url 'cours/listcours' %}">disciplines</a></li>
+            <li class="active">Composants</li>
+            
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title text-info"><i class="fa fa-table"></i> Liste des composants de <b>{{ discipline }}</b> </h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                            <div class="table-responsive">
+                                <table  id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr class="bg-{{ parametre.theme }} text-white">
+                                            <th>Composant</th>
+                                            <th>NombreDocuments</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for cour in cours %}
+                                        <tr>
+                                            <td>{{ cour.composant }}</td>
+                                            <td><span class="btn btn-default btn-xs bg-gray hoverdoccmp" id="{{ cour.id }}">{{ cour.effectif }}</span></td>
+                                            <td>
+                                                <a class="btn btn-default btn-xs delete_cours_composant" id="{{ cour.id }}"> <i class="fa fa-trash"></i> </a>&nbsp;
+                                                <a href="{% url 'cours/dcours' cour.id|crypter_id %}" title="Vue" class="btn btn-default btn-xs"><i class="fa fa-eye"></i></a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br>
+                            <a href="{% url 'cours/listcours' %}" class="btn btn-default btn-xs"><i class="fa fa-arrow-circle-left"></i> Retour </a>
+
+                            <!-- Delete Modal-->
+                            <div class="modal fade" id="content_delete" tabindex="-1" style="border-radius: 10px;">
+                                <div class="modal-dialog modal-sm" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header danger">
+                                    <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5>
+                                    </div>
+                                    <div class="modal-body" id="content-delete-item"></div>
+                                </div>
+                                </div>
+                            </div>
+                            <!-- End Delete Modal-->
+
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                  </div><!-- /.col -->
+                </div><!-- /.row -->
+              </section><!-- /.content -->
+            </div><!-- /.content-wrapper -->
+{% endblock %}
+

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email</title>
+    <style>
+        body{
+            background-color:gray;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .right{
+            float: right
+        }
+
+        .space{
+            padding-left: 30px
+        }
+        
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Votre message a été envoyé</h1>
+        <p> Vous recevez ce message en réponse à votre message envoyé à {{ parametre.appname }}.</p>
+        <p>Notre équipe vous répondra à votre adresse e-mail <b style="text-decoration: none;">{{ email }}</b> dans les plus brefs délais.</p>
+        
+        <h3>Nos contacts : </h3>
+        <p class="space">Téléphone : {{ parametre.phone }}</p>
+        <p class="space">Email : <span style="text-decoration: none;">{{ parametre.email }} </span></p>
+        <p class="right"><small>Compte crée le {{ date|date:"d/m/Y H:m" }}</small><p>
+    </div>
+</body>
+</html>

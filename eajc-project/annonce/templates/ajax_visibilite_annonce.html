@@ -1,0 +1,10 @@
+{% load crypto_filters %}
+<div class="text-center">
+    {% if annonce.visibility == 1 %}
+        <p>Voulez-vous vraiment annuler l'affichage de l'annonce ?</p>
+    {% else %}
+        <p> Voulez-vous vraiment afficher l'annonce ?</p>
+    {% endif %}
+    <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Annuler</button>&nbsp;
+    <button data-dismiss="modal" class="btn btn-primary btn-xs visibility" id="{{annonce.id}}"><i class="fa fa-check-circle"></i> Oui</button>
+</div>

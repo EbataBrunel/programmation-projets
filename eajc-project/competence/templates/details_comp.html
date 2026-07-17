@@ -1,0 +1,114 @@
+
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Competences {% endblock %}
+{% block content %}
+{% load static %}
+{% load crypto_filters %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            <i class="fa fa-edit"></i> Compétences
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+            <li><a href="{% url 'cv/step_cv' %}"> Etapes cv</a></li>
+            <li><a href="{% url 'competences' %}">Compétences</a></li>
+            <li class="active">Détails</li>
+          </ol>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+          <div class="text-center">
+            <a href="{% url 'etablissements' %}" class="tag"><b><span class="step-circle"> 1 </span> Etablissements</b></a>
+            <a href="{% url 'baccalaureat' %}" class="tag"><b><span class="step-circle"> 2 </span> Baccalauréat</b></a>
+            <a href="{% url 'formations' %}" class="tag"><b><span class="step-circle"> 3 </span> Formations</b></a>
+            <a href="{% url 'parcours' %}" class="tag"><b><span class="step-circle"> 4 </span> Parcours</b></a>
+            <a href="{% url 'entreprises' %}" class="tag"><b><span class="step-circle"> 5 </span> Entreprises</b></a>
+            <a href="{% url 'experiences' %}" class="tag"><b><span class="step-circle"> 6 </span> Expériences</b></a>
+            <a href="{% url 'competences' %}" class="tag btn btn-primary bg-gray"><b><span class="step-circle"> 7 </span> Compétences</b></a>
+            <a href="{% url 'references' %}" class="tag"><b><span class="step-circle"> 8 </span> Références</b></a>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-xs-12">
+
+              <div class="box">
+
+                <br>
+                <p class="text-center">
+                  <a href="{% url 'competences' %}" class="btn btn-default btn-sm bg-gray" style="margin:5px"><span class="step-circle"> 7.1 </span> Compétences</a>
+                  <a href="{% url 'typeCompetence/type_competences' %}" class="btn btn-default btn-sm" style="margin:5px"><span class="step-circle"> 7.2 </span> Type de compétences</a>
+                </p>
+                <br>
+                
+                <div class="box-header">
+                  <h3 class="box-title text-info"><i class="fa fa-table"></i> Liste des compétences de <b>{{ type_competence|safe }}</b>  </h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="mb-2" align="right">
+                        <a href="{% url 'add_comp' %}" class="btn btn-default btn-sm"><i class="fa fa-plus"></i> Ajouter une compétence</a>
+                    </div>
+                    <br>
+                    <div class="table-responsive">
+                      <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                          <tr class="bg-{{ parametre.theme }}">
+                            <th>Noms</th>
+                            <th>Commentaires</th>
+                            <th>Visibilité</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% for competence in competences %}
+                                            <tr>
+                                                <td>{{ competence.name }}</td>
+                                                <td>{{ competence.comment }}</td>
+                                                <td class="stcomp" id="{{ competence.id }}">
+                                                    {% if competence.status %}
+                                                        <a href="#" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>
+                                                    {% else %}
+                                                        <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></a>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-default btn-xs delete_competence" id="{{ competence.id }}"> <i class="fa fa-trash"></i> </a>
+                                                    <a href="{% url 'edit_comp' competence.id|crypter_id %}" title="Modifier" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                    </br>
+                    <a href="{% url 'competences' %}" class="btn btn-default btn-xs"><i class="fa fa-arrow-circle-left"></i> Retour</a>
+
+                    <!-- Delete Modal-->
+                  <div class="modal fade" id="content_delete" tabindex="-1" style="border-radius: 10px;">
+                    <div class="modal-dialog modal-sm" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header danger">
+                          <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5>
+                        </div>
+                        <div class="modal-body" id="content-delete-item"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Delete Modal-->
+
+
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+{% endblock %}
+
+
+
+
+

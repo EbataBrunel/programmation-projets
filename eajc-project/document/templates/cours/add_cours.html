@@ -1,0 +1,115 @@
+
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | publier un cours {% endblock %}
+{% block content %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            <i class="fa fa-book"></i> Documents
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+            <li><a href="{% url 'cours/mescours' %}"> Mes documents</a></li>
+            <li class="active">Ajout</li>
+            
+          </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                  <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title"><i class="fa fa-plus"></i> <b>Publier un document</b> </h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                            <!-- On inclut l'image de chargement -->
+                            {% include 'global/_loading.html' %}
+                            <form method="post" action="" enctype="multipart/form-data" id="formDocument">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div  class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="discipline">Discipline *</label>
+                                            <select name="discipline" id="discipline" class="form-control" required>
+                                                <option value="">-- Selectionnez --</option>
+                                                {% for discipline in disciplines %}
+                                                <option value="{{ discipline.id }}">{{ discipline.libelle }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div id="Componentview">
+                                            <div class="form-group">
+                                                <label for="composant">Composant *</label>
+                                                <select name="composant" id="composant" class="form-control" required>
+                                                    <option value="">-- Selectionnez --</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="niveau">Niveau *</label>
+                                            <select name="niveau" id="niveau" class="form-control" required>
+                                                <option value="">-- Selectionnez --</option>
+                                                {% for niveau in niveaux %}
+                                                <option value="{{ niveau }}">{{ niveau }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="other_level"></div>
+                                        <div class="form-group">
+                                            <label for="file">Fichier *</label>
+                                            <input type="file" name="file" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="title">Titre *</label>
+                                            <input type="text" name="title" class="form-control" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="type">Type de cours *</label>
+                                            <select name="type" id="type" class="form-control" required>
+                                                <option value="">-- Selectionnez --</option>
+                                                <option value="Graduit">Gratuit</option>
+                                                <option value="Payant">Payant</option>
+                                            </select>
+                                        </div>
+                                        <div id="priceview">
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="comment">Commentaire </label>
+                                            <textarea name="comment" rows="5" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <a href="{% url 'cours/mescours' %}" class="btn btn-default btn-xs"><i class="fa fa-arrow-circle-left"></i> Retour</a>&nbsp;
+                                        <button class="btn btn-info btn-xs"><i class="fa fa-check"></i> Valider</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- Modal info -->
+                            <div data-backdrop="True" class="modal fade" id="message" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-sm" role="document">
+                                    <div class="modal-content" style="background-color: rgb(28,36,47)">
+                                      <div class="modal-header text-center"><span style="color:white"><i class="fa fa-info"></i> Information</span>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="badge badge-warning" style="color:white">X</span></button>
+                                      </div>
+                                      <div class="modal-body" id="content-message"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end modal info -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- /.container-fluid -->
+
+{% endblock %}

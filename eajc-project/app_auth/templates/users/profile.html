@@ -1,0 +1,192 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Profil {% endblock %}
+{% block content %}
+{% load static %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Tableau de bord
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h4 class="box-title text-info"><i class="fa fa-user"></i> Votre profil</h4>
+                </div>
+                <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <table class="table">
+                                        <tr>
+                                            <th>NOMS : </th>
+                                            <td>{{ request.user.last_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>PRENOMS : </th>
+                                            <td>{{ request.user.first_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>NOM UTILISATEUR : </th>
+                                            <td>{{ request.user.username }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>SEXE </th>
+                                            <td>{{ profile.gender }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>ADRESSE </th>
+                                            <td>{{ profile.address }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>TELEPHONE <i class="fa fa-phone"></i> </th>
+                                            <td>{{ profile.phone }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>EMAIL <i class="fa fa-envelope"></i> </th>
+                                            <td>{{ request.user.email }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>PROFESSION  </th>
+                                            <td>{{ profile.profession }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>PAYS DE RESIDENCE  </th>
+                                            <td>{{ profile.country }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>LINKEDIN  </th>
+                                            <td>{{ profile.linkedin }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>PORTFOLIO  </th>
+                                            <td>{{ profile.portfolio }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>GITHUB  </th>
+                                            <td>{{ profile.github }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-5" align="center">
+                                    {% if messages %}
+                                        {% for message in messages %}
+                                            <div class="alert {{ message.tags }} text-center">
+                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                                <strong>{{ message }}</strong>
+                                            </div> 
+                                        {% endfor %}
+                                    {% endif %}
+                                    <a href="#" data-toggle="modal" data-target="#profileModal" style="text-decoration: none; color: black;">
+                                        {% if profile.photo %}
+                                        <img class="img-circle img-fluid" width="200px" height="250px" src="{{ profile.photo.url }}">
+                                        <p><span align="center">Membre depuis le <b>{{ request.user.date_joined|date:"d/m/Y" }}</b></span></p>
+                                        {% else %}
+                                        <img class="img-circle img-fluid" width="300px" src="{% static 'dist/img/user.png' %}">
+                                        <p><span align="center">Membre depuis le <b>{{ request.user.date_joined|date:"d/m/Y" }}</b></span></p>
+                                        {% endif %}
+                                    </a>
+                                    <!-- Profile Modal-->
+                                    <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content bg-black">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" id="exampleModalLabel"><span align="center">Photo de profile</span></h3>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {% if profile.photo %}
+                                                        <img class="img-circle img-fluid" width="300px" height="350px" src="{{ profile.photo.url }}">
+                                                        {% else %}
+                                                        <img class="img-circle img-fluid" width="300px" height="350px" src="{% static 'dist/img/user.png' %}">
+                                                    {% endif %}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form method="POST" action="" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-default btn-sm pull-left" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Fermer</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group mb-1">
+                                                                    <input type="file" name="photo" class="form-control"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-primary btn-sm pull-right"><i class="fa fa-check"></i> Valider</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <a href="{% url 'users/edit_profile' %}" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i> Mise à jour du profil</a>&nbsp;
+                                <a href="{% url 'password/password_change' %}" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Changer le mot de passe</a>
+                                <span class="askdelete">
+                                {% if profile %}
+                                    {% if profile.status_deleteaccount == 0 %}
+                                    <a class="pull-right text-danger" href="#" data-toggle="modal" data-target="#deleteAccountModal"> Supprimer le compte </i></a>
+                                    {% else %}
+                                    <span class="pull-right text-warning"><i class="fa fa-hand-o-right"></i> Demande suppresion du compte en cours du traitement ...</span>
+                                    {% endif %}
+                                {% else %}
+                                    <button data-html=true class="btn btn-default pull-right btn-xs border-radius hide-btn_{{request.user.id}}" data-toggle="popover" data-placement="left" data-content="<p>Pour supprimer votre compte, veuillez d'abord mettre à jour votre profil, puis soumettre une demande à notre équipe en précisant les raisons de cette suppression.</p><button id='{{request.user.id}}' class='btn btn-default-xs btn-xs close-popover'><i class='fa fa-remove'></i> Fermer </button>"> <i class="fa fa-question-circle"></i></button>
+                                {% endif %}
+                                </span>
+                                <!-- Request Modal-->
+                                <div class="modal fade" id="deleteAccountModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header danger">
+                                                <h5 class="modal-title" id="exampleModalLabel"><span class="text-center">Demande de suppression du compte</span></h5>
+                                            </div>
+                                            <!-- On inclut l'image de chargement -->
+                                            {% include 'global/_loading.html' %}
+                                            <form method="post" action="" id="formDemandeDeleteAccount">
+                                                {% csrf_token %}
+                                                <div class="modal-body">
+                                                    <h5 class="text-center">Pourquoi souhaitez-vous réellement supprimer votre compte ?</h5>
+                                                    <div class="form-group">
+                                                        <textarea name="just_costumer" placeholder="Tapez votre jutification ici..." rows="4" class="form-control" required></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div class="text-center">
+                                                        <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Annuler</button>
+                                                        <button type="submit" class="btn btn-primary btn-xs"> <i class="fa fa-check"></i> Valider </button>
+                                                    </div>
+                                                </div>
+                                            </form>  
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modale de l'info -->
+                                <div data-backdrop="True" class="modal fade" id="message" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-sm" role="document">
+                                        <div class="modal-content" style="background-color: rgb(28,36,47)">
+                                          <div class="modal-header text-center"><span style="color:white"><i class="fa fa-info"></i> Information</span>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="badge badge-warning" style="color:white">X</span></button>
+                                          </div>
+                                          <div class="modal-body" id="contenu_message"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Fin du modal de l'info -->
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- /.container -->
+{% endblock %}

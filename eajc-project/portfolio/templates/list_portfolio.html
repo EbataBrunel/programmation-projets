@@ -1,0 +1,49 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Portfolios {% endblock %}
+{% block content %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            <i class="fa fa-dashboard"></i> Tableau de bord
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+            <li class="active">Liste des portfolios</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title text-info"><i class="fa fa-file"></i> Liste des membres et leur portfolio</strong></h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="row">
+                              {% for u in list_users %}
+                                <div class="col-md-6">
+                                    <div class="panel panel-default" style="border-radius:20px; border:1px solid gray">
+                                        <div class="panel-body">
+                                            <h3 class="text-center">{{ u.user.last_name|title }} {{ u.user.first_name|title }}</h3>
+                                            <p class="text-center">Le lien du portfolio : <a href="{% url 'mon_portfolio' u.param %}"><span class="text-primary">{{ domain }}/ptf/mp/{{ u.param }}</span></a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                              {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      {% endblock %}

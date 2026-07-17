@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - {{ request.user.last_name|title }}</title>
+    {% if parametre.logo %}
+    <link rel="icon" type="image/jpg" href="{{ parametre.logo.url }}">
+    {% endif %}
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: rgb(63, 109, 159);
+            --secondary-color: #f4f4f9;
+            --text-color: #333;
+            --accent-color: #f39c12;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            background-color: var(--secondary-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        header p {
+            margin: 10px 0 0;
+            font-size: 1.2em;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background: var(--accent-color);
+            padding: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 5px;
+            font-size: 1.5em;
+        }
+
+        .about, .projects, .articles, .contact  {
+            margin-bottom: 50px;
+        }
+
+        .about p {
+            font-size: 1.1em;
+        }
+
+        .projects .project {
+            display: flex;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .projects .project img {
+            width: 40%;
+            height: auto;
+        }
+
+        .projects .project-content {
+            padding: 15px;
+            width: 60%;
+        }
+
+        .projects .project-content h3 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .projects .project-content p {
+            margin: 10px 0;
+        }
+
+
+        .articles .article {
+            display: flex;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .articles .article-content {
+            padding: 15px;
+            width: 60%;
+        }
+
+        .articles .article-content h3 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .articles .article-content p {
+            margin: 10px 0;
+        }
+
+        .contact form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact form input, .contact form textarea {
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .contact form span button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .contact form button:hover {
+            background: var(--accent-color);
+        }
+
+        #loading-spinner {
+            position: fixed; /* Fixed position to keep it at the center of the viewport */
+            top: 50%;        /* 50% from the top */
+            left: 50%;       /* 50% from the left */
+            transform: translate(-50%, -50%); /* Translate to center horizontally and vertically */
+            z-index: 9999;   /* Ensure it stays on top of all other content */
+          }
+          
+          #loading-spinner img {
+              width: 50px;     /* Adjust size as needed */
+              height: 50px;
+          }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .photo {
+            width:100px; 
+            height:auto; 
+            border-radius:50%; 
+            display:block; 
+            margin:20px auto;
+        }
+
+        .these-title {
+            border: 2px solid gray; 
+            background: var(--primary-color);
+            color: var(--secondary-color);
+            border-radius: 10px; 
+            padding:5px 10px; 
+            text-align:center
+        }
+
+        .article-title {
+            border: 2px solid gray; 
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            border-radius: 10px; 
+            padding:5px 10px; 
+            text-align:center
+        }
+
+        h6 {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{{ user.first_name|title }} {{ user.last_name|title }}</h1>
+        <p>{{ user.profile.profession }}</p>
+    </header>
+
+    <nav>
+        <a href="#about">À propos</a>
+        {% if projects %}
+        <a href="#projects">Projets</a>
+        {% endif %}
+        {% if theses %}
+        <a href="#articles">Thèses</a>
+        {% endif %}
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="container">
+        <!-- Section À propos -->
+        <section id="about" class="about">
+            <h2 class="section-title">À propos</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    {% if user.profile.photo %}
+                        <img src="{{ user.profile.photo.url }}" class="photo" alt="Photo de {{ user.first_name }}">
+                    {% else %}
+                        <img src="{% static 'img/user.png' %}" class="photo" alt="Photo de {{ user.first_name }}">
+                    {% endif %}
+                </div>
+                <div class="col-md-9">
+                    <p>{{ user.profile.apropos }}</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Projets -->
+        {% if projects %}
+        <section id="projects" class="projects">
+            <h2 class="section-title">Projets</h2>
+
+            {% for project in projects %}
+            <div class="project">
+                <img src="https://via.placeholder.com/400x250" alt="Aperçu du projet">
+                <div class="project-content">
+                    <h3>{{ project.title }}</h3>
+                    <p>{{ project.description }}</p>
+                    {% if project.link %}
+                        <a href="https://eajccv.pythonanywhere.com" target="_blank" style="color: blue; text-decoration: none;">
+                            Voir le projet
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        <!-- Section Projets -->
+         {% if theses %}
+        <section id="articles" class="article">
+            <h2 class="section-title">Thèses</h2>
+
+            {% for t in theses %}
+            <div class="project">
+                <div class="article-content">
+                    <h5 class="these-title">Thèse | {{ t.these.date_soutenance }}</h5>
+                    <h5><b>Titre</b></h5>
+                    <p>{{ t.these.titre }}</p>
+                    <h5><b>Résumé</b></h5>
+                    <p>{{ t.these.resume }}</p>
+                    <h5><b>Université</b></h5>
+                    <p>{{ t.these.universite }}</p>
+                    <p style="border-bottom:2px solid black; padding-bottom:10px"><b>Date de soutenance : </b>{{ t.these.date_soutenance }}</p>
+                    
+                    {% if t.nb_articles > 1 %}
+                    <h5 class="article-title"> Les articles </h5>
+                        {% for article in t.articles %}
+                            <h6><b>Article n° {{ article.numero }}</b></h6>
+                            <ul>
+                                <li><p><b>Titre :</b> {{ article.titre }}</p></li>
+                                <li><p><b>Résumé :</b> {{ article.resume }}</p></li>
+                                <li><p><b>Révue :</b> {{ article.revue }}</p></li>
+                                <li><p><b>Volume :</b> {{ article.volume }}</p></li>
+                                <li><p><b>Pages :</b> {{ article.pages }}</p></li>
+                                <li><p><b>Doi :</b> {{ article.doi }}</p></li>
+                                <li><p><b>Url :</b> {{ article.url }}</p></li>
+                                <li><p><b>Mots-clés :</b> {{ article.keywords }}</p></li>
+                                <li><p><b>Catégorie :</b> {{ article.categorie }}</p></li>
+                                <li><b><p>Date de publication :</b> {{ article.date_publication }}</p></li>
+                                <li><p><a href="{{ article.file.url }}" class="btn btn-default btn-sm" style="color:green">Voir le fichier PDF</a></p></li>
+                            </ul>
+                            <hr>
+                        {% endfor %}
+                    {% else %}
+                    <h5 class="article-title">Article</h5>
+                        {% for article in t.articles %}
+                            <h6><b>Article </b></h6>
+                            <ul>
+                                <li><p><b>Titre :</b> {{ article.titre }}</p></li>
+                                <li><p><b>Résumé :</b> {{ article.resume }}</p></li>
+                                <li><p><b>Révue :</b> {{ article.revue }}</p></li>
+                                <li><p><b>Volume :</b> {{ article.volume }}</p></li>
+                                <li><p><b>Pages :</b> {{ article.pages }}</p></li>
+                                <li><p><b>Doi :</b> {{ article.doi }}</p></li>
+                                <li><p><b>Url :</b> {{ article.url }}</p></li>
+                                <li><p><b>Mots-clés :</b> {{ article.keywords }}</p></li>
+                                <li><p><b>Catégorie :</b> {{ article.categorie }}</p></li>
+                                <li><b><p>Date de publication :</b> {{ article.date_publication }}</p></li>
+                                <li><p><a href="{{ article.file.url }}" class="btn btn-default btn-sm" style="color:green">Voir le fichier PDF</a></p></li>
+                            </ul>
+                            <hr>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        <!-- Section Contact -->
+        <section id="contact" class="contact">
+            <h2 class="section-title">Contact</h2>
+            <!-- On inclut l'image de chargement -->
+            <div id="loading-spinner" style="display: none;">
+                <img width="20" height="20" class="img-responsive loading" src="{% static 'dist/img/spinner.gif' %}" alt="Chargement...">
+            </div>
+            <form action="" method="post" id="formContactPortfolio">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="text" name="user_id" value="{{ user.id }}" hidden="True"/>
+                        {{ form.name }}
+                        {{ form.email }}
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" name="user_id" value="{{ user.id }}" hidden="True"/>
+                        {{ form.message }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4 text-center">
+                        <span>
+                        <button type="submit" class="btn btn-primary btn-sm">Envoyer le message</button>
+                        </span>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+                <br>
+                <div id="contenu_message"></div>
+            </form>
+        </section>
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'portfolio' %}" style="text-decoration:none"> <i class="fa fa-arrow-circle-left"></i> Retour à page précedente </a>
+        {% endif %}
+    </div>
+
+    <footer>
+        &copy; 2024 {{ request.user.last_name|title }} - Tous droits réservés.
+    </footer>
+
+    <!-- jQuery 2.1.4 -->
+    <script src="{% static 'plugins/jQuery/jQuery-2.1.4.min.js' %}"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function(){
+            // ============ Conta ct portfolio ==================
+            $('#formContactPortfolio').submit(function(){
+                
+                document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+                $.ajax({
+                    url:"{% url 'contact_portfolio' %}",
+                    method : "POST",
+                    data:new FormData($('#formContactPortfolio')[0]),
+                    contentType : false,
+                    processData : false,
+                    success : function(data){
+                        document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                        if (data.status == "Save"){
+                            contenu = "<div class='alert alert-success text-center'><i class='fa fa-check-circle' style='font-size:20px'></i> <a type='button' class='close' data-dismiss='alert' aria-hidden='true' style='text-decoration:none; float:right'>&times;</a> <strong> Message envoyé avec succès </strong></div>";
+                            $('#contenu_message').html(contenu);
+                            $('#formContactPortfolio')[0].reset();
+                        }
+                        if (data.status == 1){
+                            contenu = "<div class='alert alert-danger text-center'><div class='text-warning text-center'><i class='fa fa-warning'></i> <a type='button' class='close' data-dismiss='alert' aria-hidden='true' style='text-decoration:none; float:right'>&times;</a> <strong> Message envoyé avec succès </strong></div>";
+                            $('#contenu_message').html(contenu);
+                        }
+                    }
+                });
+                return false;
+            });  
+    
+    
+        });
+    </script>
+</body>
+</html>

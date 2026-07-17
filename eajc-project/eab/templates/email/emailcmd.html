@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <!-- Font Awesome -->
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+     <!-- Ionicons -->
+     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+    <title>Email</title>
+    <style>
+        body{
+            background-color:gray;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .right{
+            float: right
+        }
+
+        .space{
+            padding-left: 30px
+        }
+
+        .min_max_height{
+            min-height: 120px;
+            max-height: 120px;
+            border-radius: 100px
+        }
+        
+        
+    </style>
+</head>
+<body>
+        <p>
+            {% if parametre.logo %}
+                <img class="min_max_height" src="http://{{ domain }}/media/{{ parametre.logo }}" alt="Logo">
+            {% endif %}
+        </p>
+        <h1>Achat des documents</h1>
+        <p> Vous recevez ce message en réponse à votre achat à <b>{{ parametre.appname }}</b>.</p>
+        <p>Le document vous sera envoyé à votre adresse e-mail et sera également disponible dans votre compte dès réception de votre paiement. </p>
+        <p>Vous avez jusqu'au <b>{{date_limit|date:"d/m/Y h:m"}} pour payer votre commande. Passée cette date, elle ne sera plus prise en compte et sera supprimée automatiquement.</p>
+        <p>Commande passée au nom de {{ user.first_name|title }} {{ user.last_name|upper}}</p>
+        <h3>Nos contacts : </h3>
+        <p class="space">Téléphone : {{ parametre.phone }}</p>
+        <p class="space">Email : <span style="text-decoration: none;">{{ parametre.email }} </span></p>
+        <p class="right"><small>Commande passée le {{ date|date:"d/m/Y H:m" }}</small><p>
+</body>
+</html>

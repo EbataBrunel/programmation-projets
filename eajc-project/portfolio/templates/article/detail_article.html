@@ -1,0 +1,54 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Détail d'un article {% endblock %}
+{% block content %}
+{% load crypto_filters %}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <i class="fa fa-crop"></i> Portfolio
+        </h1>
+        <ol class="breadcrumb">
+          <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+          <li><a href="{% url 'portfolio' %}"> Portfolio</a></li>
+          <li><a href="{% url 'article/these_article' %}"> Thèses</a></li>
+          <li><a href="{% url 'article/articles' article.these.id|crypter_id %}"> Articles</a></li>
+          <li class="active">Détail</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h5 class="box-title">Détail de l'article</h5>
+                        </div>
+                        <div class="box-body">
+                            <h4><b>Titre de la thèse</b></h4>
+                            <p>{{ article.these.titre }}</p>
+                            <hr>
+                            <ul>
+                                <li><p><b>Titre : </b>{{ article.titre }}</p></li>
+                                <li><p><b>Résumé : </b>{{ article.titre }}</p></li>
+                                <li><p><b>Révue/Conférence : </b>{{ article.revue }}</p></li>
+                                <li><p><b>Numéro : </b>{{ article.numero }}</p></li>
+                                <li><p><b>Pages : </b>{{ article.pages }}</p></li>
+                                <li><p><b>Doi : </b>{{ article.doi }}</p></li>
+                                <li><p><b>Url : </b>{{ article.url }}</p></li>
+                                <li><p><b>catégorie : </b>{{ article.categorie }}</p></li>
+                                <li><p><b>Mots clés : </b>{{ article.keywords }}</p></li>
+                                <li><p><b>Date de publication : </b>{{ article.date_publication }}</p></li>
+                                <li><p><a href="{{ article.file.url }}" class="btn btn-default btn-sm" style="color:green">Voir le PDF</a></p></li>
+                            </ul>
+                            
+                        </div>
+                    </div>
+            </div>            
+        </div>                
+    </section>
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

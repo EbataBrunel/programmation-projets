@@ -1,0 +1,122 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Ajouter une thèse {% endblock %}
+{% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <i class="fa fa-crop"></i> Portfolio
+        </h1>
+        <ol class="breadcrumb">
+          <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+          <li><a href="{% url 'portfolio' %}"> Portfolio</a></li>
+          <li><a href="{% url 'article/these_article' %}"> Thèses</a></li>
+          <li class="active">Ajout</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h6 class="box-title"><i class="fa fa-plus"></i> Ajout d'un article</h6>
+                        </div>
+                        <div class="box-body">
+                            <!-- On inclut l'image de chargement -->
+                            {% include 'global/_loading.html' %}
+                            <form method="post" action="" id="formArticle" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6">
+
+                                        <div class="form-group">
+                                            <label for="these">Thèse *</label>
+                                            <select name="these" id="these" class="form-control" required>
+                                               <option value="">-- Selectionnez --</option>
+                                               {% for these in theses %}
+                                               <option value="{{ these.id }}">{{ these }}</option>
+                                               {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="titre">Titre *</label>
+                                           <input type="text" name="titre" id="titre" class="form-control" required> 
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="resume">Résumé *</label>
+                                           <textarea type="text" name="resume" id="resume" id= rows="3" class="form-control" required></textarea> 
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="date_publication">Date de la publication *</label>
+                                           <input type="date" name="date_publication" id="date_publication" class="form-control" required> 
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="revue">Revue *</label>
+                                           <input type="text" name="revue" id="revue" class="form-control" required> 
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="volume">Volume *</label>
+                                           <input type="text" name="volume" id="volume" class="form-control" required> 
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6">
+
+                                        <div class="form-group">
+                                            <label for="numero">Numéro *</label>
+                                           <input type="text" name="numero" id="numero" class="form-control" required> 
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="pages">Pages *</label>
+                                           <input type="text" name="pages" id="pages" class="form-control" required> 
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="revue">Doi *</label>
+                                           <input type="text" name="doi" id="doi" class="form-control" required> 
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="url">Url *</label>
+                                           <input type="text" name="url" id="url" class="form-control" required> 
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="keyword">Mots-clés *</label>
+                                           <input type="text" name="keyword" id="keywords" class="form-control" required> 
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="volume">Catégorie *</label>
+                                           <input type="text" name="categorie" id="categorie" class="form-control" required> 
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="file">Fichier *</label>
+                                            <input type="file" name="file" class="form-control" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <a href="{% url 'article/these_article' %}" class="btn btn-default btn-xs"><i class="fa fa-arrow-circle-left"></i> Retour</a>&nbsp;
+                                        <button class="btn btn-primary btn-xs"><i class="fa fa-check"></i> Valider</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div data-backdrop="True" class="modal fade" id="message" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-sm" role="document">
+                                    <div class="modal-content" style="background-color: rgb(28,36,47)">
+                                      <div class="modal-header text-center"><span style="color:white"><i class="fa fa-info"></i> Information</span>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="badge badge-warning" style="color:white">X</span></button>
+                                      </div>
+                                      <div class="modal-body" id="content-message"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>            
+        </div>                
+    </section>
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

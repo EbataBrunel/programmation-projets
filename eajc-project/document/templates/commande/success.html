@@ -1,0 +1,34 @@
+{% extends 'global/base0.html' %}
+{% block title %} {{ parametre.appname }} | Succès {% endblock %}
+{% block content %}
+{% load static %}
+<!-- Page Content-->
+<div class="content-wrapper">
+    <div class="container">
+        <section class="content">
+            <div class="box box-default">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <div class="succ">
+                            <div class="box-header with-border">
+                                <h4 align="center" class="mt-4">Merci !</h4>
+                            </div>
+                            <div class="box-body">
+                                <br>
+                                <h3 class="text-success text-center">Commande éfféctuée avec succès.</h3>
+                                <p class="text-success text-center"><i class="fa fa-check-circle" style="font-size:50px"></i></p>
+                                <p><b>-</b> Le document vous sera envoyé à votre adresse e-mail et sera également disponible dans votre compte dès réception de votre paiement.</p>
+                                <p><b>-</b> Vous avez jusqu'au <b>{{date_limit|date:"d/m/Y h:m"}}</b> pour payer votre commande. Passée cette date, elle ne sera plus prise en compte et sera supprimée automatiquement.</p>
+                                <p class="pull-right">Commande passée le {{date|date:"d/m/Y h:m" }}</p>
+                                <a href="{% url 'cours/cours' %}" class="btn btn-default btn-sm"><i class="fa fa-arrow-circle-left"></i> Retour</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Call to Action-->
+        </section>
+    </div>
+</div>
+{% endblock %}
+

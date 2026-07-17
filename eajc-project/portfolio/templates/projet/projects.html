@@ -1,0 +1,74 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Projets {% endblock %}
+{% block content %}
+{% load static %}
+{% load crypto_filters %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            <i class="fa fa-crop"></i> Portfolio
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+            <li><a href="{% url 'portfolio' %}"> Portfolio</a></li>
+            <li class="active">Projets</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-xs-12">
+
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title text-info"><i class="fa fa-table"></i> <b>Liste des projets</b></h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <div align="right">
+                    <a href="{% url 'projet/add_project' %}" class="btn btn-default btn-sm"><i class="fa fa-plus"></i> Enregistrer un projet</a>
+                  </div>
+                  <br>
+                  {% for project in projects %}
+                    <div class="col-md-12 col-lg-12">
+                      <div class="panel panel-default">
+                          <div class="panel-body" style="border-radius: 10px;">
+                              <h4><b>Titre</b></h4>
+                              <p>{{ project.title }}</p>
+                              <h4><b>Description</b></h4>
+                              <p>{{ project.description }}</p>
+                              <p><b>Lien : </b>{{ project.link }}</p>
+                              <p>
+                                <a class="btn btn-danger btn-xs" href="#" data-toggle="modal" data-target="#delModal{{ project.id }}" title="Supprimer"><i class="fa fa-trash"></i> Supprimer</a>&nbsp;
+                                <a href="{% url 'projet/edit_project' project.id|crypter_id %}" title="Modifier" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i> Modifier</a>
+                                <!-- Delete Modal-->
+                                <div class="modal fade" id="delModal{{ project.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                    <div class="modal-dialog modal-sm" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-red">
+                                                <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5>
+                                            </div>
+                                            <div class="modal-body text-center">Voulez-vous vraiment supprimer ce projet ?</div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Annuler</button>
+                                                <a class="btn btn-danger btn-xs" href="{% url 'del_project' project.id|crypter_id %}"><i class="fa fa-trash"></i> Supprimer</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                              </p>
+                          </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+{% endblock %}

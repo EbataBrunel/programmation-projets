@@ -1,0 +1,95 @@
+<div class="row">
+    <div class="col-md-6 col-xs-12">
+        <table class="table">
+            <tr>
+                <th>Type d'expérience : </th>
+                <td>
+                    {% if experience.type_exp == "Employé(e)" %}
+                            {% if request.user.profile.gender == "Masculin" %}
+                                Employé 
+                            {% else %}
+                                Employée 
+                            {% endif %}
+                    {% else %}
+                        {{ experience.type_exp }}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Entreprise : </th>
+                <td>{{ experience.entreprise }}</td>
+            </tr>
+            <tr>
+                <th>Date de début : </th>
+                <td>{{ experience.date_debut }}</td>
+            </tr>
+            <tr>
+                <th>Date de fin : </th>
+                <td>{{ experience.date_fin }}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-6 col-xs-12">
+        <table class="table">
+            {% if status %}
+            <tr>
+                <th>Poste occupé : </th>
+                <td>{{ experience.posteoccupe }}</td>
+            </tr>
+            <tr>
+                <th>Projet / mission effectué(e) : </th>
+                <td>{{ experience.projet }}</td>
+            </tr>
+            <tr>
+                <th> Tache : </th>
+                <td>{{ experience.tache }}</td>
+            </tr>
+                                                                <tr>
+                                                                    <th>Statut<t/h>
+                                                                    <td>
+                                                                        {% if experience.status %}
+                                                                            <span class="label label-success">Visible</span>
+                                                                        {% else %}
+                                                                            <span title="Publier" class="badge badge-danger">Invisible</span>
+                                                                        {% endif %}
+                                                                    </td>
+                                                                </tr>
+                                                                {% else %}
+                                                                <tr>
+                                                                    <th>Projet réalisé: </th>
+                                                                    <td>{{ experience.projet }}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Poste : </th>
+                                                                    <td>{{ experience.posteoccupe }}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Statut</th>
+                                                                    <td>
+                                                                        {% if experience.status %}
+                                                                            <span class="label label-success">
+                                                                                Visible
+                                                                            </span>
+                                                                        {% else %}
+                                                                            <span class="label label-danger">
+                                                                                Invisible
+                                                                            </span>
+                                                                        {% endif %}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Tâche : </th>
+                                                                    <td>
+                                                                        {% for k,v in experience.taches.items %}
+                                                                        <b>.</b> {{ v }}<br>
+                                                                        {% endfor %}
+                                                                    </td>
+                                                                </tr>
+                                                                {% endif %}
+                                                                <tr>
+                                                                    <th>Lien</th>
+                                                                    <td><a href="{{ experience.lien }}" style="text-decoration:none">{{ experience.experience.lien }}</a></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>

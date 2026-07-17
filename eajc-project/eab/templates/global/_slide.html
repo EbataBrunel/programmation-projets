@@ -1,0 +1,127 @@
+{% load static %}
+{% load crypto_filters %}
+
+{% if userpriorities %}
+<!-- Call to Action-->
+<div class="bg-gray" style="padding:10px; border-radius: 10px;">
+    <div class="card-body text-center"><p> Ces enseignants sont à votre disposition pour répondre à vos questions. N'hésitez pas à les solliciter, à condition que vos questions soient en lien avec leur domaine d'expertise. </p></div>
+</div>
+<!-- Content Row-->
+<br>
+<div class="row">
+    {% for user in userpriorities %}
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-body box-shadow">
+                <h3 class="card-title">
+                    <span class="padding-right">
+                        {% if user.profile.photo %}
+                        <img class="img-circle" width="30px" height="30px" src="{{ user.profile.photo.url }}" alt="Profil" />
+                        {% else %}
+                        <img class="img-circle" width="30px" height="30px" src="{% static 'dist/img/user.png' %}" alt="Profil" />
+                        {% endif %}
+                    </span>
+                    {{ user.last_name|title }}
+                </h3>
+                <div class="height_min_max">
+                    <p class="card-text">{{ user.profile.apropos|truncatewords:50 }}</p>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#detailModal{{ user.id }}"><i class="fa fa-eye"></i> Voir plus</a>&nbsp;
+                {% if user.profile.droitmes == 1 %}
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'contact/contactuser' user.id|crypter_id %}" class="btn btn-primary btn-xs"><i class="fa fa-envelope"></i> Envoyer un message</a>
+                    {% else %}
+                    <a href="#" data-toggle="modal" data-target="#sendMessageModal{{user.id}}" class="btn btn-primary btn-xs"><i class="fa fa-envelope"></i> Envoyer un message</a>
+                    <!-- Document info Modal-->
+                    <div class="modal fade" id="sendMessageModal{{user.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary text-white">
+                                    <h4 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-info-circle"></i> Information</span></h4>
+                                </div>
+                                <div class="modal-body">
+                                <p class="text-warning"><i class="fa fa-warning"></i> Vous devez d'abord vous connecter pour envoyer un message à <b>{{ user.last_name }} {{ user.first_name }}</b>.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <a class="btn btn-primary btn-xs pull-left" href="{% url 'users/register' %}"><i class="fa fa-user"></i> Créer un compte</a>
+                                    <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Fermer</button>
+                                    <a class="btn btn-danger btn-xs pull-left" href="{% url 'connection/connexion' %}"><i class="fa fa-key"></i> Se connecter</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endif %}
+
+                <!-- details Modal-->
+                <div class="modal fade" id="detailModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true" style="border-radius: 10px;">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary">
+                                <h5 class="modal-title" id="exampleModalLabel"><span align="center"><b><i class="fa fa-user"></i> Profil</b></span></h5>
+                            </div>
+                            <div class="modal-body">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                          <div class="col-md-3 col-xs-12">
+                                            <p>
+                                              {% if user.profile.photo %}
+                                              <img class="img-circle img-responsive" src="{{user.profile.photo.url}}" width="100" height="100" />
+                                              {% else %}
+                                              <img class="img-circle img-responsive" src="{% static 'dist/img/user.png' %}" width="100" height="100" />
+                                              {% endif %}
+                                            </p>
+                                          </div>
+                                            <div class="col-md-9 col-xs-12">
+                                                <table class="table">
+                                                    <tr>
+                                                        <th>Noms : </th>
+                                                        <td><b>{{ user.last_name }}</b></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Prénoms : </th>
+                                                        <td><b>{{ user.first_name }}</b></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Sexe : </th>
+                                                        <td>{{ user.profile.gender }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Profession : </th>
+                                                        <td>{{ user.profile.profession }}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                          <div class="col-md-12">
+                                            <p>{{user.profile.apropos}}</p>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                {% if user.profile.vp == 1 %}
+                                    {% if request.user.id == user.id %}
+                                    <a href="{% url 'cv/profile_user' user.id|crypter_id %}" class="btn btn-default btn-xs pull-left"><i class="fa fa-user"></i> Voir ton parcours</a>
+                                    {% else %}
+                                    <a href="{% url 'cv/profile_user' user.id|crypter_id %}" class="btn btn-default btn-xs pull-left"><i class="fa fa-user"></i> Voir son parcours</a>
+                                    {% endif %}
+                                {% endif %}
+                                <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}

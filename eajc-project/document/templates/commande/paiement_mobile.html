@@ -1,0 +1,132 @@
+{% extends 'global/base0.html' %}
+{% block title %} {{ parametre.appname }} | Paiement mobile {% endblock %}
+{% block content %}
+{% load static %}
+<!-- Page Content-->
+<div class="content-wrapper">
+    <div class="container">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+              <i class="fa fa-book"></i> Documents
+            </h1>
+            <ol class="breadcrumb">
+              <li><a href="{% url 'home' %}"><i class="fa fa-home"></i>Accueil</a></li>
+              <li><a href="{% url 'cours/cours' %}">Documents</a></li>
+              <li><a href="{% url 'commande/panier' %}">Panier</a></li>
+              <li><a href="{% url 'commande/md_paiement' %}">Mode de paiement</a></li>
+              <li class="active">Commande</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 align="center">Vous avez choisi mobile comme mode de paiement</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th>Disciplines</th>
+                                        <th>Composants</th>
+                                        <th>Titres</th>
+                                        <th>Quantité</th>
+                                        <th>Prix</th>
+                                    </tr>
+                                    {% for document in documents %}
+                                        <tr>
+                                            <td>{{ document.discipline }}</td>
+                                            <td>{{ document.composant }}</td>
+                                            <td>{{ document.title }}</td>
+                                            <td>{{ document.quantite }}</td>
+                                            <td class="text-danger">{{ document.price }} {{ parametre.devise }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td colspan="3" class="text-center"><b>Total</b></td>
+                                        <td class="text-primary"><b>{{ qte_total }}</b></td>
+                                        <td  class="text-danger"><b>{{ prix_total }} {{ parametre.devise }}</b></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <br>
+                            <div class="center">
+                                <a href="#" data-toggle="modal" data-target="#payeModal" style="text-decoration: none;" class="btn btn-primary btn-xs">Payer maintenant</a>&nbsp;&nbsp;
+                                <a href="#" data-toggle="modal" data-target="#commandeModal" style="text-decoration: none;" class="btn btn-primary btn-xs pull-rigth">Commander</a>
+                            </div>
+                            <!-- PayeModal-->
+                            <div class="modal fade" id="payeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-sm" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-primary">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <img class="img-responsive border-radius" width="70px" height="70px" src="{% static 'dist/img/MTN-MOMO.jpg' %}">
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <h4 class="text-center">
+                                                            Finaliser la paye 
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <form method="post" action="">
+                                                <div class="modal-body">
+                                                    <h4><i class="fa fa-info-circle"></i> Veuillez entrer le numéro de téléphone associé à votre compte Mobile Money pour effectuer le paiement de <b class="text-danger">{{ prix_total}} {{parametre.devise}}</b>.</h4>
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <label for="phone"><i class="fa fa-phone"></i> Téléphone *</label>
+                                                        <input type="text" name="phone" class="form-control border-radius" placeholder="ex: 242069223965" required/>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <div class="center">
+                                                            <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Annuler</button>
+                                                            <button type="submit" class="btn btn-default btn-xs bg-yellow"><i class="fa fa-check"></i> Valider la paye de <span class="text-danger badge badge-danger">{{ prix_total}} {{parametre.devise}}</span> </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                            </div>
+                            <!-- Fin PayeModal -->
+                            <!-- Commande Modal-->
+                            <div class="modal fade" id="commandeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-primary">
+                                                <h4 class="text-center">Faire une commande </h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                    <p> Une fois votre commande passée et le paiement effectué, les documents seront disponibles dans votre compte <b>{{parametre.appname}}</b> et envoyés à votre adresse e-mail.</p>
+                                                    <p>Votre commande sera disponible pendant trois(3) jours à compter de la date de commande</p>
+                                                    <p class="text-center">Montant à payer : <span class="text-danger">{{ prix_total}} {{parametre.devise}}</span>.</p>
+                                                    <div class="modal-footer">
+                                                        <div class="center">
+                                                            <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Annuler</button>
+                                                            <a href="{% url 'commande/validate_order' %}" class="btn btn-primary btn-xs"><i class="fa fa-check"></i> Commander maintenant </a>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            <!-- Fin CommandeModal -->
+                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a href="{% url 'commande/md_paiement' %}" class="btn btn-default btn-xs"><i class="fa fa-arrow-circle-left"></i> Retour</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Call to Action-->
+        </section>
+    </div>
+</div>
+{% endblock %}
+        

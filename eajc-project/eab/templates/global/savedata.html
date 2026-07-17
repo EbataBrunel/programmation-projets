@@ -1,0 +1,1398 @@
+<script>
+    $(document).ready(function(){
+
+        // ============ Gestion Group ==================
+        $(document).on('click','.delete_group', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_group/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        
+        // ============ Gestion User Group ==================
+        $('#formUserGroup').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block';
+            $.ajax({
+                url:"{% url 'users/add_ug' %}",
+                method : "POST",
+                data:new FormData($('#formUserGroup')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "Save"){
+                        contenu="<div  class='text-success text-center'><b>Utilisateur attribué au groupe avec succès<br/><i class='fa fa-check-circle' style='font-size:50px'></i></b></div>"
+                        $('#contenu_message').html(contenu);
+                        $('#formUserGroup')[0].reset();
+                    }
+                    if (data.status == 2){
+                        contenu="<div class='text-warning text-center'><i class='fa fa-warning'></i> <b>Opération échouée.</b></div>"
+                        $('#contenu_message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        }); 
+
+        $(document).on('click','.delete_user_group', function(){
+            var id = $(this).attr("id");
+            var name = $(this).data("group");
+            if(id && name){
+                    $.get("ajax_delete_user_group/"+id+"/"+name,
+                        {id:id, name:name},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+
+        // ================ Suppression d'un admininistrateur =======================
+        $(document).on('click','.delete_user', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_user/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        // ================ Suppression d'un client =======================
+        $(document).on('click','.delete_customer', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_customer/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        // ============ Gestion année ==================
+        $('#formAnnee').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block';
+            $.ajax({
+                url:"{% url 'add_annee' %}",
+                method : "POST",
+                data:new FormData($('#formAnnee')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none';
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formAnnee')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });  
+
+        $('#formUpdateAnnee').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block';
+            $.ajax({
+                url:"{% url 'edit_an' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateAnnee')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none';
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        }); 
+
+        $(document).on('click','.delete_annee', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_annee/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        // ============ Gestion établissement ==================
+        $('#formEtab').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'add_etab' %}",
+                method : "POST",
+                data:new FormData($('#formEtab')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formEtab')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        }); 
+
+        $('#formUpdateEtab').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'edit_eta' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateEtab')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        }); 
+
+        $(document).on('click','.delete_etablissement', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_etab/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        // ============ Gestion formation ==================
+        $('#formForm').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'add_form' %}",
+                method : "POST",
+                data:new FormData($('#formForm')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formForm')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });  
+
+        $('#formUpdateForm').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'edit_for' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateForm')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });
+
+        $(document).on('click','.delete_formation', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_form/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        // ============ Gestion Entreprise ==================
+        $('#formEnt').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'add_ent' %}",
+                method : "POST",
+                data:new FormData($('#formEnt')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formEnt')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });  
+
+        $('#formUpdateEnt').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'edit_en' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateEnt')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });
+
+        $(document).on('click','.delete_entreprise', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_entreprise/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+         // ============ Gestion Discipline ==================
+         $('#formDisc').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'discipline/add_disc' %}",
+                method : "POST",
+                data:new FormData($('#formDisc')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formDisc')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });  
+
+        $('#formUpdateDisc').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'discipline/edit_dis' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateDisc')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });
+
+        $(document).on('click','.delete_discipline', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_discipline/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        // ============ Gestion Composant ==================
+        $('#formCom').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'composant/add_cmp' %}",
+                method : "POST",
+                data:new FormData($('#formCom')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formCom')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });  
+
+        $('#formUpdateCom').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'composant/edit_com' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateCom')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });
+
+        $(document).on('click','.delete_composant', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_composant/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        $(document).on('click','.delete_multiple_composant', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_multiple_composant/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        // ============ Gestion Chambre ==================
+        $('#formRoom').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'room/add_room' %}",
+                method : "POST",
+                data:new FormData($('#formRoom')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formRoom')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });  
+
+        $('#formUpdateRoom').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'room/edit_ro' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateRoom')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });
+
+        $(document).on('click','.delete_room', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_room/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        $(document).on('click','.delete_multiple_room', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_multiple_room/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        // ============ Gestion de type de compétence ================
+
+        $('#formTypeCompetence').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block';
+            $.ajax({
+                url:"{% url 'typeCompetence/add_typeCompetence' %}",
+                method : "POST",
+                data:new FormData($('#formTypeCompetence')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formTypeCompetence')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });  
+
+        $('#formUpdateTypeCompetence').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block';
+            $.ajax({
+                url:"{% url 'edit_typec' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateTypeCompetence')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none';
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });
+
+        $(document).on('click','.delete_type_competence', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_type_competence/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        // ============ Gestion de Competence ==================
+        $('#formComp').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'add_comp' %}",
+                method : "POST",
+                data:new FormData($('#formComp')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formComp')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });  
+
+        $('#formUpdateComp').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'edit_cmp' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateComp')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none';
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });
+
+        $(document).on('click','.delete_multiple_competence', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_multiple_competence/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        $(document).on('click','.delete_competence', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_competence/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        // ============ Gestion Expérience ==================
+        $('#formExp').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'add_exp' %}",
+                method : "POST",
+                data:new FormData($('#formExp')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formExp')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });  
+
+        $('#formUpdateExp').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'edit_ex' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateExp')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none';
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });
+
+        $(document).on('click','.delete_experience', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_experience/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        // ============ Gestion de Parcours ==================
+        $('#formPar').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'add_parcours' %}",
+                method : "POST",
+                data:new FormData($('#formPar')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formPar')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });  
+
+        $('#formUpdatePar').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'edit_par' %}",
+                method : "POST",
+                data:new FormData($('#formUpdatePar')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });
+
+        $(document).on('click','.delete_parcours', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_parcours/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        // ============ Gestion mode de paiement ==================
+        $('#formMode').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'mode-paiement/add-mode' %}",
+                method : "POST",
+                data:new FormData($('#formMode')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formMode')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });  
+
+        $('#formUpdateMode').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'mode-paiement/edit-mod' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateMode')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        }); 
+
+        $(document).on('click','.delete_mode_payment', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_mode_payment/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        // ============ Gestion référence ==================
+        $('#formRef').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'add_ref' %}",
+                method : "POST",
+                data:new FormData($('#formRef')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formRef')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        }); 
+
+        $('#formUpdateRef').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'edit_re' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateRef')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        }); 
+
+        $(document).on('click','.delete_reference', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_reference/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+
+        // ============ Gestion de lettre de motivation ==================
+        $('#formUpdateLM').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'edit_l' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateLM')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        }); 
+
+        // ============ Signaler une question du forum ==================
+        $('#formReportQuestion').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'report_quest' %}",
+                method : "POST",
+                data:new FormData($('#formReportQuestion')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    $('.hide_modal').modal('hide');
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "Save"){
+                        contenu="<div  class='text-success text-center'><b><i class='fa fa-check-circle' style='font-size:50px'></i><br>Question signalée avec succès</b><hr><small style='color:white'>Notre équipe examinera votre signalement et prendra des mésure en cas d'infraction de nos Règles communautaires</small></div>"
+                        content_footer = "<div style='text-align:center'><button class='btn btn-success btn-xs' type='button' data-dismiss='modal'><i class='fa fa-remove'></i> Terminé </button></div>"
+                        $('#contenu_message').html(contenu);
+                        $('#content_footer').html(content_footer);
+                        $('#formReportQuestion')[0].reset();
+                    }
+                    if (data.status == 0){
+                        contenu="<div class='text-warning text-center'><i class='fa fa-warning'></i> <b>Cette question a déjà été signalée.</b></div>"
+                        content_footer = "<div style='text-align:center'><button class='btn btn-default btn-xs' type='button' data-dismiss='modal'><i class='fa fa-remove'></i> Fermer </button></div>"
+                        $('#contenu_message').html(contenu);
+                        $('#content_footer').html(content_footer);
+                        $('#formReportQuestion')[0].reset();
+                    }
+                }
+            });
+            return false;
+        }); 
+        
+        // ============ Signaler la réponse d'une question du forum ==================
+        $('#formReportAnswer').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'report_answ' %}",
+                method : "POST",
+                data:new FormData($('#formReportAnswer')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "Save"){
+                        contenu="<div  class='text-success text-center'><b><i class='fa fa-check-circle' style='font-size:50px'></i><br>Réponse signalée avec succès</b><hr><small style='color:white'>Notre équipe examinera votre signalement et prendra des mésure en cas d'infraction de nos Règles communautaires</small></div>"
+                        content_footer = "<div style='text-align:center'><button class='btn btn-success btn-xs' type='button' data-dismiss='modal'><i class='fa fa-remove'></i> Terminé </button></div>"
+                        $('#contenu_message').html(contenu);
+                        $('#content_footer').html(content_footer);
+                        $('#formReportAnswer')[0].reset();
+                    }
+                    if (data.status == 0){
+                        contenu="<div class='text-warning text-center'><i class='fa fa-warning'></i> <b>Cette question a déjà été signalée.</b></div>"
+                        content_footer = "<div style='text-align:center'><button class='btn btn-default btn-xs' type='button' data-dismiss='modal'><i class='fa fa-remove'></i> Fermer </button></div>"
+                        $('#contenu_message').html(contenu);
+                        $('#content_footer').html(content_footer);
+                        $('#formReportAnswer')[0].reset();
+                    }
+                }
+            });
+            return false;
+        }); 
+
+        // ============ Suppression du compte ==================
+        $('#formDemandeDeleteAccount').submit(function(){
+            $('#deleteAccountModal').modal('hide')
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'demandeDeleteAccount' %}",
+                method : "POST",
+                data:new FormData($('#formDemandeDeleteAccount')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "Save"){
+                        contenu="<div  class='text-success text-center'><b>Votre démande a été prise en compte par notre équipe, elle sera étudiée le plus tôt possible. <br/><i class='fa fa-check-circle' style='font-size:50px'></i></b></div>"
+                        $('#contenu_message').html(contenu);
+                        $('.askdelete').html("<span class='pull-right text-warning'><i class='fa fa-hand-o-right'></i> Demande suppresion du compte en cours du traitement ...</span>")
+                        $('#formDemandeDeleteAccount')[0].reset();
+                    }
+                    if (data.status == 0){
+                        contenu="<div class='text-warning text-center'><i class='fa fa-warning'></i> <b>Ta demande a échouée.</b></div>"
+                        $('#contenu_message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });
+        
+        // ============ Suppression du compte ==================
+        $('#formAnswerDeleteAccount').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'answerDeleteAccount' %}",
+                method : "POST",
+                data:new FormData($('#formAnswerDeleteAccount')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "Save"){
+                        contenu="<div  class='text-success text-center'><b>Message envoyé avec succès. <br/><i class='fa fa-check-circle' style='font-size:50px'></i></b></div>"
+                        $('#contenu_message').html(contenu);
+                        $('#formAnswerDeleteAccount')[0].reset();
+                    }
+                    if (data.status == 0){
+                        contenu="<div class='text-warning text-center'><i class='fa fa-warning'></i> <b>Le message n'a pas été envoyé.</b></div>"
+                        $('#contenu_message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        }); 
+
+        // ============ Gestion référence ==================
+        $('#formDocument').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'cours/add_cours' %}",
+                method : "POST",
+                data:new FormData($('#formDocument')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formDocument')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        }); 
+
+        $('#formUpdateDocument').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'edit_cour' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateDocument')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        }); 
+
+        $(document).on('click','.delete_cours_discipline', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_cours_discipline/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        $(document).on('click','.delete_cours_composant', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_cours_composant/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        $(document).on('click','.delete_cours', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_cours/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        $(document).on('click','.delete_document_discipline', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_document_discipline/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        $(document).on('click','.delete_document_composant', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_document_composant/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        $(document).on('click','.delete_document', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_document/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+
+        // ============ Gestion project ==================
+        $('#formProject').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'projet/add_project' %}",
+                method : "POST",
+                data:new FormData($('#formProject')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formProject')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });  
+
+        $('#formUpdateProject').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'edit_proj' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateProject')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });
+
+        // ============ Gestion thèse ==================
+        $('#formThese').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'these/add_these' %}",
+                method : "POST",
+                data:new FormData($('#formThese')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formThese')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });  
+
+        $('#formUpdateThese').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'edit_th' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateThese')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        });
+
+        // ============================ Gestion Article =======================
+        $('#formArticle').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'article/add_article' %}",
+                method : "POST",
+                data:new FormData($('#formArticle')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                        $('#formArticle')[0].reset();
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        }); 
+
+        $('#formUpdateArticle').submit(function(){
+            document.getElementById('loading-spinner').style.display = 'block'; // On affiche le loading
+            $.ajax({
+                url:"{% url 'edit_art' %}",
+                method : "POST",
+                data:new FormData($('#formUpdateArticle')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    document.getElementById('loading-spinner').style.display = 'none'; // On cache le loading
+                    $('#message').modal('show');
+                    if (data.status == "success"){
+                        contenu = "<div class='text-success text-center'><b>"+data.message+"<br/><i class='bi bi-check-circle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                    if (data.status == "error"){
+                        contenu="<div class='text-danger text-center'> <b>"+data.message+"<br/><i class='bi bi-exclamation-triangle-fill' style='font-size:50px'></i></b></div>"
+                        $('#content-message').html(contenu);
+                    }
+                }
+            });
+            return false;
+        }); 
+
+
+        // ========================== Annonce ==================================
+
+        $(document).on('click','.delete_annonce', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_annonce/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+
+        $(document).on('click','.delete_my_ad', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_delete_my_ad/"+id,
+                        {id:id},
+                        function(data){
+                            $('#content_delete').modal('show');
+                            $('#content-delete-item').html(data);
+                        }
+                    );
+            }
+        });
+        
+    });
+</script>

@@ -1,0 +1,83 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Signaler une question {% endblock %}
+{% block content %}
+
+<div class="content-wrapper">
+    <!-- On inclut l'image de chargement -->
+    {% include 'global/_loading.html' %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Forum
+        </h1>
+        <ol class="breadcrumb">
+          <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+          <li ><a href="{% url 'question/questions' %}">Questions</a></li>
+          <li class="active">Signaler la réponse</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                    <!-- DataTales Example -->
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h4 class="text-center"><span><i class="fa fa-rocket"></i> Signalement d'une question </spam> </h4>
+                        </div>
+                        <div class="box-body">
+                            <div class="bg-gray" style="padding:5px; border-radius:10px">
+                                <p class="text-center">Pourquoi voulez vous signaler la question de {{ question.user.last_name }} {{ question.user.first_name }} ? <br></p>
+                                <p>Votre signalement est essentiel pour préserver la crédibilité de notre application et de notre communauté. La personne ayant publié ce contenu ne sera pas informée de votre signalement.<br>
+                                    Si vous estimez que la situation est urgente, n'hésitez pas à nous contacter directement. Nos coordonnées sont disponibles sur le site.                                    
+                                </p>
+                                <hr>
+                                <p>{{question.content|safe}}</p>
+                            </div>
+                            <hr>
+                            <!-- On inclut l'image de chargement -->
+                            {% include 'global/_loading.html' %}
+                            <form method="post" action="" id="formReportQuestion">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-10 col-md-offset-1">
+                                        <input type="text" name="question" value="{{ question.id }}" hidden="True">
+                                        <div class="form-group">
+                                            <label for="name">Justification *</label>
+                                            <select name="justification" class="form-control" required>
+                                                <option value="">-- Selectionnez --</option>
+                                                <option value="Je n'ai pas tout simplement envie cela">Je n'ai pas tout simplement envie de cela</option>
+                                                <option value="Menaces, violence et comportements dangeruex">Menaces, violence et comportements dangereux</option>
+                                                <option value="Discours haineux">Discours haineux</option>
+                                                <option value="Information fausses ou pratiques trompeuses">Informations fausses ou pratiques trompeuses</option>
+                                                <option value="Contenu sexuel">Contenu à caractère sexuel</option>
+                                                <option value="Autre">Autre</option>
+                                                <option value="Projet académique">Autre contenu illégal</option>
+                                             </select>
+                                        </div>
+                                        <div class="text-center">
+                                            <a href="{% url 'question/questions' %}" class="btn btn-default btn-xs"><i class="fa fa-arrow-circle-left"></i> Retour</a>&nbsp;
+                                            <button class="btn btn-primary btn-xs"><i class="fa fa-check"></i> Valider</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div data-backdrop="True" class="modal fade" id="message" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-sm" role="document">
+                                    <div class="modal-content" style="background-color: rgb(28,36,47)">
+                                      <div class="modal-header text-center"><span style="color:white"><i class="fa fa-info"></i> Information</span>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="badge badge-warning" style="color:white">X</span></button>
+                                      </div>
+                                      <div class="modal-body" id="contenu_message"></div>
+                                      <div class="modal-footer" id="content_footer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

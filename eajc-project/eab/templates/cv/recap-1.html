@@ -1,0 +1,238 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Récapitulatif {% endblock %}
+{% block content %}
+{% load static %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+              <i class="fa fa-download"></i> Télécharger CV & LM
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                <li><a href="{% url 'cv_lm' %}">Télécharger CV & LM</a></li>
+                <li class="active">Curriculum Vitae (CV)</li>
+            </ol>
+          </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="box">
+                    <div style="padding-left: 20px; padding-right: 20px;">
+                        <br>
+                        <p class="text-center">
+                            <a href="{% url 'cv/recap' %}" class="btn btn-default btn-xs" style="margin:5px"><i class="fa fa-file"></i> Modèle 1</a>
+                            <a href="{% url 'cv/recap-1' %}" class="btn btn-primary btn-xs" style="margin:5px"><i class="fa fa-file"></i> Modèle 2</a>
+                            <a href="{% url 'cv/recap-2' %}" class="btn btn-default btn-xs" style="margin:5px"><i class="fa fa-file"></i> Modèle 3</a>
+                        </p>
+                        <br>
+                        <div class="cv-container">
+                            <div class="header-cv">
+                                <h3>{{ user.last_name|title }} {{ user.first_name|title }}</h3>
+                                {% if user.profile.nature_recherche and user.profile.profession %}
+                                    <p>{{ user.profile.nature_recherche }} | {{ user.profile.profession }}</p>
+                                {% elif user.profile.nature_recherche %}
+                                    <p>{{ user.profile.nature_recherche }} </p>
+                                {% elif user.profile.profession %}
+                                    <p>{{ user.profile.profession }}
+                                </p>
+                                {% else %}
+                                <p></p>
+                                {% endif %}
+                            </div>
+                    
+                            <div class="content">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="section-cv">
+                                            <h2>Informations personnelles</h2>
+                                            <ul>
+                                                <li><strong>Email :</strong> {{ user.email }}</li>
+                                                <li><strong>Téléphone :</strong> {{ user.profile.phone }}</li>
+                                                <li><strong>Adresse :</strong> {{ user.profile.address }}</li>
+                                                {% if user.profile.linkedin %}
+                                                <li><strong>Linkedin :</strong> {{ user.profile.linkedin }}</li>
+                                                {% endif %}
+                                                {% if user.profile.portfolio %}
+                                                <li><strong>Portfolio :</strong> {{ user.profile.portfolio }}</li>
+                                                {% endif %}
+                                                {% if user.profile.github %}
+                                                <li><strong>Github :</strong> {{ user.profile.github }}</li>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="section-cv">
+                                            <h2>Profil</h2>
+                                            <p>{{ user.profile.apropos|truncatewords:100 }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if user.profile.vcomp == "Visible" %}
+                                    {% if competences %}
+                                    <div class="section-cv">
+                                        <h2>Compétences techniques</h2>
+                                        <div class="skills">
+                                            {% for competence in competences %}
+                                                <span>{{ competence.name|safe }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endif %}
+                                
+                                <!-- Experience professionnelle -->
+                                {% if user.profile.vep == "Visible" %}
+                                    {% if experiences or experiencesProjetA or experiencesProjetP %}
+                                        <div class="section-cv">
+                                            <h2>Expérience professionnelle</h2>
+                                            {% for experience in experiences %}
+                                                <ul>
+                                                    <li>
+                                                        {% if experience.experience.type_exp == "Employé(e)" %}
+                                                            {% if user.profile.gender == "Masculin" %}
+                                                                <strong>{{ experience.experience.posteoccupe }} (Employé), </strong> <span>{{ experience.experience.date_debut|date:"m/Y" }} - {{ experience.experience.date_fin|date:"m/Y" }}</span><br>
+                                                            {% else %}
+                                                                <strong>{{ experience.experience.posteoccupe }} (Employée), </strong> <span>{{ experience.experience.date_debut|date:"m/Y" }} - {{ experience.experience.date_fin|date:"d/m/Y" }}</span><br>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <strong>{{ experience.experience.posteoccupe }} ({{experience.experience.type_exp}}),</strong> <span> {{ experience.experience.date_debut|date:"m/Y" }} - {{ experience.experience.date_fin|date:"m/Y" }}</span><br>
+                                                        {% endif %}
+                                                        <p><strong style="padding-left: 15px;">{{ experience.experience.entreprise }}</strong>, {{ experience.experience.entreprise.city }} ({{ experience.experience.entreprise.country }})<br></p>
+                                                        <span>{{ experience.experience.projet }} </span><br>
+                                                        {% for k,v in experience.taches.items %}
+                                                            <span>
+                                                                <b>. </b>{{ v }} <br>
+                                                            </span>
+                                                        {% endfor %}
+                                                    </li>
+                                                </ul>
+                                            {% endfor %}
+                                            {% if experiencesProjetA %}
+                                                <ul>
+                                                    {% for experience in experiencesProjetA %}
+                                                    <li>
+                                                        <strong>{{ experience.experience.type_exp }} </strong> | {{ experience.experience.projet }}
+                                                        <p>
+                                                            {% for k,v in experience.taches.items %}
+                                                                <spam>
+                                                                    <b>. </b>{{ v }} <br>
+                                                                </spam>
+                                                            {% endfor %}
+                                                        </p>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                            {% if experiencesProjetP %}
+                                                <ul>
+                                                    {% for experience in experiencesProjetP %}
+                                                    <li>
+                                                        <strong>Projet</strong> | {{ experience.experience.projet }}
+                                                        <p>
+                                                            {% for k,v in experience.taches.items %}
+                                                                <spam>
+                                                                    <b>. </b>{{ v }} <br>
+                                                                </spam>
+                                                            {% endfor %}
+                                                        </p>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                    
+                                {% if user.profile.vform == "Visible" %}
+                                  {% if parcours or baccalaureat %}
+                                    <div class="section-cv">
+                                        <h2>Formation</h2>
+                                        {% for par in parcours %}
+                                            {% if par.status == 1 %}
+                                                <ul>
+                                                    <li>
+                                                        <strong>{{ par.formation }} ({{ par.niveau }})</strong> <br> 
+                                                        <span class="espace">{{ par.annee }} - {{ par.annee1 }}</span> {{ par.etablissement }}, {{ par.etablissement.city }} ({{ par.etablissement.country }})</td>                                
+                                                    </li>
+                                                </ul>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if baccalaureat %}
+                                                <ul>
+                                                    <li>
+                                                        <strong>Obtention du baccalauréat ({{ baccalaureat.diplome }})</strong><br>
+                                                        <span class="espace">{{ baccalaureat.annee.libelle }}</span> {{ baccalaureat.etablissement.name }}, {{ baccalaureat.etablissement.city }} ({{ baccalaureat.etablissement.country }})</td>
+                                                    </li>
+                                                </ul>
+                                        {% endif %}
+                                    </div>
+                                  {% endif %}
+                                {% endif %}
+                                
+                                {% if user.profile.vcomp == "Visible" %}
+                                    {% if cpCertification %}
+                                        <div class="section-cv">
+                                            {% if cpCertification > 1 %}
+                                                <h2>Certifications</h2>
+                                                <ul>
+                                                    {% for competence in competenceCertifications %}
+                                                    <li>{{ competence.name|safe }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% else %}
+                                                <h2>Certification</h2>
+                                                <ul>
+                                                    {% for competence in competenceCertifications %}
+                                                    <li>{{ competence.name }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+
+                                {% if cpReference > 0 and user.profile.vref == "Visible" %}
+                                        <div class="section-cv">
+                                            {% if cpReference > 1 %}
+                                            <h2>Réferences</h2>
+                                            {% else %}
+                                            <h2>Réference</h2>
+                                            {% endif %}
+                                            <ul>
+                                                {% for reference in references %}
+                                                    <li><b>{{ reference.entreprise.name }}</b></li>
+                                                    {% if reference.gender == "Masculin" %}
+                                                    <li>Mr {{ reference.name }}</li>
+                                                    {% else %}
+                                                    <li>Mme {{ reference.name }}</li>
+                                                    {% endif %}
+                                                    <li>{{ reference.phone }}</li>
+                                                    <li>{{ reference.email }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                {% endif %}
+                            </div>
+            
+                        </div>
+
+                        <br>
+                        <p class="text-center">
+                            <a href="{% url 'cv/generatecv-1' %}" class="btn btn-primary btn-sm"><i class="fa fa-download"></i> Télécharger le CV</a>
+                        </p>
+                        <br>
+                    </div>  
+                </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+    <!-- /.container -->
+
+{% endblock %}
+

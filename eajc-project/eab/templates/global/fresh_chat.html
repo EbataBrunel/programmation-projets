@@ -1,0 +1,65 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        // Appel initial pour défiler vers le bas à l'ouverture de la page
+        scrollToBottom();
+
+        // Fonction pour défiler vers le dernier message (le bas du conteneur)
+        function scrollToBottom(){
+            const container = document.getElementById('chat_container');
+            setTimeout(() => {
+                container.scrollTop = container.scrollHeight;
+            }, 100);  // On ajoute un délai de 100ms
+        }
+        
+        const roomName = "{{ room.id }}";
+        const user_id = "{{ user_id }}";
+                                
+        if (roomName){
+            setInterval(function(){
+                $.ajax({
+                    type: 'GET',
+                    url : "chat/content_chat/"+roomName,
+                    success: function(data){
+
+                        if (data.action === 'delete_message') {
+                            // Supprimer le message du DOM
+                            const messageElement = document.getElementById('message_' + data.message_id);              
+                            if (messageElement) {
+                                messageElement.remove();
+                            }else{
+                                // Si l'élément n'existe pas (par exemple si déjà supprimé), on peut afficher un message indicatif
+                                console.log("Le message n'existe plus ou est déjà supprimé.");
+                            }
+
+                        } else {
+                            $("#chat-log").html(data);
+                        }
+                    },
+                });
+            },100);
+        }
+
+        // ===================== Nouveau chat ==========================
+        $('#messageForm').submit(function(){
+            $.ajax({
+                url:"{% url 'new_chat' %}",
+                method : "POST",
+                data:new FormData($('#messageForm')[0]),
+                contentType : false,
+                processData : false,
+                success : function(data){
+                    if (data.status == "Save"){
+                        // Recuperer la date et l'heure à la quelle le message a été envoyée 
+                        let [date_seule, heure_seule] = data.message.date.split(' ');
+                        document.querySelector('#chat-log').innerHTML += '<div id="message_'+data.message.message_id+'"><div class="row"><div class="col-md-10 bg-gray" style="margin-bottom:20px; padding:5px; border-bottom-right-radius:15px; border-top-left-radius: 15px; box-shadow: inset 0 0 1em gold, 0 0 2em black;"><span style=" color: blueviolet;"><b>'+data.message.last_name+' '+ data.message.first_name +'</b></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small class="pull-right"> <i align="right"></i>'+heure_seule+'</small><p>' + data.message.content + '</p></div>    <div class="col-md-1 col-xs-1 message"><a href="#" data-toggle="modal" data-target="#contactModal'+data.message.message_id+'" style="text-decoration: none"><button class="delete-button" style="border-radius:20px"><i class="fa fa-github-alt"></i> <i class="fa fa-chevron-down"></i></button> </a></div> </div>   <div class="modal fade delete" id="contactModal'+data.message.message_id+'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header danger"><h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5></div><div class="modal-body">Voulez-vous supprimer ce message ?</div><div class="modal-footer"><button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Annuler</button><button class="btn btn-danger btn-xs delete_chat" id="'+data.message.message_id+'"><i class="fa fa-trash"></i> Supprimer</button></div></div></div></div></div>';
+                        $('#messageForm')[0].reset();
+                        scrollToBottom();
+                    }
+                }
+            });
+            return false;
+        }); 
+
+    });
+</script>

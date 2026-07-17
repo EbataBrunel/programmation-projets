@@ -1,0 +1,78 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Détails des documents en cours de traitement {% endblock %}
+{% block content %}
+{% load crypto_filters %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        <i class="fa fa-book"></i> Documents
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+        <li><a href="{% url 'cours/c-encours' %}">Disciplines</a></li>
+        <li><a href="{% url 'cours/detcoursencours' composant.discipline.id|crypter_id %}">Composants</a> </li>
+        <li class="active">Documents</li>
+      </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h6 class="box-title text-info"><i class="fa fa-table"></i> Liste des documents de <b>{{ composant }}</b> en cours de traitement</h6>
+                        </div>
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr class="bg-{{ parametre.theme }} text-white">
+                                            <th>Fichier</th>
+                                            <th>Niveau</th>
+                                            <th>Type</th>
+                                            <th>Prix</th>
+                                            <th>Date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for course in cours %}
+                                        <tr>
+                                            <td><a href="{{ course.file.url }}" class="btn btn-default btn-sm" style="color:green">Voir le PDF</a></td>
+                                            <td>{{ course.niveau }}</td>
+                                            <td>{{ course.type }}</td>
+                                            <td class="text-danger">{{ course.price }} {{ parametre.devise }}</td>
+                                            <td>{{ course.date|date:"d/m/Y" }}</td>
+                                            <td>
+                                                <a class="btn btn-default btn-xs detail_document_encours" id="{{ course.id }}"> <i class="fa fa-eye"></i> </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br>
+                            <a href="{% url 'cours/detcoursencours' composant.discipline.id|crypter_id %}" class="btn btn-default btn-xs"><i class="fa fa-arrow-circle-left"></i> Retour </a>
+
+                            <!-- Detail Modal-->
+                            <div class="modal fade" id="show-content-detail" tabindex="-1" style="border-radius: 10px;">
+                                <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary">
+                                    <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-eye"></i> Détail du document</span></h5>
+                                    </div>
+                                    <div class="modal-body" id="content-detail"></div>
+                                </div>
+                                </div>
+                            </div>
+                            <!-- End Detail Modal-->
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- /.container -->
+{% endblock %}

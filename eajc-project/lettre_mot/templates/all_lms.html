@@ -1,0 +1,103 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Lettres de motivation {% endblock %}
+{% block content %}
+{% load crypto_filters %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            <i class="fa fa-tags"></i> Tableau de bord
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+            <li class="active">Lettres de motivation</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title text-info"><i class="fa fa-send"></i> Toutes les lettres de motivations</strong></h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    {% for line in lms %}
+                    {% if line.lm.statut == 0 %}
+                    <div class="border-shadow">
+                        <p><b><em class="text-info">{{ line.lm.user.last_name|title }} {{ line.lm.user.first_name|title }}</em></b></p>
+                        <p>{{ line.lm.type|upper }} | <a href="{{ line.lm.file.url }}"> {{ line.lm.file }} <span style="font-size: 20px; margin-left:5px"><i class="fa fa-download"></i></span> </a> <span class="label label-warning border-radius"  style="margin-left:5px; margin-right:5px">En cours de traitement</span> | <a class="btn btn-primary btn-xs" href="{% url 'valid_lm' line.lm.id %}" title="Statut"><i class="fa fa-check-circle"></i> Valider la LM </a> | <a class="btn btn-danger btn-xs" href="#" title="Supprimer" data-toggle="modal" data-target="#etabModal{{ line.lm.id }}"><i class="fa fa-trash"></i></a> |
+                        <em style="float: right">{{ line.lm.date }}</em> </p>
+                        <div class="modal fade" id="etabModal{{ line.lm.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="border-radius: 10px;">
+                                    <div class="modal-dialog modal-sm" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header danger">
+                                                <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5>
+                                            </div>
+                                            <div class="modal-body">Voulez-vous vraiment supprimer cette ligne ?</div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Annuler</button>
+                                                <a class="btn btn-danger btn-xs" href="{% url 'delete_lm' line.lm.id|crypter_id %}"><i class="fa fa-trash"></i> Supprimer</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                        </div>
+                    </div>
+                    {% elif line.lm.statut == 1 %}
+                    <div class="border-shadow">
+                        <p><b><em class="text-info">{{ line.lm.user.last_name }} {{ line.lm.user.first_name }}</em></b></p>
+                        <p>{{ line.lm.type|upper }} | <a href="{{ line.lm.file.url }}">{{ line.lm.file }} <i class="fa fa-download" style="font-size: 20px; margin-left:5px"></i></span> </a> <span class="label label-success border-radius"  style="margin-left:5px; margin-right:5px"> Publiée </span> | <a class="btn btn-primary btn-xs" href="{% url 'valid_lm' line.lm.id %}" title="Statut"><i class="fa fa-check-circle"></i> Valider la LM </a> | <a class="btn btn-danger btn-xs" href="#" title="Supprimer" data-toggle="modal" data-target="#etabModal{{ line.lm.id }}"><i class="fa fa-trash"></i></a> <em style="float: right">{{ line.lm.date }}</em> </p>
+                        
+                        <div class="modal fade" id="etabModal{{ line.lm.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true" style="border-radius: 10px;">
+                                    <div class="modal-dialog modal-sm" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header danger">
+                                                <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5>
+                                            </div>
+                                            <div class="modal-body">Voulez-vous vraiment supprimer cette LM ?</div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Annuler</button>
+                                                <a class="btn btn-danger btn-xs" href="{% url 'delete_lm' line.lm.id|crypter_id %}"><i class="fa fa-trash"></i> Supprimer</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="border-shadow">
+                        <p><b><em class="text-info">{{ line.lm.user.last_name|title }} {{ line.lm.user.first_name|title }}</em></b></p>
+                        <p>{{ line.lm.type|upper }} | <a href="{{ line.lm.file.url }}">{{ line.lm.file }} <span style="font-size: 20px; margin-left:5px"><i class="fa fa-download"></i></span></a> <span class="label label-danger border-radius"  style="margin-left:5px; margin-right:5px"> A Corriger </span>  |  <a class="btn btn-primary btn-xs" href="{% url 'valid_lm' line.lm.id %}" title="Statut"><i class="fa fa-check-circle"></i> Valider la LM </a> | <a class="btn btn-danger btn-xs" href="#" title="Supprimer" data-toggle="modal" data-target="#etabModal{{ line.lm.id }}"><i class="fa fa-trash"></i></a> |
+                            <a class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="right" data-content="{{ line.lm.comment }}">
+                                Voir le commentaire
+                            </a> 
+                            <em style="float: right">{{ line.lm.date }}</em> </p>
+                        <div class="modal fade" id="etabModal{{ line.lm.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true" style="border-radius: 10px;">
+                                    <div class="modal-dialog modal-sm" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header danger">
+                                                <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5>
+                                            </div>
+                                            <div class="modal-body">Voulez-vous vraiment supprimer cette LM ?</div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Annuler</button>
+                                                <a class="btn btn-danger btn-xs" href="{% url 'del_lm' line.lm.id|crypter_id %}"><i class="fa fa-trash"></i> Supprimer</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      {% endblock %}

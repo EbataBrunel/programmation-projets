@@ -1,0 +1,104 @@
+
+{% if status == 1 %}
+        <div class="form-group">
+            <label for="posteoccupe">Poste occupé *</label>
+            <input type="text" name="posteoccupe" id="posteoccupe" value="{{ experience.posteoccupe }}" class="form-control" required> 
+        </div>
+        <div class="form-group">
+            <label for="projet">Projet/Mission effectué(e) *</label>
+            <input type="text" name="projet" id="projet" value="{{ experience.projet }}" class="form-control" required> 
+        </div>
+        <table id="dynamic_field" class="table">
+            {% if experience %}
+            {% for k,v in taches.items %}
+            <tr id="row{{k}}">
+                {% if k == 0 %}
+                <td>
+                    <div class="form-group">
+                        <label for="tache{{k}}">Tâche *</label>
+                        <input type="text" name="tache{{k}}" id="tache{{k}}" value="{{ v }}" class="form-control" required> 
+                    </div>
+                </td>
+                <td>
+                    <br>
+                    <button type="button" name="add" id="add" class="btn btn-success">+</button>
+                </td>
+                {% else %}
+                <td>
+                    <div class="form-group">
+                        <label for="tache{{k}}">Tâche *</label>
+                        <input type="text" name="tache{{k}}" id="tache{{k}}" value="{{ v }}" class="form-control" required> 
+                    </div>
+                </td>
+                <td>
+                    <br>
+                    <button type="button" name="remove" id="{{k}}" class="btn btn-danger btn_remove">X</button>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="tache0">Tâche *</label>
+                        <input type="text" name="tache0" id="tache0" class="form-control" required> 
+                    </div>
+                </td>
+                <td>
+                    <br>
+                    <button type="button" name="add" id="add" class="btn btn-success">+</button>
+                </td>
+            </tr>
+            {% endif %}
+        </table>
+{% else %}
+    <div class="form-group">
+        <label for="projet">Titre du projet *</label>
+        <input type="text" name="projet" id="projet" value="{{ experience.projet }}" class="form-control" required> 
+    </div>
+    <table id="dynamic_field" class="table">
+        {% if experience %}
+            {% for k,v in taches.items %}
+            <tr id="row{{k}}">
+                {% if k == 0 %}
+                <td>
+                    <div class="form-group">
+                        <label for="tache{{k}}">Tâche *</label>
+                        <input type="text" name="tache{{k}}" id="tache{{k}}" value="{{ v }}" class="form-control" required> 
+                    </div>
+                </td>
+                <td>
+                    <br>
+                    <button type="button" name="add" id="add" class="btn btn-success">+</button>
+                </td>
+                {% else %}
+                <td>
+                    <div class="form-group">
+                        <label for="tache{{k}}">Tâche *</label>
+                        <input type="text" name="tache{{k}}" id="tache{{k}}" value="{{ v }}" class="form-control" required> 
+                    </div>
+                </td>
+                <td>
+                    <br>
+                    <button type="button" name="remove" id="{{k}}" class="btn btn-danger btn_remove">X</button>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        {% else %}
+        <tr>
+            <td>
+                <div class="form-group">
+                    <label for="tache0">Tâche *</label>
+                    <input type="text" name="tache0" id="tache0" class="form-control" required> 
+                </div>
+            </td>
+            <td>
+                <br>
+                <button type="button" name="add" id="add" class="btn btn-success">+</button>
+            </td>
+        </tr>
+        {% endif %}
+    </table>
+{% endif %}

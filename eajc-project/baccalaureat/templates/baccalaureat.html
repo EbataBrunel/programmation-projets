@@ -1,0 +1,179 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Baccalauréat {% endblock %}
+{% block content %}
+{% load static %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            {% for group in request.user.groups.all %}
+            {% if group.name == "admin" %}
+            <i class="fa fa-tags"></i> 
+            Gestion
+            {% else %}
+            <i class="fa fa-university"></i> 
+            baccalauréat
+            {% endif %}
+            {% endfor %}
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+            <li><a href="{% url 'cv/step_cv' %}"> Etapes cv</a></li>
+            <li class="active">baccalauréat</li>
+          </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="text-center">
+            <a href="{% url 'etablissements' %}" class="tag"><b><span class="step-circle"> 1 </span> Etablissements</b></a>
+            <a href="{% url 'baccalaureat' %}" class="tag btn btn-primary bg-gray"><b><span class="step-circle"> 2 </span> Baccalauréat</b></a>
+            <a href="{% url 'formations' %}" class="tag"><b><span class="step-circle"> 3 </span> Formations</b></a>
+            <a href="{% url 'parcours' %}" class="tag"><b><span class="step-circle"> 4 </span> Parcours</b></a>
+            <a href="{% url 'entreprises' %}" class="tag"><b><span class="step-circle"> 5 </span> Entreprises</b></a>
+            <a href="{% url 'experiences' %}" class="tag"><b><span class="step-circle"> 6 </span> Expériences</b></a>
+            <a href="{% url 'competences' %}" class="tag"><b><span class="step-circle"> 7 </span> Compétences</b></a>
+            <a href="{% url 'references' %}" class="tag"><b><span class="step-circle"> 8 </span> Références</b></a>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h4 class="box-title text-info"><i class="fa fa-graduation-cap"></i> Baccalauréat</h4>
+                    </div>
+                    <div class="box-body">
+                        {% if etablissements %}
+                            <a href="#" data-toggle="modal" data-target="#saisirBac" style="text-decoration: none;" class="btn btn-primary"><i class="fa fa-pencil"> Saisir / Modifier </i> </a>
+                            <!-- Repondre Modal-->
+                            <div class="modal fade" id="saisirBac" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-graduation-cap"></i> Enregistrement ou Edition du baccalauréat</span></h3>
+                                        </div>
+                                        <form method="post" action="">
+                                            <div class="modal-body">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    <label for="annee">Année d'obtention *</label>
+                                                    <select name="annee" class="form-control">
+                                                        {% if baccalaureat %}
+                                                        <option value="{{baccalaureat.annee.id}}">{{baccalaureat.annee.libelle}}</option>
+                                                        {% else %}
+                                                        <option value="">-- Selectionnez une année --</option>
+                                                        {% endif %}
+                                                        {% for annee in annees %}
+                                                            <option value="{{annee.id}}">{{annee.libelle}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="etablissement">Etablissement *</label>
+                                                    <select name="etablissement" class="form-control">
+                                                        {% if baccalaureat %}
+                                                        <option value="{{baccalaureat.etablissement.id}}">{{baccalaureat.etablissement.name}}</option>
+                                                        {% else %}
+                                                        <option value="">-- Selectionnez un établissement --</option>
+                                                        {% endif %}
+                                                        {% for etablissement in etablissements %}
+                                                            <option value="{{etablissement.id}}">{{etablissement.name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="diplome">Diplôme *</label>
+                                                    <select name="diplome" id="diplome" class="form-control">
+                                                        {% if baccalaureat %}
+                                                        <option value="{{baccalaureat.diplome}}">{{baccalaureat.diplome}}</option>
+                                                        {% else %}
+                                                        <option value="">-- Selectionnez un diplôme --</option>
+                                                        {% endif %}
+                                                        {% for diplome in diplomes %}
+                                                            <option value="{{diplome}}">{{diplome}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="other">
+
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="center">
+                                                    <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Annuler</button>
+                                                    <button type="submit" class="btn btn-primary btn-xs"><i class="fa fa-check"></i> Valider </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if baccalaureat %}
+                            <!-- Information -->
+                            <h3 class="text-center">Information du baccalauréat</h3>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-7 col-xs-9">
+                                    <table class="table">
+                                        <tr>
+                                            <th> DIPLÔME </th>
+                                            <td>{{ baccalaureat.diplome }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>ANNEE D'OBTENTION : </th>
+                                            <td>{{ baccalaureat.annee.libelle }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>ETABLISSEMENT : </th>
+                                            <td>{{ baccalaureat.etablissement.name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>PAYS DE L'ETABLISSEMENT : </th>
+                                            <td>{{ baccalaureat.etablissement.country }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>VILLE DE L'ETABLISSEMENT : </th>
+                                            <td>{{ baccalaureat.etablissement.city }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                    <div class="col-md-5 col-xs-3" align="center">
+                                        <img class="img-circle img-fluid img-responsive" width="300px" height="350px" src="{% static 'dist/img/graduation.jpeg' %}">
+                                        <div class="pull-right">
+                                            <a href="#" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Suppimer </a>
+                                            <!-- Delete Modal-->
+                                            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="border-radius: 10px;">
+                                                <div class="modal-dialog modal-sm" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header danger">
+                                                            <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5>
+                                                        </div>
+                                                        <div class="modal-body text-center">Voulez-vous vraiment supprimer votre baccalauréat ?</div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Annuler</button>
+                                                            <a class="btn btn-danger btn-xs" href="{% url 'del_bac' baccalaureat.id %}"><i class="fa fa-trash"></i> Supprimer</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End delete Modal -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% else %}
+                        <h3><a href="{% url 'etablissements' %}" class="btn btn-primary btn-sm"><i class="fa-hand-o-right"></i> Enregistrer d'abord un établissement</a></h3>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <a href="{% url 'etablissements' %}" class="btn btn-primary btn-sm" style="border-radius:20px"><i class="fa fa-arrow-circle-left"></i> Etape Précédente</a>&nbsp;&nbsp;
+                <a href="{% url 'formations' %}" class="btn btn-primary btn-sm" style="border-radius:20px">Etape Suivante <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- /.container -->
+{% endblock %}

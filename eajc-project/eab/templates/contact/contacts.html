@@ -1,0 +1,91 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Contacts {% endblock %}
+{% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        <i class="fa fa-dashboard"></i> Tableau de bord
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="box">
+                <div class="box-header">
+                    <h6 class="box-title text-info"><i class="fa fa-table"></i> Liste des contacts</h6>
+                </div>
+                <div class="box-body">
+
+                    {% for contact in listeContact %}
+                    <div class="border-radius content_message">
+                        <p><span class="text-primary">{{ contact.name|title }}</span> | {{ contact.email }} <small class="pull-right">{{ contact.datecontact|date:"d-m-Y H:m" }}</small></p>
+                        {% autoescape on %}
+                        <span>{{ contact.message|escape }}</span>
+                        {% endautoescape %}
+                    </div>
+                    <p style="margin-left:30px">
+                        <span class="label label-success border-radius" style="margin-right:5px">
+                            {% if contact.effectif > 1 %}
+                                {{ contact.effectif }} messages
+                            {% else %}
+                                {{ contact.effectif }} message
+                            {% endif %} 
+                        </span>
+                        <a class="text-danger" href="#" data-toggle="modal" data-target="#contactModal{{ contact.id }}"><i class="fa fa-trash"></i> Supprimer </a>&nbsp;
+                        <a href="{% url 'contact/details_contact' contact.email %}" class="text-info"><i class="fa fa-eye"></i> Voir plus</a>
+
+                        <!-- delete Modal-->
+                        <div class="modal fade" id="contactModal{{ contact.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content modal-sm">
+                                    <div class="modal-header bg-red">
+                                        <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5>
+                                    </div>
+                                    <div class="modal-body text-center">Voulez-vous supprimer le message de {{ contact.name }} ?</div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Annuler</button>
+                                        <a class="btn btn-danger btn-xs" href="{% url 'contact/delete_contact' contact.id %}"><i class="fa fa-trash"></i> Supprimer</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p>
+                    {% endfor %}
+
+                    {% for contact in listeContact2 %}
+                    <div class="border-radius content_message">
+                        <p><span class="text-primary">{{ contact.name|title }}</span> | {{ contact.email }} <small class="pull-right">{{ contact.datecontact|date:"d-m-Y H:m" }}</small></p>
+                        <span>{{ contact.message|safe }}</span>
+                    </div>
+                    <p style="margin-left:30px">
+                        <a class="text-danger" href="#" data-toggle="modal" data-target="#contactModal{{ contact.id }}"><i class="fa fa-trash"></i> Supprimer </a>&nbsp;
+                        <a href="{% url 'contact/details_contact' contact.email %}" class="text-info"><i class="fa fa-eye"></i> Voir plus</a>
+
+                        <!-- delete Modal-->
+                        <div class="modal fade" id="contactModal{{ contact.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content modal-sm">
+                                    <div class="modal-header bg-red">
+                                        <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5>
+                                    </div>
+                                    <div class="modal-body text-center">Voulez-vous supprimer le message de {{ contact.name }} ?</div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Annuler</button>
+                                        <a class="btn btn-danger btn-xs" href="{% url 'contact/delete_contact' contact.id %}"><i class="fa fa-trash"></i> Supprimer</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- /.container -->
+{% endblock %}

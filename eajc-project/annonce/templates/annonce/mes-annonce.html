@@ -1,0 +1,105 @@
+
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Annonces {% endblock %}
+{% block content %}
+{% load crypto_filters %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            <i class="fa fa-info-circle"></i> Annonces
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+            <li class="active">Annonces</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title text-info"><i class="fa fa-table"></i> <b>Mes annonces</b> </h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <div class="row">
+                    <div class="col-md-4">
+                      {% if messages %}
+                          {% for message in messages %}
+                              <div class="alert {{ message.tags }} text-center">
+                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                  <i class="fa fa-check-circle"></i>
+                                  <strong>{{ message }}</strong>
+                              </div> 
+                          {% endfor %}
+                      {% endif %}
+                    </div>
+                </div>
+                  <div align="right">
+                    <a href="{% url 'annonce/add-annonce' %}" class="btn btn-default btn-sm"><i class="fa fa-plus"></i> Publiez une annonce</a>
+                  </div>
+                  <br>
+                  <div class="table-responsive text-black">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                          <tr>
+                            <th>Titre</th>
+                            <th>Entreprise</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for annonce in annonces %}
+                            <tr>
+                                <td>{{ annonce.title|safe }}</td>
+                                <td>{{ annonce.company }}</td>
+                                <td>{{ annonce.date|date:"d/m/Y" }}</td>
+                                <td>
+                                    <a class="btn btn-default btn-xs delete_my_ad" id="{{ annonce.id }}"> <i class="fa fa-trash"></i> </a>&nbsp;
+                                    <a href="{% url 'annonce/edit-annonce' annonce.id|crypter_id %}" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a>&nbsp;
+                                    <a class="btn btn-default btn-xs detail-annonce" id="{{ annonce.id }}"> <i class="fa fa-eye"></i> </a>
+                              </td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                  </div>
+
+                  <!-- Delete Modal-->
+                  <div class="modal fade" id="content_delete" tabindex="-1" style="border-radius: 10px;">
+                    <div class="modal-dialog modal-sm" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header danger">
+                          <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-trash"></i> Suppression</span></h5>
+                        </div>
+                        <div class="modal-body" id="content-delete-item"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Delete Modal-->
+
+                  <!-- Detail Modal-->
+                  <div class="modal fade" id="show-content-detail" tabindex="-1" style="border-radius: 10px;">
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header bg-primary">
+                          <h5 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-eye"></i> Détail de l'annonce</span></h5>
+                        </div>
+                        <div class="modal-body" id="content-detail"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Detail Modal-->
+
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      {% endblock %}

@@ -1,0 +1,1054 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+        hideContent();
+        hideComponentview();
+        hideYearview();
+        count_new_chat();
+        //fresh_header()
+        
+        var i=0;
+        $(document).on('click','#add',function(){
+            i++;
+            $('#dynamic_field').append('<tr id="row'+i+'"><td><div class="form-group"><label for="tache'+i+'">Tâche *</label><input type="text" name="tache'+i+'" id="tache'+i+'" class="form-control" required></div></td><td><br><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></td></tr>')
+        });
+        
+        $(document).on('click','.btn_remove',function(){
+            var btn_id = $(this).attr("id");
+            $('#row'+btn_id).remove();
+        });
+
+        $('#type_exp').on('change', function(){
+            var type_exp = $(this).val();
+            if(type_exp){
+              $.get("ajax/"+type_exp,
+              {type_exp:type_exp},
+                function(data){
+                  $('#contenu').html(data);
+                  $('#contenu').show();  
+                }
+              );
+            }else{
+                $('#contenu').hide();
+            }
+        });
+
+        $('#type_exp').on('change', function(){
+            var type_exp = $(this).val();
+            if(type_exp){
+              $.get("ajaxdate/"+type_exp,
+              {type_exp:type_exp},
+                function(data){
+                  $('#contenu_1').html(data);
+                  $('#contenu_1').show();  
+                }
+              );
+            }else{
+                $('#contenu_1').hide();
+            }
+        });
+
+        $('#type_exp').on('change', function(){
+            var type_exp = $(this).val();
+            var id = $('#id').val();
+            if(type_exp && id){
+              $.get("ajax/"+type_exp+"/"+id,
+              {type_exp:type_exp},
+                function(data){
+                  $('#contenu2').html(data);
+                }
+              );
+            }
+        });
+
+        $('#type_exp').on('change', function(){
+            var type_exp = $(this).val();
+            var id = $('#id').val();
+            if(type_exp && id){
+
+              $.get("ajaxdate/"+type_exp+"/"+id,
+              {type_exp:type_exp},
+                function(data){
+                  $('#contenu_2').html(data);
+                }
+              );
+            }
+        });
+
+        $('#type_comp').on('change', function(){
+            var type_comp = $(this).val();
+            if(type_comp){
+        
+              $.get("ajaxcomp/"+type_comp,
+              {type_comp:type_comp},
+                function(data){
+                  $('#comp').html(data);
+                }
+              );
+            }
+        });
+
+
+        $('#discipline').on('change', function(){
+            var discipline = $(this).val();
+            if(discipline){
+
+              $.get("ajaxCompDisc/"+discipline,
+              {discipline:discipline},
+                function(data){
+                  $('#composant').html(data);
+                  $('#Componentview').show();  
+                }
+              );
+
+            }else{
+                $('#Componentview').hide();
+            }
+        });
+
+        $('#annee').on('change', function(){
+            var annee = $(this).val();
+            if(annee){
+                $.get("ajaxAnnee/"+annee,
+                    {annee:annee},
+                    function(data){
+                        $('#annee1').html(data); 
+                        $('#yearview').show();
+                    }
+                );
+
+            }else{
+                $('#yearview').hide();  
+            }
+        });
+
+        $('#annee').on('change', function(){
+            var annee = $(this).val();
+            if(annee){
+                $.get("ajaxAnnee/"+annee,
+                    {annee:annee},
+                    function(data){
+                        $('#annee2').html(data); 
+                    }
+                );
+            }
+        });
+
+        $('#type').on('change', function(){
+            var type = $(this).val();
+            if(type){
+                $.get("ajaxType/"+type,
+                    {type:type},
+                    function(data){
+                        $('#priceview').html(data); 
+                    }
+                );
+
+            }
+        });
+
+        $('#statut').on('change', function(){
+            var statut = $(this).val();
+            if(statut){
+                $.get("ajaxlm/"+statut,
+                    {statut:statut},
+                    function(data){
+                        $('#statutlmview').html(data); 
+                    }
+                );
+
+            }
+        });
+
+        /* ========================== */
+        $('.hovercomp').popover({
+             title:fetchData,
+             html:true,
+             placement:'left'
+         });
+
+         function fetchData(){
+             var fetch_data='';
+             var id = $(this).attr("id");
+             $.ajax({
+                 url:"fetchcomp/"+id,
+                 method:"GET",
+                 async:false,
+                 data:{id:id},
+                 success:function(data){
+                     fetch_data=data;
+                 }
+
+             });
+             return fetch_data;
+         }
+
+         /* ========================== */
+        $('.hoverpar').popover({
+             title:retrieveData,
+             html:true,
+             placement:'left'
+         });
+
+         function retrieveData(){
+             var retrieve_data='';
+             var id = $(this).attr("id");
+             $.ajax({
+                 url:"fetchpar/"+id,
+                 method:"GET",
+                 async:false,
+                 data:{id:id},
+                 success:function(data){
+                    retrieve_data=data;
+                 }
+
+             });
+             return retrieve_data;
+         }
+
+         /* ========================== */
+        $('.hoverdoc').popover({
+             title:retrieveData,
+             html:true,
+             placement:'left'
+         });
+
+         function retrieveData(){
+             var retrieve_data='';
+             var id = $(this).attr("id");
+             $.ajax({
+                 url:"fetchdoc/"+id,
+                 method:"GET",
+                 async:false,
+                 data:{id:id},
+                 success:function(data){
+                    retrieve_data=data;
+                 }
+
+             });
+             return retrieve_data;
+         }
+
+        /* ========================== */
+        $('.hoverdoccmp').popover({
+             title:retrieveData,
+             html:true,
+             placement:'left'
+         });
+
+         function retrieveData(){
+             var retrieve_data='';
+             var id = $(this).attr("id");
+             $.ajax({
+                 url:"fetchdoccmp/"+id,
+                 method:"GET",
+                 async:false,
+                 data:{id:id},
+                 success:function(data){
+                    retrieve_data=data;
+                 }
+
+             });
+             return retrieve_data;
+         }
+
+        /*===================== Statut de competence =============*/
+        $(document).on('click','.stcomp', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("statcomp/"+id,
+                    {id:id},
+                    function(data){
+                        $("#"+id).html(data); 
+                    }
+                );
+
+            }
+        });
+
+        /*===================== Statut de l'expérience =============*/
+        $(document).on('click','.stexp', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("statexp/"+id,
+                    {id:id},
+                    function(data){
+                        $("#"+id).html(data); 
+                    }
+                );
+
+            }
+        });
+
+        /*===================== Statut de parcours =============*/
+        $(document).on('click','.stpar', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("statpar/"+id,
+                    {id:id},
+                    function(data){
+                        $("#"+id).html(data); 
+                    }
+                );
+
+            }
+        });
+
+        /*===================== Statut de l'expérience =============*/
+        $(document).on('click','.stref', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("statref/"+id,
+                    {id:id},
+                    function(data){
+                        $("#"+id).html(data); 
+                    }
+                );
+
+            }
+        });
+
+        /*===================== status like de questions =============*/
+        $(".like").on('click', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("ajaxlike/"+id,
+                    {id:id},
+                    function(data){
+                        $(".content_like_"+id).html(data); 
+                    }
+                );
+
+            }
+        });
+
+        /*===================== status like de questions =============*/
+        $(".likes").on('click', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("ajaxlikes/"+id,
+                    {id:id},
+                    function(data){
+                        $("#vuelikes"+id).html(data); 
+                    }
+                );
+
+            }
+        });
+
+         /*===================== status like de answer =============*/
+         $(".likeanswer").on('click', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("ajaxlike/"+id,
+                    {id:id},
+                    function(data){
+                        $(".content_like_"+id).html(data); 
+                    }
+                );
+
+            }
+        });
+
+        /*===================== status like de answer =============*/
+        $(".likeanswers").on('click', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("ajaxlikes/"+id,
+                    {id:id},
+                    function(data){
+                        $("#vuelikes"+id).html(data);  
+                    }
+                );
+
+            }
+        });
+
+        /*======================== Membre prioritaire ================= */
+        $(".priority").on('click', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("priority/"+id,
+                    {id:id},
+                    function(data){
+                        if (data.status == 1){
+                            contenu="<button class='btn btn-success btn-xs'><i class='fa fa-check'></i></a>"
+                            $("#"+id).html(contenu);
+                        }else{
+                            contenu="<button class='btn btn-danger btn-xs text-light'><i class='fa fa-remove'></i></button>"
+                            $("#"+id).html(contenu);
+                        } 
+                    }
+                );
+
+            }
+        });        
+
+        $('#status').on('change', function(){
+            var status = $(this).val();
+            
+            if(status){
+                $.get("status/"+status,
+                    {status:status},
+                    function(data){
+                        if (data.status == "Non"){
+                            contenu="<label for='status'>Année en cours </label> <select name='status' id='status' required><option value='Non'>Non</option><option value='Oui'>Oui</option></select>"
+                            $('#vueStatus').html(contenu); 
+                            $('#vueMatiere').show();
+                        }else{
+                            $('#vueMatiere').hide();
+                        }
+                            
+                    }
+                );
+            }
+        });
+
+        
+
+        $('#typepaiement').on('change', function(){
+            var typepaiement = $(this).val();
+            if(typepaiement){
+              $.get("ajaxmode/"+typepaiement,
+              {typepaiement:typepaiement},
+                function(data){
+                  $('#mode').html(data);
+                }
+              );
+            }
+        });
+
+        $('#typepaiement').on('change', function(){
+            var typepaiement = $(this).val();
+            if(typepaiement){
+              $.get("ajaxmode/"+typepaiement,
+              {typepaiement:typepaiement},
+                function(data){
+                  $('#modeedit').html(data); 
+                }
+              );
+            }
+        });
+
+        // Seletionner les achats par mois et année 
+        $('#month_year').on('change', function(){
+            var month_year = $(this).val();
+            if(month_year){
+              $.get("purchase_month_year/"+month_year,
+              {month_year:month_year},
+                function(data){
+                  $('#content_purchase_month_year').html(data); 
+                }
+              );
+            }else{
+                month_year = "022024"
+                $.get("purchase_month_year/"+month_year,
+                {month_year:month_year},
+                    function(data){
+                    $('#content_purchase_month_year').html(data); 
+                    }
+                );
+            }
+        });
+
+         // Seletionner les achats par mois et année 
+         $('#month_year_user').on('change', function(){
+            var month_year_user = $(this).val();
+            if(month_year_user){
+              $.get("purchase_month_year_user/"+month_year_user,
+              {month_year_user:month_year_user},
+                function(data){
+                  $('#content_purchase_month_year_user').html(data); 
+                }
+              );
+            }else{
+                month_year_user = "022024"
+                $.get("purchase_month_year_user/"+month_year_user,
+                {month_year_user:month_year_user},
+                    function(data){
+                    $('#content_purchase_month_year_user').html(data); 
+                    }
+                );
+            }
+        });
+
+        function hideContent(){
+            $('#contenu').hide();
+        }
+        
+        function hideComponentview(){
+            $('#Componentview').hide();
+        }
+
+        function hideYearview(){
+            $('#yearview').hide();
+        }
+
+        function count_new_chat(){
+            //var display = $("#count_new_chat");
+            const fresh = "{{ fresh_dashbord }}";
+            if (fresh){
+                setInterval(function(){
+                    $.ajax({
+                        type: 'GET',
+                        url : "count_new_chat",
+                        success: function(response){
+                            if (response.countnewchat == 0){
+                                dt = '<h3>'+response.countnewchat+'</h3><p>Nouveau Chat</p>';
+                                $(".count_new_chat").html(dt); 
+                            }else if (response.countnewchat == 1){
+                                dt = '<h3 class="text-success">'+response.countnewchat+'</h3><p class="text-success">Nouveau Chat</p>';
+                                $(".count_new_chat").html(dt); 
+                            }else{
+                                dt = '<h3 class="text-success">'+response.countnewchat+'</h3><p class="text-success">Nouveaux Chats</p>';
+                                $(".count_new_chat").html(dt); 
+                            }
+                            // Question du forum
+                            if (response.countquestion == 0){
+                                dt = '<h3>'+response.countquestion+'</h3><p>Nouvelle question</p>';
+                                $(".countnewquestion").html(dt); 
+                            }else if (response.countquestion == 1){
+                                dt = '<h3 class="text-success">'+response.countquestion+'</h3><p class="text-success">Nouvelle question</p>';
+                                $(".countnewquestion").html(dt); 
+                            }else{
+                                dt = '<h3 class="text-success">'+response.countquestion+'</h3><p class="text-success">Nouvelles questions</p>';
+                                $(".countnewquestion").html(dt); 
+                            }
+                            // Contact
+                            if (response.countnewcontact == 0){
+                                dt = '<h3>'+response.countnewcontact+'</h3><p>Contact</p>';
+                                $(".countnewcontact").html(dt); 
+                            }else if (response.countnewcontact == 1){
+                                dt = '<h3 class="text-success">'+response.countnewcontact+'</h3><p class="text-success">Contact</p>';
+                                $(".countnewcontact").html(dt); 
+                            }else{
+                                dt = '<h3 class="text-success">'+response.countnewcontact+'</h3><p class="text-success">Contacts</p>';
+                                $(".countnewcontact").html(dt); 
+                            }
+
+                            // Signal
+                            if (response.countreport == 0){
+                                dt = '<h3>'+response.countreport+'</h3><p>Signalement</p>';
+                                $(".countreport").html(dt); 
+                            }else if (response.countreport == 1){
+                                dt = '<h3 class="text-danger">'+response.countreport+'</h3><p class="text-danger">Signalement</p>';
+                                $(".countreport").html(dt); 
+                            }else{
+                                dt = '<h3 class="text-danger">'+response.countreport+'</h3><p class="text-danger">Signalements</p>';
+                                $(".countreport").html(dt); 
+                            }
+
+                            // Utilisateurs en ligne
+                            if (response.countuseractive  > 1 ){
+                                dt = '<h3>'+response.countuseractive+'</h3><p>Utilisateurs en ligne </p>';
+                                $(".countuseractive").html(dt);
+                            }else{
+                                dt = '<h3>'+response.countuseractive+'</h3><p>Utilisateur en ligne</p>';
+                                $(".countuseractive").html(dt); 
+                            }
+
+                            // Demande de suppression de commande
+                            if (response.countdmddeleteaccount == 0 ){
+                                dt = '<h3>'+response.countdmddeleteaccount+'</h3><p>Demande de suppression du compte </p>';
+                            }else if (response.countdmddeleteaccount == 1 ){
+                                dt = '<h3 class="text-danger">'+response.countdmddeleteaccount+'</h3><p class="text-danger">Demande de suppression du compte </p>';
+                                $(".countdmddeleteaccount").html(dt);
+                            }else{
+                                dt = '<h3 class="text-danger">'+response.countdmddeleteaccount+'</h3><p class="text-danger">Demandes de suppression du compte</p>';
+                                $(".countdmddeleteaccount").html(dt); 
+                            }
+
+
+                            // Sélectionner l'élément HTML où la liste sera affichée
+                            const userList = document.getElementById('user_list');
+
+                            // Vider la liste (au cas où il y aurait des éléments existants)
+                            userList.innerHTML = '';
+                            
+                            const usersOnline = JSON.parse(response.users_online);
+                            // Parcourir la liste des utilisateurs
+                            usersOnline.forEach(user => {
+                                // Créer un élément de liste pour chaque utilisateur
+                                const li = document.createElement('li');
+                                li.innerHTML = `<p><i class="fa fa-circle text-success"></i> ${user.fields.last_name} ${user.fields.first_name} <p>`;
+
+                                // Ajouter l'élément à la liste dans le DOM
+                                userList.appendChild(li);
+                            });
+
+
+                        },
+                    });
+                },100);
+            }
+        }
+
+        function fresh_header(){
+
+            setInterval(function(){
+                    $.ajax({
+                        type: 'GET',
+                        url : "fresh_header",
+                        success: function(response){
+                            header_mesg = `<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="label label-success">${ response.count }</span>
+                              </a>
+                              <ul class="dropdown-menu">`;
+                                if (response.count > 1){
+                                `<li class="header">Tu as ${ response.count } messages</li>`;
+                                }else{
+                                `<li class="header">Tu as ${ response.count } message</li>`;
+                                }
+                                `<li>
+                                  <!-- inner menu: contains the actual data -->
+                                  <ul class="menu">`;
+                                    if (response.users){
+                                        response.users.forEach(function(user) {
+                                        `<li><!-- start message -->
+                                        <a href="{% url 'contact/detmes' ${user.id}">
+                                            <div class="pull-left">`;
+                                            if (user.photo){
+                                            `<img src="${user.photo.url}" class="img-circle" alt="User Image">`;
+                                            }else{
+                                            `<img class="img-circle" src="" alt="User Image">`;
+                                            }
+                                            msg = user.message.split(' ').slice(0, 2).join(' ');
+                                            first_name = user.firstname.split(' ')[0];
+
+                                            userDate = user.date
+                                            // Formater le jour, mois, année, heure et minutes
+                                            const day = String(userDate.getDate()).padStart(2, '0');
+                                            const month = String(userDate.getMonth() + 1).padStart(2, '0'); // Les mois commencent à 0 en JavaScript
+                                            const year = userDate.getFullYear();
+                                            const hours = String(userDate.getHours()).padStart(2, '0');
+                                            const minutes = String(userDate.getMinutes()).padStart(2, '0');
+
+
+                                            `</div>
+                                            <h4>
+                                            ${user.lastname } ${ first_name}
+                                            <small><i class="fa fa-clock-o"></i> ${day}-${month}-${year} ${hours}:${minutes}</small>
+                                            </h4>
+                                            <p><b class="text-success">(${ user.nombre })</b> ${ msg }</p>
+                                        </a>
+                                        </li><!-- end message -->`;
+                                    });
+                                    }else{
+                                    `<li> 
+                                      <a href="{% url 'contact/messages' %}">
+                                        <i class="fa fa-envelope text-aqua"></i> O message
+                                      </a>
+                                    </li>`;
+                                     }
+                                    `</ul>
+                                </li>
+                                <li class="footer"><a href="{% url 'contact/messages' %}"> Voir tous les messages</a></li>
+                              </ul>`;
+                            $(".header_message").html(header_mesg);
+                        },
+                    });
+            },100);
+        }
+
+        /*===================== Activation des messages =============*/
+        $(".activate_message").on('click', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("activate_message/"+id,
+                    {id:id},
+                    function(data){
+                        $("#active"+id).html(data); 
+                    }
+                );
+
+            }
+        });
+
+        /*===================== Activation des messages =============*/
+        $(document).on('click','.activate_msg',function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("activate_message/"+id,
+                    {id:id},
+                    function(data){
+                        $("#active"+id).html(data);  
+                    }
+                );
+
+            }
+        });
+
+        // Supprimer le contact
+        $(".delete_contact").on('click', function(){
+            $('.delete').modal('hide');
+            var id = $(this).attr("id");
+            if(id){
+                $.get("del_message/"+id,
+                    {id:id},
+                    function(data){
+                        $("#message_"+id).html("<em> Ce message a été supprimé</em>");  
+                    }
+                );
+            }
+        });
+
+        // Supprimer les contacts
+        $(".delete_contacts").on('click', function(){
+            $('.delete').modal('hide');
+            var id = $(this).attr("id");
+            if(id){
+                $.get("delete_messages/"+id,
+                    {id:id},
+                    function(data){
+                        $("#message_"+id).html("<em> Ce message a été supprimé</em>");  
+                    }
+                );
+
+            }
+        });
+
+        // Supprimer la question du forum
+        $(document).on('click','.delete_forum', function(){
+            $('.delete').modal('hide');
+            var id = $(this).attr("id");
+            if(id){
+                $.get("del_ques/"+id,
+                    {id:id},
+                    function(data){
+                        $("#message_"+id).html("<em></em>");  
+                    }
+                );
+            }
+        });
+        
+        // Supprimer la réponse du forum
+        $(document).on('click','.delete_forum_response', function(){
+            //$('.delete').modal('hide');
+            var id = $(this).attr("id");
+            if(id){
+                $.get("del_answer/"+id,
+                    {id:id},
+                    function(data){
+                        $("#message_"+id).html("");  
+                    }
+                );
+
+            }
+        });
+
+        // Annuler le signal
+        $(document).on('click','.cancel_quest_report', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("cancel_quest_report/"+id,
+                    {id:id},
+                    function(data){
+                        $("#cancelq_"+id).html(data);  
+                    }
+                );
+
+            }
+        });
+
+        // Annuler le signal
+        $(document).on('click','.cancel_ques_report', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("cancel_ques_report/"+id,
+                    {id:id},
+                    function(data){
+                        alert(id)
+                        $("#cancelq_"+id).html(data);  
+                    }
+                );
+
+            }
+        });
+
+        // Annuler le signal d'une réponse du forum 
+        $(document).on('click','.cancel_answer_report', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("cancel_answer_report/"+id,
+                    {id:id},
+                    function(data){
+                        $("#cancela_"+id).html(data);  
+                    }
+                );
+
+            }
+        });
+
+        /*===================== Activation des messages =============*/
+        $(document).on('click','.delete_rq',function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("delete_rq/"+id,
+                    {id:id},
+                    function(data){
+                        if (data.status == 1){
+                            $("#contentrq_"+id).html(""); 
+                        }
+                    }
+                );
+
+            }
+        });
+
+        /*===================== Activation des messages =============*/
+        $(document).on('click','.delete_ra',function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("delete_ra/"+id,
+                    {id:id},
+                    function(data){
+                        if (data.status == 1){
+                            $("#contentra_"+id).html(""); 
+                        }
+                    }
+                );
+
+            }
+        });
+
+        // Supprimer ma question au forum
+        $(document).on('click','.delete_myq', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("my_delques/"+id,
+                    {id:id},
+                    function(data){
+                        $("#message_"+id).html("<em></em>");  
+                    }
+                );
+            }
+        });
+
+        // Supprimer ma réponse au forum
+        $(document).on('click','.delete_mya', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("my_delanswer/"+id,
+                    {id:id},
+                    function(data){
+                        $("#message_"+id).html("");  
+                    }
+                );
+            }
+        });
+
+        // Supprimer ma question au forum
+        $(document).on('click','.delete_fq', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("f_delques/"+id,
+                    {id:id},
+                    function(data){
+                        $("#message_"+id).html("<em></em>");  
+                    }
+                );
+            }
+        });
+
+        // Supprimer la question du forum
+        $(document).on('click','.delete_fa', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("f-delanswer/"+id,
+                    {id:id},
+                    function(data){
+                        $("#message_"+id).html("");  
+                    }
+                );
+            }
+        });
+
+
+        // Fenêtre du detail de l'expérience
+        $(document).on('click','.detail-experience', function(){
+            var id = $(this).attr("id");
+            if(id){
+                $.get("ajax_detail_experience/"+id,
+                    {id:id},
+                    function(data){
+                        $('#show-detail-experience').modal('show');
+                        $('#content-detail-experience').html(data);
+                    }
+                );
+            }
+        });
+
+
+        //Remplir le formulaire du baccalaureat
+        $('#diplome').on('change', function(){
+            var diplome = $(this).val()
+            if (diplome == "Autre BAC"){
+                $.get("diplome/"+diplome,
+                {diplome:diplome},
+                function(data){
+                    $('.other').html(data)
+                });
+            }else{
+                $('.other').html("")
+            }
+        });
+
+        //Remplir le champs niveau du parcours
+        $('#niveau').on('change', function(){
+            var niveau = $(this).val()
+            if (niveau == "Autre niveau"){
+                $.get("niveau/"+niveau,
+                {niveau:niveau},
+                function(data){
+                    $('.other_level').html(data)
+                });
+            }else{
+                $('.other_level').html("")
+            }
+        });
+
+        // Écouter le clic sur le bouton "Fermer"
+        $(document).on('click', '.close-popover', function () {
+            var id = $(this).attr("id");
+            $('.hide-btn_'+id).popover('hide');
+        });
+
+
+        // ========================== Opération sur l'annonce =======================
+
+        // Afficher le détail d'une annonce
+
+        $(document).on('click','.detail-annonce', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_detail_annonce/"+id,
+                        {id:id},
+                        function(data){
+                            $('#show-content-detail').modal('show');
+                            $('#content-detail').html(data);
+                        }
+                    );
+            }
+        });
+
+        // Afficher le modal de la confirmation de la visibilité de l'annonce
+        $(document).on('click','.ad_visibility', function(){ 
+            var id = $(this).data("id"); 
+            if(id){
+                    $.get("ajax_visibilite_annonce/"+id,
+                        {id:id},
+                        function(data){
+                            $('#show-modal-confirmation-visibilite').modal('show');
+                            $('#content-visibilite').html(data);
+                        }
+                    );
+            }
+        });
+
+        // Activer ou desactiver la visibilité d'une annonce 
+         $(document).on('click', '.visibility', function () {
+            var id = $(this).attr("id");
+            if(id){
+                $.get("visibility/"+id,
+                    {id:id},
+                    function(data){
+                        if (data.status == 1){
+                            contenu="<span class='label label-success'><i class='fa fa-check'></i></span>"
+                            $("#visible"+id).html(contenu);
+                        }else{
+                            contenu="<span class='label label-danger'><i class='fa fa-remove'></i></span>"
+                            $("#visible"+id).html(contenu);
+                        } 
+                    }
+                );
+
+            }
+        });
+
+        // ========================== Opération sur le document =======================
+
+        // Afficher le détail d'un document
+        $(document).on('click','.detail_document', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_detail_document/"+id,
+                        {id:id},
+                        function(data){
+                            $('#show-content-detail').modal('show');
+                            $('#content-detail').html(data);
+                        }
+                    );
+            }
+        });
+
+        $(document).on('click','.detail_document_encours', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_detail_document_encours/"+id,
+                        {id:id},
+                        function(data){
+                            $('#show-content-detail').modal('show');
+                            $('#content-detail').html(data);
+                        }
+                    );
+            }
+        });
+
+
+        $(document).on('click','.detail_document_publie', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_detail_document_publie/"+id,
+                        {id:id},
+                        function(data){
+                            $('#show-content-detail').modal('show');
+                            $('#content-detail').html(data);
+                        }
+                    );
+            }
+        });
+
+        $(document).on('click','.detail_document_nonpublie', function(){
+            var id = $(this).attr("id");
+            if(id){
+                    $.get("ajax_detail_document_nonpublie/"+id,
+                        {id:id},
+                        function(data){
+                            $('#show-content-detail').modal('show');
+                            $('#content-detail').html(data);
+                        }
+                    );
+            }
+        });
+
+
+        // Fermer le popover en cliquant en dehors
+        $('body').on('click', function (e) {
+            // Si le clic est à l'extérieur du popover
+            if (!$(e.target).closest('.popover').length && !$(e.target).closest('[data-toggle="popover"]').length) {
+                $('[data-toggle="popover"]').popover('hide');
+            }
+        });
+
+        //  récupère le chemin actuel de l’URL.
+        var path = window.location.pathname;
+
+        // Parcourir tous les liens dans les sous-menus
+        $('.treeview-menu li a').each(function() {
+            // Vérifier si le href correspond à l'URL actuelle
+            if ($(this).attr('href') === path) {
+                // Ajouter la classe active au sous-menu cliqué
+                $(this).parent().addClass('active');
+                // Ajouter la classe active à l'élément parent "treeview" pour garder le menu ouvert
+                $(this).closest('.treeview').addClass('active');
+            }
+        });
+
+        $('.sidebar-menu li a').each(function() { // parcourt tous les liens du menu et ajoute la classe active si le chemin de l'URL correspond à href de l’élément <a>.
+            if ($(this).attr('href') === path) {
+                $(this).closest('li').addClass('active');
+            }
+        });
+
+    });
+</script>

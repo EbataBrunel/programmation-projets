@@ -1,0 +1,10 @@
+{% if type == "Payant" %}
+<div class="group-control"></div>
+    {% if parametre.devise  %}
+    <label for="price">Prix ({{parametre.devise}}) *</label>
+    {% else %}
+    <label for="price">Prix *</label>
+    {% endif %}
+    <input type="number" name="price" id="price" class="form-control" required>
+</div>
+{% endif %}

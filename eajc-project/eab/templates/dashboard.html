@@ -1,0 +1,648 @@
+{% extends 'global/base.html' %}
+{% block title %} {{parametre.appname}} | Tableau de bord{% endblock %}
+{% block content %}
+{% load static %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        <i class="fa fa-dashboard"></i> Tableau de bord
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-home"></i> Accueil</a></li>
+        <li class="active">Tableau de bord</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      {% if profil == None %}
+        <div class="alert alert-warning text-center">
+          <a href="{% url 'users/edit_profile' %}" style="text-decoration: none;">
+            <i class="fa fa-warning"></i> Cliquez ici pour mettre à jour votre profil.
+          </a>
+        </div>
+      {% endif %}
+      <!-- Small boxes (Stat box) -->
+      {% for group in request.user.groups.all %}
+      {% if group.name == "admin" %}
+      <div class="row">
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-gray">
+            <div class="inner">
+              <h3>{{ countmembers }}</h3>
+              {% if countmembers > 1 %}
+              <p>Membres</p>
+              {% else %}
+              <p>Membre</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-user"></i>
+            </div>
+            <a href="{% url 'users/members' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-gray">
+            <div class="inner">
+              <h3>{{ countcustomers }}</h3>
+              {% if countcustomers > 1 %}
+              <p>Clients</p>
+              {% else %}
+              <p>Client</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="ion ion-person-add"></i>
+            </div>
+            <a href="{% url 'users/customers' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-gray">
+            <div class="inner">
+              <h3>{{ countusers }}</h3>
+              {% if countusers > 1 %}
+              <p>Admininistrateurs</p>
+              {% else %}
+              <p>Admininistrateur</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="ion ion-person-add"></i>
+            </div>
+            <a href="{% url 'users/users' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-gray">
+            <div class="inner countuseractive">
+              <h3>{{ countuseronline }}</h3>
+              {% if countuseronline > 1 %}
+              <p>Utilisateurs en ligne</p>
+              {% else %}
+              <p>Utilisateur en ligne</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="ion ion-person-add"></i>
+            </div>
+            <a class="small-box-footer bg-black" href="#" data-toggle="modal" data-target="#useronlineModal">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+            <!-- Logout Modal-->
+            <div class="modal fade" id="useronlineModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary">
+                            <h5 class="modal-title" id="exampleModalLabel"><span align="center">Liste des Utilisateurs actuellement en ligne</span></h5>
+                        </div>
+                        <div class="modal-body text-black">
+                          <ul id="user_list" style="list-style-type: none; padding: 0;">
+                            <!-- Les utilisateurs connectés seront affichés ici -->
+                          </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Fermer</button>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+
+
+          </div>
+        </div><!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-default">
+            <div class="inner bg-gray">
+              <h3>{{ count_country }}</h3>
+              <p>Pays</p>
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-home"></i>
+            </div>
+            <a href="{% url 'users/m-countries' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-default">
+            <div class="inner bg-gray countnewcontact">
+              {% if nombre_contact == 0 %}
+              <h3>{{ nombre_contact }}</h3>
+              <p>Contact</p>
+              {% elif nombre_contact == 1 %}
+              <h3 class="text-success">{{ nombre_contact }}</h3>
+              <p class="text-success">Contact</p>
+              {% else %}
+              <h3 class="text-success">{{ nombre_contact }}</h3>
+              <p class="text-success">Contacts</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-envelope"></i>
+            </div>
+            <a href="{% url 'contact/contacts' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-default">
+            <div class="inner bg-gray">
+              <h3>{{ countcourstotal }}</h3>
+              {% if countcourstotal > 1 %}
+              <p>Documents</p>
+              {% else %}
+              <p>Document</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-book"></i>
+            </div>
+            <a href="{% url 'cours/listcours' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-default">
+            <div class="inner bg-gray">
+              {% if countcoursencours > 1 %}
+              <h3 class="text-warning">{{ countcoursencours }}</h3>
+              <p>Documents en cours de traitement</p>
+              {% else %}
+              <h3>{{ countcoursencours }}</h3>
+              <p>Document en cours de traitement</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-book"></i>
+            </div>
+            <a href="{% url 'cours/c-encours' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-default">
+            <div class="inner bg-gray">
+              <h3>{{ countcourspublie }}</h3>
+              {% if countcourspublie > 1 %}
+              <p>Documents publiés</p>
+              {% else %}
+              <p>Document publié</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-book"></i>
+            </div>
+            <a href="{% url 'cours/courspub' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-default">
+            <div class="inner bg-gray">
+              {% if countcoursnonpublie > 1 %}
+              <h3 class="text-danger">{{ countcoursnonpublie }}</h3>
+              <p>Documents non rétenus</p>
+              {% else %}
+              <h3>{{ countcoursnonpublie }}</h3>
+              <p>Document non rétenu</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-book"></i>
+            </div>
+            <a href="{% url 'cours/coursnonpub' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-default">
+            <div class="inner bg-gray countnewquestion">
+              {% if countquestion == 0 %}
+              <h3>{{ countquestion }}</h3>
+              <p>Nouvelle question</p>
+              {% elif countquestion == 1 %}
+              <h3 class="text-success">{{ countquestion }}</h3>
+              <p class="text-success">Nouvelle question</p>
+              {% else %}
+              <h3 class="text-success">{{ countquestion }}</h3>
+              <p class="text-success">Nouvelles questions</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-question"></i>
+            </div>
+            <a href="{% url 'question/questions' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-default">
+            <div class="inner bg-gray">
+              <h3>{{ countnotif }}</h3>
+              {% if countnotif > 1 %}
+              <p>Nouvelles notifications</p>
+              {% else %}
+              <p>Nouvelle notification</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-bell"></i>
+            </div>
+            <a href="{% url 'cours/mescours' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-default">
+            <div class="inner bg-gray">
+              <h3>{{ countachat }}</h3>
+              {% if countachat > 1 %}
+              <p>Documents vendus</p>
+              {% else %}
+              <p>Document vendu</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-money"></i>
+            </div>
+            <a href="{% url 'commande/my-docpur' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-default">
+            <div class="inner bg-gray">
+              <h3>{{ countallachat }}</h3>
+              {% if countallachat > 1 %}
+              <p>Tous documents vendus</p>
+              {% else %}
+              <p>Tout document vendu</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-book"></i>
+            </div>
+            <a href="{% url 'commande/all-docpur' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-gray">
+            <div class="inner">
+              <h3>{{ countachats }}</h3>
+              {% if countachats > 1 %}
+              <p>Achats</p>
+              {% else %}
+              <p>Achat</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-money"></i>
+            </div>
+            <a href="{% url 'commande/achats' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-gray">
+            <div class="inner">
+              {% if countcmd == 0 %}
+              <h3>{{ countcmd }}</h3>
+              <p>Commande</p>
+              {% elif countcmd == 1 %}
+              <h3 class="text-success">{{ countcmd }}</h3>
+              <p class="text-success">Commande</p>
+              {% else %}
+              <h3 class="text-success">{{ countcmd }}</h3>
+              <p class="text-success">Commandes</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="ion ion-bag"></i>
+            </div>
+            <a href="{% url 'commande/commandes' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-gray">
+            <div class="inner">
+              {% if countlms == 0 %}
+              <h3>{{ countlms }}</h3>
+              <p>Lettre de motivation</p>
+              {% elif countlms == 1 %}
+              <h3 class="text-success">{{ countlms }}</h3>
+              <p class="text-success">Lettre de motivation</p>
+              {% else %}
+              <h3 class="text-success">{{ countlms }}</h3>
+              <p class="text-success">Lettres de motivation</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-file"></i>
+            </div>
+            <a href="{% url 'all_lms' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-gray">
+            <div class="inner count_new_chat">
+              {% if countnewchat == 0 %}
+              <h3>{{ countnewchat }}</h3>
+              <p>Nouveau Chat</p>
+              {% elif countnewchat == 1 %}
+              <h3 class="text-success">{{ countnewchat }}</h3>
+              <p class="text-success">Nouveau Chat</p>
+              {% else %}
+              <h3 class="text-success">{{ countnewchat }}</h3>
+              <p class="text-success">Nouveaux Chats</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-comments-o"></i>
+            </div>
+            <a href="{% url 'room/disc_room' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-gray">
+            <div class="inner countreport">
+              {% if countreport == 0 %}
+              <h3>{{ countreport }}</h3>
+              <p>Signalement</p>
+              {% elif countreport == 1 %}
+              <h3 class="text-danger">{{ countreport }}</h3>
+              <p class="text-danger">Signalement</p>
+              {% else %}
+              <h3 class="text-danger">{{ countreport }}</h3>
+              <p class="text-danger">Signalements</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-flag"></i>
+            </div>
+            <a href="{% url 'question/count_report' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-gray">
+            <div class="inner countdmddeleteaccount">
+              {% if countdmddeleteaccount == 0 %}
+              <h3>{{ countdmddeleteaccount }}</h3>
+              <p>Demande de suppression du compte</p>
+              {% elif countdmddeleteaccount == 1 %}
+              <h3 class="text-danger">{{ countdmddeleteaccount }}</h3>
+              <p class="text-danger">Demande de suppression du compte</p>
+              {% else %}
+              <h3 class="text-danger">{{ countdmddeleteaccount }}</h3>
+              <p class="text-danger">Demandes de suppression du compte</p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-trash"></i>
+            </div>
+            <a href="{% url 'users/useraskdeleteaccount' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-gray">
+            <div class="inner countcontactportfolio">
+              {% if countcontactportfolio == 0 %}
+              <h3>{{ countcontactportfolio }}</h3>
+              <p>Message du portfolio</p>
+              {% elif countcontactportfolio == 1 %}
+              <h3 class="text-success">{{ countcontactportfolio }}</h3>
+              <p class="text-success">Message du portfolio </p>
+              {% else %}
+              <h3 class="text-success">{{ countcontactportfolio }}</h3>
+              <p class="text-success">Messages du portfolio </p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-envelope"></i>
+            </div>
+            <a href="{% url 'contact_pf' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-gray">
+            <div class="inner nb_portfolios">
+              {% if nb_portfolios == 0 %}
+              <h3>0</h3>
+              <p>Portfolio</p>
+              {% elif nb_portfolios == 1 %}
+              <h3>1</h3>
+              <p>Portfolio </p>
+              {% else %}
+              <h3>{{ nb_portfolios }}</h3>
+              <p>Portfolios </p>
+              {% endif %}
+            </div>
+            <div class="icon text-black">
+              <i class="fa fa-crop"></i>
+            </div>
+            <a href="{% url 'list_portfolio' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+
+      </div><!-- /.row -->
+      {% else %}
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="text-center" style="font-family: 'Times New Roman', Times, serif;">Bienvenu à {{ parametre.appname }}
+            {% if request.user.profile %}
+                {% if request.user.profile.gender == "Masculin" %}
+                Monsieur
+                {% else %}
+                Madame
+                {% endif %}
+            {% endif %}
+            <b>{{ request.user.last_name }}</b>
+          </h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8 col-xs-12">
+          <div class="row">
+            <div class="col-lg-6 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-default">
+                <div class="inner bg-gray countnewquestion">
+                  <h3>{{ countquestion }}</h3>
+                  {% if countquestion > 1 %}
+                  <p>Nouvelles Questions</p>
+                  {% else %}
+                  <p>Nouvelle Question</p>
+                  {% endif %}
+                </div>
+                <div class="icon text-black">
+                  <i class="fa fa-question"></i>
+                </div>
+                <a href="{% url 'question/questions' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+    
+            <div class="col-lg-6 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-default">
+                <div class="inner bg-gray">
+                  <h3>{{ countnotif }}</h3>
+                  {% if countnotif > 1 %}
+                  <p>Nouvelles notifications</p>
+                  {% else %}
+                  <p>Nouvelle notification</p>
+                  {% endif %}
+                </div>
+                <div class="icon text-black">
+                  <i class="fa fa-bell"></i>
+                </div>
+                <a href="{% url 'cours/mescours' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+    
+            <div class="col-lg-6 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-default">
+                <div class="inner bg-gray">
+                  <h3>{{ countachat }}</h3>
+                  {% if countachat > 1 %}
+                  <p>Documents vendus</p>
+                  {% else %}
+                  <p>Document vendu</p>
+                  {% endif %}
+                </div>
+                <div class="icon text-black">
+                  <i class="fa fa-book"></i>
+                </div>
+                <a href="{% url 'commande/my-docpur' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+
+            <div class="col-lg-6 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-default">
+                <div class="inner bg-gray">
+                  <h3>{{ countachatsmember }}</h3>
+                  {% if countachatsmember > 1 %}
+                  <p>Documents achetés</p>
+                  {% else %}
+                  <p>Document acheté</p>
+                  {% endif %}
+                </div>
+                <div class="icon text-black">
+                  <i class="fa fa-book"></i>
+                </div>
+                <a href="{% url 'commande/doc-pur' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+            <div class="col-lg-6 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-default">
+                <div class="inner bg-gray">
+                  <h3>{{ countcommandemember }}</h3>
+                  {% if countcommandemember > 1 %}
+                  <p>Documents commandés</p>
+                  {% else %}
+                  <p>Document commandé</p>
+                  {% endif %}
+                </div>
+                <div class="icon text-black">
+                  <i class="fa fa-book"></i>
+                </div>
+                <a href="{% url 'commande/doc-cmd' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+            <div class="col-lg-6 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-gray">
+                <div class="inner count_new_chat">
+                  {% if countnewchat == 0 %}
+                  <h3>{{ countnewchat }}</h3>
+                  <p>Nouveau Chat</p>
+                  {% elif countnewchat == 1 %}
+                  <h3 class="text-success">{{ countnewchat }}</h3>
+                  <p class="text-success">Nouveau Chat</p>
+                  {% else %}
+                  <h3 class="text-success">{{ countnewchat }}</h3>
+                  <p class="text-success">Nouveaux Chats</p>
+                  {% endif %}
+                </div>
+                <div class="icon text-black">
+                  <i class="fa fa-comments-o"></i>
+                </div>
+                <a href="{% url 'room/disc_room' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+
+            <div class="col-lg-6 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-gray">
+                <div class="inner countcontactportfolio">
+                  {% if countcontactportfolio == 0 %}
+                  <h3>{{ countcontactportfolio }}</h3>
+                  <p>Message du portfolio</p>
+                  {% elif countcontactportfolio == 1 %}
+                  <h3 class="text-danger">{{ countcontactportfolio }}</h3>
+                  <p class="text-danger">Message du portfolio </p>
+                  {% else %}
+                  <h3 class="text-danger">{{ countcontactportfolio }}</h3>
+                  <p class="text-danger">Messages du portfolio </p>
+                  {% endif %}
+                </div>
+                <div class="icon text-black">
+                  <i class="fa fa-crop"></i>
+                </div>
+                <a href="{% url 'contact_pf' %}" class="small-box-footer bg-black">Voir plus <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+
+          </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+          <div class="box box-solid box-default">
+            <div class="bo box-header">
+              <h4 class="text-danger"><i class="fa fa-info-circle"></i><b> Dernière annonce </b></h4>
+            </div>
+            <div class="box-body">
+              <h4><b>{{annonce.title}}</b></h4>
+              <p>{{annonce.content|safe}}</p>
+              <h4><b class="text-primary"><i class="fa fa-university"></i> {{annonce.company}}</b></h4>
+              <p><small class="pull-right">Publiez le <b>{{annonce.date|date:"d/m/Y"}}</b></small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    {% endfor %}
+      <!-- Main row -->
+    </section><!-- /.content -->
+  </div><!-- /.content-wrapper -->
+{% endblock %}

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %} EAJC {% endblock %}</title>
+    {% if parametre.logo %}
+    <link rel="icon" type="image/jpg" href="{{ parametre.logo.url }}">
+    {% endif %}
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %}">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="{% static 'dist/css/skins/_all-skins.min.css' %}">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+      .design{
+          width: 100%;
+          height: 45px;
+          border-radius: 7px;
+          border:2px solid gray;
+      }
+      #id_password1{
+          width: 100%;
+          height: 45px;
+          border-radius: 7px;
+          border:2px solid gray;
+      }
+      #id_password2{
+          width: 100%;
+          height: 45px;
+          border-radius: 7px;
+          border:2px solid gray;
+      }
+
+      #loading-spinner {
+        position: fixed; /* Fixed position to keep it at the center of the viewport */
+        top: 50%;        /* 50% from the top */
+        left: 50%;       /* 50% from the left */
+        transform: translate(-50%, -50%); /* Translate to center horizontally and vertically */
+        z-index: 9999;   /* Ensure it stays on top of all other content */
+      }
+
+      #loading-spinner img {
+          width: 50px;     /* Adjust size as needed */
+          height: 50px;
+      }
+
+      .succ{
+        border-radius: 20px;
+        background-color: rgb(215, 215, 215);
+        padding : 30px;
+        margin-top:50px;
+        margin-bottom:50px
+      }
+
+      /* Style du bouton */
+        #checkout-button {
+            background-color: #4CAF50; /* Couleur de fond verte */
+            color: white;              /* Couleur du texte */
+            padding: 10px 30px;        /* Espacement intérieur */
+            border: none;              /* Retire la bordure */
+            border-radius: 10px;        /* Coins arrondis */
+            font-size: 16px;           /* Taille de police */
+            cursor: pointer;           /* Curseur en forme de main */
+            transition: background-color 0.3s ease; /* Effet de transition */
+        }
+
+        /* Style du bouton au survol */
+        #checkout-button:hover {
+            background-color: #45a049; /* Couleur plus foncée au survol */
+        }
+
+        /* Centrer le bouton */
+        .button-container {
+            text-align:center
+        }
+
+        .font-size {
+          font-size:50px;
+        }
+
+        .modal-content {
+          border-radius: 10px; /* Ajuste cette valeur pour obtenir le rayon souhaité */
+          border-width: 2px;   /* Réduction de la largeur de la bordure */
+          border-color: #ccc;  /* Personnalise la couleur de la bordure (facultatif) */
+        }
+
+        .border-radius{
+          border-radius:20px
+        }
+
+        .center{
+          text-align:center;
+        }
+
+        .padding-right{
+          padding-right:10px
+        }
+
+        .height_min_max{
+          min-height: 200px; /* Hauteur minimale */
+          max-height: 500px; /* Hauteur maximale */
+          overflow-y: auto; /* Ajoute un défilement vertical si le contenu dépasse la hauteur maximale */
+        }
+
+        .height_widht_min_max{
+          min-height: 140px; /* Hauteur minimale */
+          max-height: 140px; /* Hauteur maximale */
+          min-width: 120px; /* Largeur minimale */
+          max-width: 120px; /* Largeur maximale */
+        }
+
+        .height_minimum_maximum{
+          min-height: 200px; /* Hauteur minimale */
+        }
+
+        .tag {
+              text-decoration:none; 
+              border-radius: 20px; 
+              border:2px solid #0d9ddd; 
+              margin:5px; 
+              padding:7px;
+              font-size:14px
+        }
+
+        .header-cv {
+          text-align: center;
+          padding: 20px;
+          font-size: 20px;
+        }
+
+  </style>
+  </head>
+  <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+  <body class="hold-transition skin-blue layout-top-nav">
+    <div class="wrapper">
+      {% include 'global/header.html' %}
+      {% block content %}
+      {% endblock %}
+      {% include 'global/footer.html' %}
+    </div><!-- ./wrapper -->
+    <!-- Forum Modal-->
+    <div class="modal fade" id="ForumModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary" style="color:white;">
+                    <h4 class="modal-title" id="exampleModalLabel"><span align="center"><i class="fa fa-info-circle"></i> Information</span></h4>
+                </div>
+                <div class="modal-body">
+                  <p class="text-warning"><i class="fa fa-warning"></i> Vous devez être connecté pour acceder au forum</p>
+                </div>
+                <div class="modal-footer">
+                   <a class="btn btn-primary btn-xs pull-left" href="{% url 'users/register' %}"><i class="fa fa-user"></i> Créer un compte</a>
+                    <button class="btn btn-default btn-xs" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Fermer</button>
+                    <a class="btn btn-danger btn-xs pull-left" href="{% url 'connection/connexion' %}"><i class="fa fa-key"></i> Se connecter</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery 2.1.4 -->
+    <script src="{% static 'plugins/jQuery/jQuery-2.1.4.min.js' %}"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <!-- SlimScroll -->
+    <script src="{% static 'plugins/slimScroll/jquery.slimscroll.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static 'plugins/fastclick/fastclick.min.js' %}"></script>
+    <!-- AdminLTE App -->
+    <script src="{% static 'dist/js/app.min.js' %}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{% static 'dist/js/demo.js' %}"></script>
+    <!-- Inclure la bibliothèque Stripe -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+      $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();
+      });
+    </script>
+    {% include 'global/save.html' %}
+    <script>
+      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      // Remplace cette clé par ta clé publique Stripe
+      const stripe = Stripe("{{ stripe_publishable_key }}");
+
+      // Fonction pour démarrer une session de paiement
+      document.getElementById("checkout-button").addEventListener("click", function () {
+          // Effectue une requête POST à l'API backend pour créer une session de paiement
+          fetch("{% url 'commande/paiement_card_bancaire' %}", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+                  'X-CSRFToken': csrftoken
+              },
+              // Utilise la méthode 'POST' sans corps si le backend n'attend pas de données JSON
+          })
+          .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la création de la session de paiement.');
+            }
+            return response.json();
+          })
+          .then(session => {
+              console.log("Session ID:", session.id); // Confirme l'ID de session
+              return stripe.redirectToCheckout({ sessionId: session.id });
+          })
+          .then(result => {
+              if (result.error) {
+                  alert(result.error.message);
+              }
+          })
+          .catch(error => {
+              console.error("Erreur :", error);
+              alert("Une erreur est survenue lors de la création de la session de paiement.");
+          });
+      });
+  </script>
+  </body>
+</html>
+
+
