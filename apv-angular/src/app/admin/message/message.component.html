@@ -1,0 +1,184 @@
+
+    <div class="wrapper">
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-10">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+              <h1>
+                Tableau de bord
+              </h1>
+              <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                <li class="active">Messages</li>
+              </ol>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+              <div class="row">
+                <div class="col-xs-12">
+
+                  <div class="box">
+                    <div class="box-header">
+                      <h3 class="box-title">Messages</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+
+                      <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                          <div class="box box-primary">
+                            <div class="box-header with-border">
+                              <h3 class="box-title">Discussion</h3>
+                              <div class="box-tools pull-right">
+                                <div class="has-feedback">
+                                  <input type="text" class="form-control input-sm" placeholder="Search Mail">
+                                  <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                </div>
+                              </div><!-- /.box-tools -->
+                            </div><!-- /.box-header -->
+                            <button class="btn btn-default btn-xs" (click)="openUserModal()">
+                                <i class="fa fa-users"></i>
+                            </button>
+                            <div class="box-body no-padding">
+                              <div class="table-responsive mailbox-messages">
+                                <table class="table table-hover table-striped">
+                                  <tbody>
+                                    <tr *ngFor="let conversation of conversations" (click)="openConversation(conversation)">
+                                      <td><input type="checkbox"></td>
+                                      <td class="mailbox-star" *ngIf="conversation.unreadCount > 0"><span class="label label-success">{{ conversation.unreadCount }}</span></td>
+                                      <td class="mailbox-star" *ngIf="conversation.unreadCount == 0"></td>
+                                      <td class="mailbox-name" *ngIf="conversation.userPhoto"><img [src]="'http://127.0.0.1:8080/uploads/' + conversation.userPhoto" class="img-circle" alt="User Image"  width="35" height="35"> <b> {{ conversation.userName }}</b></td>
+                                      <td class="mailbox-name" *ngIf="!conversation.userPhoto"><img src="assets/static/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"  width="35" height="35"> <b> {{ conversation.userName }}</b></td>
+                                      <td class="mailbox-subject">{{ conversation.lastMessage | slice:0:30 }}<span *ngIf="conversation.lastMessage.length > 30">...</span></td>
+                                      <td class="mailbox-attachment"></td>
+                                      <td class="mailbox-date">{{ conversation.lastMessageDate|date:"dd/m/YYYY h:m" }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table><!-- /.table -->
+
+                                <!-- start send modal -->
+                                    <div class="modal fade" id="usersModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered modal-sm">
+                                        <div class="modal-content">
+                                          <div *ngIf="setting$ | async as setting" class="modal-header {{ setting.bodyTheme }}">
+                                            <h4 class="modal-title {{ setting.textColor }}"><b>Membres</b></h4>
+                                          </div>
+
+                                          <div class="modal-body">
+                                            <!--Block Styled Form -->
+                                            <!--===================================================-->
+
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                          <div class="form-group">
+                                                            <select value="userId"
+                                                                (change)="onUserChange($event)"
+                                                                class="form-control"
+                                                                required>
+                                                                <option value="null" selected>-- Sélectionnez un membre --</option>
+                                                                <option value="{{ user.id }}" *ngFor="let user of users">{{ user.userProfile.lastName }} {{ user.userProfile.firstName }}</option>
+                                                            </select>
+
+                                                            </div>
+
+                                                            <div class="input-zone" *ngIf="selectedUserId">
+                                                              <input
+                                                                type="text"
+                                                                [(ngModel)]="newMessage"
+                                                                placeholder="Votre message..."
+                                                                (keyup.enter)="send()"
+                                                              />
+                                                              <button class="btn btn-default btn-xs" [disabled]="!currentUserId || !selectedUserId || !newMessage" (click)="send()"> <i class="fa fa-send-o"></i> </button>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                            <!--===================================================-->
+                                            <!--End form Modal -->
+                                          </div>
+
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-xs" data-dismiss="modal">Fermer </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                <!-- end send modal -->
+
+                                <!-- start conversation modal -->
+                                    <div class="modal fade" id="conversationModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered modal-sm">
+                                        <div class="modal-content">
+                                          <div *ngIf="setting$ | async as setting" class="modal-header {{ setting.bodyTheme}}">
+                                            <h4 class="modal-title {{ setting.textColor }}" *ngIf="selectedUserPhoto"><b><img [src]="'http://127.0.0.1:8080/uploads/' + selectedUserPhoto" class="img-circle" alt="User Image" width="60" height="60"> {{ selectedUserName }}</b></h4>
+                                            <h4 class="modal-title {{ setting.textColor }}" *ngIf="!selectedUserPhoto"><b><img src="assets/static/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" width="60" height="60"> {{ selectedUserName }}</b></h4>
+                                          </div>
+
+                                          <div class="modal-body">
+
+                                            <div class="messages">
+                                              <div
+                                                *ngFor="let msg of messages"
+                                                class="message"
+                                                [class.mine]="isMine(msg)"
+                                                [class.other]="!isMine(msg)">
+
+                                                <span>{{ msg.content }}</span>
+                                                <span class="pull-right">
+                                                  <a *ngIf="isMine(msg)" class="btn btn-default btn-xs" (click)="deleteMessage(msg)">
+                                                    <i class="fa fa-trash"></i>
+                                                  </a>
+                                                </span>
+                                              </div>
+                                            </div>
+
+                                            <div class="input-zone">
+                                              <input
+                                                type="text"
+                                                [(ngModel)]="newMessage"
+                                                placeholder="Votre message..."
+                                                (keyup.enter)="send()"
+                                              />
+                                              <button class="btn btn-default btn-xs" [disabled]="!currentUserId || !selectedUserId || !newMessage" (click)="send()"> <i class="fa fa-send-o"></i> </button>
+                                            </div>
+                                          </div>
+
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-xs" data-dismiss="modal">Fermer </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                <!-- end conversation modal -->
+
+
+
+                              </div><!-- /.mail-box-messages -->
+                            </div><!-- /.box-body -->
+                          </div><!-- /. box -->
+                        </div><!-- /.col -->
+                        <div class="col-md-1"></div>
+                      </div>
+
+                    </div><!-- /.box-body -->
+                  </div><!-- /.box -->
+                </div><!-- /.col -->
+              </div><!-- /.row -->
+            </section><!-- /.content -->
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+
+      </div><!-- /.content-wrapper -->
+
+    </div><!-- ./wrapper -->
+

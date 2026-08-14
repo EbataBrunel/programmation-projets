@@ -1,0 +1,313 @@
+
+    <div class="wrapper">
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+
+        <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-10">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+              <h1>
+                Profil
+              </h1>
+              <ol class="breadcrumb">
+                <li><a routerLink="/dashboard"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                <li class="active">Paramètre</li>
+              </ol>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+
+              <div class="row">
+
+                <div class="col-md-12">
+
+                  <!-- Profile Image -->
+                  <div class="box box-primary">
+
+                    <form [formGroup]="settingForm" (ngSubmit)="submit()">
+
+                      <div class="panel-body">
+
+                        <div class="row">
+
+                          <!-- Nom Application -->
+                          <div class="col-sm-6">
+                              <div class="form-group">
+                                <label class="control-label">Nom Application *</label>
+                                <input type="text"
+                                    class="form-control"
+                                    formControlName="nameApp">
+                                <div class="text-danger"
+                                    *ngIf="settingForm.get('nameApp')?.invalid && settingForm.get('nameApp')?.touched">
+                                    Le nom de l'application est obligatoire
+                                </div>
+                              </div>
+                          </div>
+
+                          <!-- Nom Développeur -->
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <label class="control-label">Nom Développeur *</label>
+                              <input type="text"
+                                class="form-control"
+                                formControlName="nameDev">
+                              <div class="text-danger" *ngIf="settingForm.get('nameDev')?.invalid && settingForm.get('nameDev')?.touched">
+                                  Le nom du développeur est obligatoire
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+
+                                            <div class="row">
+
+                                              <div class="col-sm-4">
+                                                  <div class="form-group">
+                                                    <label for="theme">Thème *</label>
+                                                        <select class="form-control"
+                                                          formControlName="theme"
+                                                          name="theme"
+                                                          id="theme"
+                                                          required>
+                                                          <option [ngValue]="null" disabled>
+                                                            -- Sélectionnez un thème --
+                                                          </option>
+                                                          <option *ngFor="let theme of themes" [value]="theme">
+                                                            {{ theme }}
+                                                          </option>
+                                                    </select>
+                                                    <div class="text-danger" *ngIf="settingForm.get('theme')?.invalid && settingForm.get('theme')?.touched">
+                                                      Le thème est obligatoire
+                                                    </div>
+                                                  </div>
+                                              </div>
+
+                                              <div class="col-sm-4">
+                                                  <div class="form-group">
+                                                    <label for="bodyTheme">Thème du corps*</label>
+                                                        <select class="form-control"
+                                                          formControlName="bodyTheme"
+                                                          name="bodyTheme"
+                                                          id="bodyTheme"
+                                                          required>
+                                                          <option [ngValue]="null" disabled>
+                                                            -- Sélectionnez un thème du corps --
+                                                          </option>
+                                                          <option *ngFor="let theme of bodyThemes" [value]="theme">
+                                                            {{ theme }}
+                                                          </option>
+                                                    </select>
+                                                    <div class="text-danger" *ngIf="settingForm.get('bodyTheme')?.invalid && settingForm.get('bodyTheme')?.touched">
+                                                      Le thème du corps est obligatoire
+                                                    </div>
+                                                  </div>
+                                              </div>
+
+                                              <div class="col-sm-4">
+                                                  <div class="form-group">
+                                                    <label for="textColor">Couleur du text *</label>
+                                                    <select class="form-control"
+                                                          formControlName="textColor"
+                                                          name="textColor"
+                                                          id="textColor"
+                                                          required="">
+                                                          <option [ngValue]="null" disabled>
+                                                            -- Sélectionnez une couleur --
+                                                          </option>
+                                                          <option *ngFor="let textColor of textColors" [value]="textColor">
+                                                            {{ textColor }}
+                                                          </option>
+                                                    </select>
+                                                    <div class="text-danger" *ngIf="settingForm.get('textColor')?.invalid && settingForm.get('textColor')?.touched">
+                                                      La couleur du texte est obligatoire
+                                                    </div>
+                                                  </div>
+                                              </div>
+
+                                            </div>
+
+                                            <div class="row">
+
+                                              <div class="col-sm-4">
+                                                <div class="form-group">
+                                                  <label class="control-label">Version *</label>
+                                                  <input type="text"
+                                                        class="form-control"
+                                                        formControlName="version">
+                                                  <div class="text-danger" *ngIf="settingForm.get('version')?.invalid && settingForm.get('version')?.touched">
+                                                      La version
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                              <div class="col-sm-4">
+                                                <div class="form-group">
+                                                  <label class="control-label">Email *</label>
+                                                  <input type="email"
+                                                        class="form-control"
+                                                        formControlName="email">
+                                                  <div class="text-danger"
+                                                      *ngIf="settingForm.get('email')?.invalid && settingForm.get('email')?.touched">
+                                                    Email invalide
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                              <div class="col-sm-4">
+                                                <div class="form-group">
+                                                  <label class="control-label">Téléphone *</label>
+                                                  <input type="text"
+                                                        class="form-control"
+                                                        formControlName="phone">
+                                                  <div class="text-danger" *ngIf="settingForm.get('phone')?.invalid && settingForm.get('phone')?.touched">
+                                                    Le téléphone est obligatoire
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                            </div>
+
+                                            <div class="row">
+
+                                              <div class="col-sm-4">
+                                                <div class="form-group">
+                                                  <label>Devise *</label>
+                                                  <input type="text"
+                                                        class="form-control"
+                                                        formControlName="currency">
+                                                  <div class="text-danger" *ngIf="settingForm.get('currency')?.invalid && settingForm.get('currency')?.touched">
+                                                      La dévise est obligatoire
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                              <div class="col-sm-4">
+                                                <div class="form-group">
+                                                  <label>Largeur Logo</label>
+                                                  <input type="number"
+                                                        class="form-control"
+                                                        formControlName="width">
+                                                  <div class="text-danger" *ngIf="settingForm.get('width')?.invalid && settingForm.get('width')?.touched">
+                                                      La longueur du logo est obligatoire
+                                                    </div>
+                                                </div>
+                                              </div>
+
+                                              <div class="col-sm-4">
+                                                <div class="form-group">
+                                                  <label>Hauteur Logo</label>
+                                                  <input type="number"
+                                                        class="form-control"
+                                                        formControlName="height">
+                                                  <div class="text-danger" *ngIf="settingForm.get('height')?.invalid && settingForm.get('height')?.touched">
+                                                    L'hauteur du logo est obligatoire
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                            </div>
+
+                                            <!-- Adresse -->
+                                            <div class="row">
+                                              <div class="col-sm-12">
+                                                <div class="form-group">
+                                                  <label>Adresse *</label>
+                                                  <input type="text"
+                                                        class="form-control"
+                                                        formControlName="address">
+                                                </div>
+                                                <div class="text-danger" *ngIf="settingForm.get('address')?.invalid && settingForm.get('address')?.touched">
+                                                      L'adresse est obligatoire
+                                                    </div>
+                                              </div>
+                                            </div>
+
+                                            <!-- Logo Upload -->
+                                            <div class="row">
+                                              <div class="col-sm-6">
+                                                <div class="form-group">
+                                                  <label>Logo</label>
+                                                  <input type="file"
+                                                        class="form-control"
+                                                        (change)="onFileSelected($event)">
+                                                </div>
+
+                                                <div *ngIf="logoPreview" class="m-t-10">
+                                                  <img [src]="'http://127.0.0.1:8080/uploads/' + logoPreview"
+                                                      [style.width.px]="settingForm.get('width')?.value"
+                                                      [style.height.px]="settingForm.get('height')?.value"
+                                                      style="border:1px solid #ddd; padding:5px;">
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                          </div>
+
+                                          <!-- Footer -->
+                                          <div class="panel-footer text-left">
+
+                                            <button class="btn btn-info"
+                                                    type="submit"
+                                                    [disabled]="settingForm.invalid">
+                                              <i class="glyphicon glyphicon-ok"></i>
+                                              {{ currentSettingId ? 'Mettre à jour' : 'Créer' }}
+                                            </button>
+
+                                          </div>
+
+                                      </form>
+
+
+                                      <!-- satrt info modal -->
+                                            <div
+                                              class="modal fade"
+                                              id="infoModal"
+                                              tabindex="-1"
+                                              aria-labelledby="deleteModalLabel"
+                                              aria-hidden="true"
+                                            >
+                                              <div class="modal-dialog modal-dialog-centered modal-sm">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h4 class="modal-title"><i class="glyphicon glyphicon-info-sign"></i><b>information</b></h4>
+                                                  </div>
+
+                                                  <div class="modal-body">
+                                                    <div *ngIf="statusInfo">
+                                                      <p class="text-success text-center">Paramètre enregistré avec succès ? <br>
+                                                        <i class="glyphicon glyphicon-ok-sign" style="font-size: 50px;"></i></p>
+                                                    </div>
+                                                    <div *ngIf="!statusInfo">
+                                                      <p class="text-success text-center">paramètre modifié avec succès ? <br>
+                                                        <i class="glyphicon glyphicon-ok-sign" style="font-size: 50px;"></i></p>
+                                                    </div>
+                                                  </div>
+
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer </button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                            <!-- end info modal -->
+
+
+                  </div><!-- /.box -->
+
+
+                </div><!-- /.col -->
+
+
+              </div><!-- /.row -->
+
+            </section><!-- /.content -->
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+
+      </div><!-- /.content-wrapper -->
+    </div><!-- /.content-wrapper -->
+

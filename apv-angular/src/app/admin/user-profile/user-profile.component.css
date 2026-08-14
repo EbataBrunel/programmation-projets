@@ -1,0 +1,13 @@
+.hidden-file-input {
+      display: none !important;
+}
+
+.upload-icon {
+      font-size: 22px;
+      cursor: pointer;
+      color: #007bff;
+}
+
+.upload-icon:hover {
+    color: #0056b3;
+}

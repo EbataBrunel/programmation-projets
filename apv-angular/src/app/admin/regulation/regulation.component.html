@@ -1,0 +1,269 @@
+
+    <div class="wrapper">
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-10">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+              <h1>
+                Tableau de bord
+              </h1>
+              <ol class="breadcrumb">
+                <li><a routerLink="/dashboard"><i class="fa fa-dashboard"></i> Tableeau de bord</a></li>
+                <li class="active">Règlements</li>
+              </ol>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+              <div class="row">
+                <div class="col-xs-12">
+
+                  <div class="box">
+                    <div class="box-header">
+                      <h3 class="box-title"><b>Liste des règlements</b></h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                      <div class="text-right">
+                        <button *ngIf="isAdmin$ | async" (click)="openAddModal()" class="btn btn-sm btn-mint"><i class="glyphicon glyphicon-plus"></i> Ajouter un règlement</button>
+                      </div>
+                      <br>
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="box box-solid" *ngFor="let regulation of regulations">
+                            <div class="box-header with-border">
+                              <h3 class="box-title"><b>{{ regulation.name }}</b></h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                              <dl>
+                                <dt>Description</dt>
+                                <dd>{{ regulation.description }}</dd>
+                                <dd>
+                                  <em>Enregistrer le {{ regulation.createdAt|date:"dd/mm/YYYY" }}</em>
+                                </dd>
+                                 <dd>
+                                  <p><em class="pull-right">Modifier le {{ regulation.updateAt|date:"dd/mm/YYYY" }}</em></p>
+                                </dd>
+                                <dd class="pull-right" *ngIf="isAdmin$ | async">
+                                  <br>
+                                  <button class="btn btn-danger btn-xs" (click)="openDeleteModal(regulation)"><i class="fa fa-trash"></i></button>&nbsp;
+                                  <button (click)="openUpdateModal(regulation.publicId)" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i></button>
+                                </dd>
+                              </dl>
+                            </div><!-- /.box-body -->
+                          </div><!-- /.box -->
+                        </div><!-- ./col -->
+                       </div><!-- /.row -->
+
+                            <!-- start add modal -->
+                                    <div class="modal fade" id="addRegulationModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                          <div *ngIf="setting$ | async as setting" class="modal-header {{ setting.bodyTheme }}">
+                                            <h4 class="modal-title {{ setting.textColor }}"><b>Ajout d'un règlement</b></h4>
+                                          </div>
+
+                                          <div class="modal-body">
+                                            <!--Block Styled Form -->
+                                            <!--===================================================-->
+                                            <form [formGroup]="regulationForm" (ngSubmit)="addRegulation()">
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+
+                                                            <div class="form-group">
+                                                              <label for="name">Nom *</label>
+                                                              <select formControlName="name" name="name" id="name" class="form-control" required>
+                                                                  <option [ngValue]="null" disabled>
+                                                                    -- Sélectionnez un nom --
+                                                                  </option>
+                                                                  <option [value]="name" *ngFor="let name of regulationNames">{{ name }}</option>
+                                                              </select>
+                                                              <div class="text-danger" *ngIf="regulationForm.get('name')?.invalid && regulationForm.get('name')?.touched">
+                                                                  Le nom est obligatoire
+                                                              </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                              <label class="control-label">Description *</label>
+
+                                                              <textarea
+                                                                formControlName="description"
+                                                                name="description"
+                                                                class="form-control"
+                                                                rows="5"
+                                                                required>
+                                                              </textarea>
+
+                                                              <!-- Message d'erreur -->
+                                                              <div class="text-danger" *ngIf="regulationForm.get('description')?.invalid && regulationForm.get('description')?.touched">
+                                                                La description est obligatoire
+                                                              </div>
+
+                                                              <div class="text-danger" *ngIf="errorMessage">
+                                                                {{ errorMessage }}
+                                                              </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="panel-footer text-left">
+                                                  <button class="btn btn-info btn-xs" type="submit" [disabled]="regulationForm.invalid"><i class="glyphicon glyphicon-ok"></i> Valider</button>
+                                                </div>
+                                            </form>
+                                            <!--===================================================-->
+                                            <!--End form Modal -->
+                                          </div>
+
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-xs" data-dismiss="modal">Fermer </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                <!-- end add modal -->
+
+                            <!-- start edit modal -->
+                                    <div class="modal fade" id="updateRegulationModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content">
+                                          <div *ngIf="setting$ | async as setting" class="modal-header {{ setting.bodyTheme }}">
+                                            <h4 class="modal-title {{ setting.textColor }}"><b>Edition d'un règlement</b></h4>
+                                          </div>
+
+                                          <div class="modal-body">
+                                            <!--Block Styled Form -->
+                                            <!--===================================================-->
+                                            <form [formGroup]="regulationForm" (ngSubmit)="updRegulation()">
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+
+                                                          <div class="form-group">
+                                                              <label for="name">Nom *</label>
+                                                              <select formControlName="name" name="name" id="name" class="form-control" required>
+                                                                  <option [ngValue]="null" disabled>
+                                                                    -- Sélectionnez un nom --
+                                                                  </option>
+                                                                  <option [value]="name" *ngFor="let name of regulationNames">{{ name }}</option>
+                                                              </select>
+                                                              <div class="text-danger" *ngIf="regulationForm.get('name')?.invalid && regulationForm.get('name')?.touched">
+                                                                  Le nom est obligatoire
+                                                              </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                              <label class="control-label">Description *</label>
+
+                                                              <textarea
+                                                                formControlName="description"
+                                                                name="description"
+                                                                class="form-control"
+                                                                rows="5"
+                                                                required>
+                                                              </textarea>
+
+                                                              <!-- Message d'erreur -->
+                                                              <div class="text-danger" *ngIf="regulationForm.get('description')?.invalid && regulationForm.get('description')?.touched">
+                                                                La description est obligatoire
+                                                              </div>
+
+                                                              <div class="text-danger" *ngIf="errorMessage">
+                                                                {{ errorMessage }}
+                                                              </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="panel-footer text-left">
+                                                  <button class="btn btn-info btn-xs" [disabled]="regulationForm.invalid" type="submit"><i class="glyphicon glyphicon-ok"></i> Valider</button>
+                                                </div>
+                                            </form>
+                                            <!--===================================================-->
+                                            <!--End form Modal -->
+                                          </div>
+
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-xs" data-dismiss="modal">Fermer </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                <!-- end edit modal -->
+
+                                <!-- satrt info modal -->
+                                            <div
+                                              class="modal fade"
+                                              id="infoModal"
+                                              tabindex="-1"
+                                              aria-labelledby="deleteModalLabel"
+                                              aria-hidden="true"
+                                            >
+                                              <div class="modal-dialog modal-dialog-centered modal-sm">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h4 class="modal-title"><i class="glyphicon glyphicon-info-sign"></i><b> information</b></h4>
+                                                  </div>
+
+                                                  <div class="modal-body">
+                                                    <div *ngIf="statusInfo">
+                                                      <p class="text-success text-center">Règlement enregistré avec succès ? <br>
+                                                        <i class="glyphicon glyphicon-ok-sign" style="font-size: 50px;"></i></p>
+                                                    </div>
+                                                    <div *ngIf="!statusInfo">
+                                                      <p class="text-success text-center">Règlement modifié avec succès ? <br>
+                                                        <i class="glyphicon glyphicon-ok-sign" style="font-size: 50px;"></i></p>
+                                                    </div>
+                                                  </div>
+
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer </button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                            <!-- end info modal -->
+
+                            <!-- start delete modale -->
+                                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered modal-sm">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title"><b>Avertissement</b></h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+                                          </div>
+
+                                          <div class="modal-body">
+                                            <p class="text-center">Voulez-vous vraiment supprimer ce règlement ? </p>
+                                          </div>
+
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-xs pull-left" data-dismiss="modal">Fermer </button>
+                                            <button class="btn btn-danger btn-xs" (click)="deleteRegulation(selectedRegulation.publicId!)"><i class="fa fa-tarsh"></i> Supprimer</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                            <!-- end delete modale -->
+
+                    </div><!-- /.box-body -->
+                  </div><!-- /.box -->
+                </div><!-- /.col -->
+              </div><!-- /.row -->
+            </section><!-- /.content -->
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+
+      </div><!-- /.content-wrapper -->
+
+    </div><!-- ./wrapper -->
+
