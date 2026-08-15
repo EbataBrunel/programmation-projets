@@ -44,7 +44,7 @@ export class DonationComponent {
               { key: 12, value: 'Décembre' }
       ];
 
-      selectedDonation!: Donation;
+      selectedDonation: Donation |  null = null;
 
       error: string = '';
       errorMessage = '';

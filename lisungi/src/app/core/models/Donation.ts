@@ -17,7 +17,7 @@ export interface Donation {
 
   beneficiaryName?: string;
 
-  photo?: string;
+  photo: string|null;
 
   publicStatus?: boolean;
 

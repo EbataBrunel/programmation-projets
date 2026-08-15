@@ -169,7 +169,7 @@
                                 </div>
                                 <div class="col-md-5">
                                   <div *ngIf="selectedDonation?.photo">
-                                    <img class="img-responsive" [src]="'http://127.0.0.1:8080/uploads/' + selectedDonation.photo">
+                                    <img class="img-responsive" [src]="'http://127.0.0.1:8080/uploads/' + selectedDonation!.photo">
                                   </div>
                                 </div>
                               </div>
@@ -432,7 +432,7 @@
                                                     <tr>
                                                       <th>Bénéficiaire</th>
                                                       <th>Titre</th>
-                                                      <th>Description</th> 
+                                                      <th>Description</th>
                                                       <th>DateDon</th>
                                                       <th>Statut</th>
                                                     </tr>
@@ -516,7 +516,7 @@
 
                                           <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary btn-xs pull-left" data-dismiss="modal">Fermer </button>
-                                            <button class="btn btn-danger btn-xs" (click)="deleteDonation(selectedDonation.publicId)"><i class="fa fa-tarsh"></i> Supprimer</button>
+                                            <button class="btn btn-danger btn-xs" *ngIf="selectedDonation" (click)="deleteDonation(selectedDonation.publicId)"><i class="fa fa-tarsh"></i> Supprimer</button>
                                           </div>
                                         </div>
                                       </div>
@@ -541,7 +541,7 @@
 
                                           <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary btn-xs pull-left" data-dismiss="modal">Fermer </button>
-                                            <button class="btn btn-danger btn-xs" (click)="updateVisibilityDonation(selectedDonation.publicId!)"><i class="fa fa-tarsh"></i> Valider</button>
+                                            <button class="btn btn-danger btn-xs" *ngIf="selectedDonation" (click)="updateVisibilityDonation(selectedDonation.publicId!)"><i class="fa fa-tarsh"></i> Valider</button>
                                           </div>
                                         </div>
                                       </div>
@@ -581,7 +581,7 @@
 
                                           <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Fermer </button>
-                                            <button class="btn btn-danger btn-sm" (click)="updateClosureStatusDonation(selectedDonation.publicId!)" [disabled]="!captchaToken"><i class="fa fa-tarsh"></i> Cloturer</button>
+                                            <button class="btn btn-danger btn-sm" *ngIf="selectedDonation" (click)="updateClosureStatusDonation(selectedDonation.publicId!)" [disabled]="!captchaToken"><i class="fa fa-tarsh"></i> Cloturer</button>
                                           </div>
                                         </div>
                                       </div>
