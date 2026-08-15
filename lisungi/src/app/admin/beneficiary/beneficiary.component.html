@@ -406,7 +406,7 @@
 
                                           <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary btn-xs pull-left" data-dismiss="modal">Fermer </button>
-                                            <button class="btn btn-danger btn-xs" (click)="deleteBeneficiary(selectedBeneficiary.publicId)"><i class="fa fa-tarsh"></i> Supprimer</button>
+                                            <button class="btn btn-danger btn-xs" *ngIf="selectedBeneficiary" (click)="deleteBeneficiary(selectedBeneficiary.publicId)"><i class="fa fa-tarsh"></i> Supprimer</button>
                                           </div>
                                         </div>
                                       </div>

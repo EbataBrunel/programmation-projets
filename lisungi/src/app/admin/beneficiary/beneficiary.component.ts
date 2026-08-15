@@ -27,7 +27,7 @@ export class BeneficiaryComponent {
       "AUTRE"
     ]
 
-    selectedBeneficiary!: Beneficiary;
+    selectedBeneficiary: Beneficiary | null = null;;
     error: string = '';
     errorMessage = '';
     logoUrl= '';

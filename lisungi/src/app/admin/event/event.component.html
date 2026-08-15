@@ -535,7 +535,7 @@
 
                                           <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Fermer </button>
-                                            <button class="btn btn-danger btn-sm" (click)="deleteEvent(selectedEvent.publicId!)"><i class="fa fa-tarsh"></i> Supprimer</button>
+                                            <button class="btn btn-danger btn-sm" *ngIf="selectedEvent" (click)="deleteEvent(selectedEvent.publicId!)"><i class="fa fa-tarsh"></i> Supprimer</button>
                                           </div>
                                         </div>
                                       </div>
@@ -575,7 +575,7 @@
 
                                           <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Fermer </button>
-                                            <button class="btn btn-danger btn-sm" (click)="updateClosureStatusEvent(selectedEvent.publicId!)" [disabled]="!captchaToken"><i class="fa fa-tarsh"></i> Cloturer</button>
+                                            <button class="btn btn-danger btn-sm" *ngIf="selectedEvent" (click)="updateClosureStatusEvent(selectedEvent.publicId!)" [disabled]="!captchaToken"><i class="fa fa-tarsh"></i> Cloturer</button>
                                           </div>
                                         </div>
                                       </div>

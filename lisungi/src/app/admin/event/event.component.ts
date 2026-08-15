@@ -45,7 +45,7 @@ export class EventComponent {
         { key: 11, value: 'Novembre' },
         { key: 12, value: 'Décembre' }
       ];
-      selectedEvent!: Event;
+      selectedEvent: Event | null = null;
 
       error: string = '';
       errorMessage = '';
