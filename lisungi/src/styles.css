@@ -1,0 +1,28 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background-color: #ecf0f5;
+}
+
+app-root {
+  display: block;
+  min-height: 100vh;
+}
+
+#all {
+  min-height: 100vh;
+  background-color: #ecf0f5;
+}
+
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #ecf0f5;
+}
+
+.admin-content {
+  flex: 1;
+  background-color: #ecf0f5;
+}

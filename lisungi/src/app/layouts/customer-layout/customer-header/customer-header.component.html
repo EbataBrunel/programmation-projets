@@ -1,0 +1,74 @@
+<header class="main-header">
+        <nav class="navbar navbar-static-top {{ setting.theme }}" *ngIf="setting$ | async as setting">
+          <div class="container">
+            <div class="navbar-header">
+
+              <a routerLink="/home" class="logo {{ setting.theme }}">
+                <span *ngIf="setting.logo; else another">
+                  <img [src]="'http://127.0.0.1:8080/uploads/' + setting.logo" alt="logo" class="img-circle" width="{{ setting.width}}" height="setting.height">
+                </span>
+                <ng-template #another>
+                  <!-- logo for regular state and mobile devices -->
+                  <span class="logo-lg"><b>{{ setting.nameApp }}</b></span>
+                </ng-template>
+              </a>
+              <button
+                  type="button"
+                  class="navbar-toggle"
+                  (click)="toggleMenu()">
+                  <i class="fa fa-bars"></i>
+              </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="navbar-collapse pull-left"
+                  [class.in]="menuOpen"
+                  [class.collapse]="!menuOpen">
+              <ul class="nav navbar-nav">
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"><a routerLink="/home"><i class="fa fa-home"></i> Accueil <span class="sr-only">(current)</span></a></li>
+                <li routerLinkActive="active"><a routerLink="/customer-service"><i class="fa fa-list"></i> Service</a></li>
+                <li routerLinkActive="active"><a routerLink="/customer-contact"><i class="fa fa-phone"></i> Contact</a></li>
+                <li routerLinkActive="active"><a routerLink="/a-propos"><i class="fa fa-heart"></i> A propos</a></li>
+              </ul>
+              <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="navbar-search-input" placeholder="Recherche">
+                </div>
+              </form>
+            </div><!-- /.navbar-collapse -->
+            <!-- Navbar Right Menu -->
+              <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                  <!-- User Account Menu -->
+                  <li class="dropdown user user-menu">
+                    <!-- Menu Toggle Button -->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      <!-- The user image in the navbar-->
+                      <img src="assets/static/dist/img/avatar.png" class="user-image" alt="User Image">
+                      <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                      <span class="hidden-xs">Compte</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <!-- The user image in the menu -->
+                      <li class="user-header {{ setting.theme }}" *ngIf="setting$ | async as setting">
+                        <p class="text-center">
+                          Avez-vous déjà un compte ?
+                        </p>
+                        <img src="assets/static/dist/img/avatar.png" class="img-circle" alt="User Image">
+                      </li>
+                      <!-- Menu Footer-->
+                      <li class="user-footer">
+                        <div class="pull-left">
+                          <a routerLink="/register" class="btn btn-default btn-flat">Créer un compte</a>
+                        </div>
+                        <div class="pull-right">
+                          <a routerLink="/login" class="btn btn-default btn-flat">Se connecter</a>
+                        </div>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div><!-- /.navbar-custom-menu -->
+          </div><!-- /.container-fluid -->
+        </nav>
+      </header>

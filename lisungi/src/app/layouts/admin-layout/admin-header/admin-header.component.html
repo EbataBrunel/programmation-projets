@@ -1,0 +1,142 @@
+<header class="main-header">
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav *ngIf="setting$ | async as setting" class="navbar navbar-static-top {{ setting.theme }}" role="navigation">
+          <!-- Logo -->
+          <a routerLink="/dashboard" class="logo {{ setting.theme }}">
+            <span *ngIf="setting.logo; else another">
+              <img [src]="'http://127.0.0.1:8080/uploads/' + setting.logo" alt="logo" class="img-circle" width="{{ setting.width}}" height="setting.height">
+            </span>
+            <ng-template #another>
+              <!-- logo for regular state and mobile devices -->
+              <span class="logo-lg"><b>{{ setting.nameApp }}</b></span>
+            </ng-template>
+          </a>
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <!-- Messages: style can be found in dropdown.less-->
+              <li class="dropdown messages-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-envelope-o"></i>
+                  <span class="label label-success">{{ countMessageUnread }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="header" *ngIf="countMessageUnread <= 1">Vous avez {{ countMessageUnread }} message</li>
+                  <li class="header" *ngIf="countMessageUnread > 1">Vous avez {{ countMessageUnread }} messages</li>
+                  <li>
+                    <!-- inner menu: contains the actual data -->
+                    <ul class="menu">
+                      <li *ngFor="let conversation of conversations"><!-- start message -->
+                        <a href="#">
+                          <div class="pull-left" *ngIf="conversation.userPhoto">
+                            <img [src]="'http://127.0.0.1:8080/uploads/' + conversation.userPhoto" class="img-circle" alt="User Image">
+                          </div>
+                          <div class="pull-left" *ngIf="!conversation.userPhoto">
+                            <img src="assets/static/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                          </div>
+                          <h4>
+                            {{ conversation.userName }}
+                            <small><i class="fa fa-clock-o"></i> {{ conversation.lastMessageDate|date:"dd/m/YYYY h:m" }}</small>
+                          </h4>
+                          <p><span class="label label-success">{{ conversation.unreadCount }}</span> {{ conversation.lastMessage | slice:0:10 }}<span *ngIf="conversation.lastMessage.length > 10">...</span></p>
+                        </a>
+                      </li><!-- end message -->
+
+                    </ul>
+                  </li>
+                  <li class="footer"><a routerLink="/messages">Voir tous les messages</a></li>
+                </ul>
+              </li>
+              <!-- Notifications: style can be found in dropdown.less -->
+              <li class="dropdown notifications-menu" *ngIf="isAdmin$">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-bell-o"></i>
+                  <span class="label label-warning">{{ totalContactStatus + countNewsRegistrations + countViews + countProfiles }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="header" *ngIf="(totalContactStatus + countNewsRegistrations + countViews + countProfiles) <= 1">Vous avez {{ totalContactStatus + countNewsRegistrations + countViews + countProfiles }} notification</li>
+                  <li class="header" *ngIf="(totalContactStatus + countNewsRegistrations + countViews + countProfiles) > 1">Vous avez {{ totalContactStatus + countNewsRegistrations + countViews + countProfiles }} notifications</li>
+                  <li>
+                    <!-- inner menu: contains the actual data -->
+                    <ul class="menu">
+                      <li *ngIf="countNewsRegistrations">
+                        <a routerLink="/users">
+                          <i class="fa fa-users text-aqua"></i>
+                          <span *ngIf="countNewsRegistrations > 1">{{ countNewsRegistrations }} membres inscris aujourd'hui</span>
+                          <span *ngIf="countNewsRegistrations <= 1">{{ countNewsRegistrations}} membre inscri aujourd'hui</span>
+                        </a>
+                      </li>
+                      <li *ngIf="countViews">
+                        <a routerLink="/users">
+                          <i class="fa fa-users text-red"></i>
+                          <span *ngIf="countViews > 1">{{ countViews }} nouveaux membres inscris</span>
+                          <span *ngIf="countViews <= 1">{{ countViews }} nouveau membre inscrit</span>
+                        </a>
+                      </li>
+                      <li *ngIf="totalContactStatus">
+                        <a routerLink="/contacts">
+                          <i class="fa fa-envelope-o text-green"></i>
+                          <span *ngIf="totalContactStatus > 1">{{ totalContactStatus }} noveaux contacts</span>
+                          <span *ngIf="totalContactStatus <= 1">{{ totalContactStatus }} noveau contact</span>
+                        </a>
+                      </li>
+                      <li *ngIf="countProfiles">
+                        <a routerLink="/users">
+                          <i class="fa fa-user text-red"></i>
+                          <span *ngIf="countProfiles > 1">{{ countProfiles }} demandes de suppression</span>
+                          <span *ngIf="countProfiles <= 1">{{ countProfiles }} demande de suppression</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+
+              <!-- User Account: style can be found in dropdown.less -->
+              <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <span *ngIf="profile.photo">
+                    <img [src]="'http://127.0.0.1:8080/uploads/' + profile.photo" class="user-image" alt="User Image">
+                  </span>
+                  <span *ngIf="!profile.photo">
+                    <img src="assets/static/dist/img/avatar.png" class="user-image" alt="User Image">
+                  </span>
+                  <span class="hidden-xs">{{ profile.lastName }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <!-- User image -->
+                  <li class="user-header {{ setting.theme }}" *ngIf="setting$ | async as setting">
+                    <img *ngIf="profile.photo" [src]="'http://127.0.0.1:8080/uploads/' + profile.photo" class="img-circle" alt="User Image">
+                    <img *ngIf="!profile.photo" src="assets/static/dist/img/avatar.png" class="user-image" alt="User Image">
+                    <p>
+                      {{ profile.firstName }} {{ profile.lastName }}
+                      <small>Member depuis {{ profile.registrationDate|date:"dd/mm/YYYY" }}</small>
+                    </p>
+                  </li>
+                  <!-- Menu Body -->
+                  <li class="user-body" *ngIf="isAdmin$ | async">
+                    <div class="col-xs-6 text-center">
+                      <a routerLink="/settings">Paramètre</a>
+                    </div>
+                    <div class="col-xs-6 text-center">
+                      <a routerLink="/statistique">Statistique</a>
+                    </div>
+                  </li>
+                  <!-- Menu Footer-->
+                  <li class="user-footer">
+                    <div class="pull-left">
+                      <a routerLink="/user-profile" class="btn btn-default btn-flat">Profil</a>
+                    </div>
+                    <div class="pull-right">
+                      <a routerLink="/logout" class="btn btn-default btn-flat">Se déconnecter</a>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+              <!-- Control Sidebar Toggle Button -->
+              <li>
+                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>

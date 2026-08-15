@@ -1,0 +1,161 @@
+<div class="wrapper">
+
+      <!-- Full Width Column -->
+      <div class="content-wrapper bg-gray">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                  <h1>
+                    <i class="fa fa-heart"></i> A propos
+                  </h1>
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+
+                  <div class="box box-default">
+                    <div class="box-header with-border">
+                      <h2 class="about-title">
+                          Ensemble, faisons grandir
+                          <span>l’espoir</span>
+                      </h2>
+                    </div>
+                    <div class="box-body">
+                      <div class="row">
+                        <div class="col-md-12 text-center">
+                          <p>Fondé en 2026 par Le Groupe EAJC, l'APV est une fondation reconnue d'utilité publique. L'APV est aujourd'hui l'un des fondations de lutte contre la pauvrété et un ensemble hospitalier de pointe.</p>
+                          <p>Chaque jour, près de {{ users.length }} membres, entrepreneurs et autres unissent leurs expertises pour faire progresser le bon sens et l'humanisme à faire reculer la pauvrété.</p>
+                          <p>En léguant à l'APV, vous transmettez bien plus qu'un héritage : vous faites le choix de soutenir durablement la recherche et de donner de l'espoir à celles et ceux qui combattent le cancer.</p>
+                          <h3 class="text-center">l'APV C'EST : </h3>
+                          <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-10">
+
+                              <div class="row">
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                  <div class="info-box bg-gray info-box-1">
+                                    <span class="info-box-icon bg-aqua"><i class="fa fa-users"></i></span>
+                                    <div class="info-box-content">
+                                      <span class="info-box-text">
+                                        <span *ngIf="users.length > 1; else anotherUser ">
+                                          Membres
+                                        </span>
+                                        <ng-template #anotherUser>
+                                          Membre
+                                        </ng-template>
+                                      </span>
+
+                                      <span class="info-box-number">{{ users.length }}</span>
+                                    </div><!-- /.info-box-content -->
+                                  </div><!-- /.info-box -->
+                                </div><!-- /.col -->
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                  <div class="info-box bg-gray info-box-2">
+                                    <span class="info-box-icon bg-primary"><i class="fa fa-list"></i></span>
+                                    <div class="info-box-content">
+                                      <span class="info-box-text">
+                                        <span *ngIf="donations.length > 1; else anotherDonation ">
+                                          Dons
+                                        </span>
+                                        <ng-template #anotherDonation>
+                                          Don
+                                        </ng-template>
+                                      </span>
+
+                                      <span class="info-box-number">{{ donations.length }}</span>
+                                    </div><!-- /.info-box-content -->
+                                  </div><!-- /.info-box -->
+                                </div><!-- /.col -->
+
+                                <!-- fix for small devices only -->
+                                <div class="clearfix visible-sm-block"></div>
+
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                  <div class="info-box bg-gray info-box-3">
+                                    <span class="info-box-icon bg-green"><i class="ion ion-ios-gear-outline"></i></span>
+                                    <div class="info-box-content">
+                                      <span class="info-box-text">
+                                        <span *ngIf="participants.length > 1; else anotherParticipant ">
+                                          Participants
+                                        </span>
+                                        <ng-template #anotherParticipant>
+                                          Participant
+                                        </ng-template>
+                                      </span>
+
+                                      <span class="info-box-number">{{ participants.length }}</span>
+                                    </div><!-- /.info-box-content -->
+                                  </div><!-- /.info-box -->
+                                </div><!-- /.col -->
+                              </div>
+
+                            </div>
+                            <div class="col-md-1"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <br>
+                      <div class="row">
+                        <div class="col-lg-5 col-sm-6 col-xs-12">
+                          <div class="post-image">
+                            <img class="img-responsive" src="assets/static/dist/img/photo2.png">
+                          </div>
+                        </div>
+                        <div class="col-lg-7 col-sm-6 col-xs-12">
+                          <h3 class="box-title">
+                            <b><em>Encourager</em><br> l’engagement associatif des <em>citoyens</em></b>
+                          </h3>
+                          <p>Nous avons cette conviction que l’engagement associatif est le moteur d’une société plus soudée. Les 1,5 million d’associations que compte la France et les millions de personnes qui s’y impliquent sont une fabrique de lien social indispensable et la preuve que ce qui nous unit est plus fort que ce qui nous divise.</p>
+                          <p>Il existe pourtant des obstacles à s’engager comme le manque de temps ou d’informations. C’est pourquoi nous avons construit une plateforme qui propose des solutions performantes et intégralement gratuites qui font gagner un temps précieux aux bénévoles et responsables associatifs. Un temps et une économie d’argent qu’ils peuvent consacrer à ce qui nous semble le plus important : fédérer davantage de gens autour de leurs actions.</p>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-3"></div>
+                          <div class="col-md-6">
+                            <h3 class="box-title text-center">
+                              <b class="text-primary">
+                                Nous croyons que l'engagement-associatif est le-moteur d'une société plus-soudée
+                              </b>
+                              <hr>
+                              <a routerLink="/register" class="btn btn-primary btn-sm"> <i class="fa fa-users"></i> Rejoingnez-nous</a>
+                            </h3>
+                          </div>
+                        <div class="col-md-3"></div>
+                      </div>
+
+                      <hr>
+                      <div class="row">
+                        <div class="col-md-2 col-xs-5">
+                          <div class="post-image">
+                            <img class="img-responsive" src="assets/static/dist/img/Desp Despiero.jpg">
+                          </div>
+                        </div>
+                        <div class="col-md-10 col-xs-7">
+                          <p>
+                            Faire un legs à l’APS, c’est transmettre l’espoir et donner la possibilité d’accélérer la lutte contre la pauvrété. C’est donc un formidable message d’espoir pour toutes nos patientes et tous nos compatriote.
+                          </p>
+                          <em class="pull-right">
+                            <b>Ingénieur Brunel EBATA-ATIPO </b><br>
+                            Membre de l'APS
+                          </em>
+                        </div>
+                      </div>
+
+
+
+                    </div><!-- /.box-body -->
+                  </div><!-- /.box -->
+                </section><!-- /.content -->
+
+            </div>
+            <div class="col-md-1"></div>
+          </div>
+        </div><!-- /.container -->
+      </div><!-- /.content-wrapper -->
+
+    </div><!-- ./wrapper -->

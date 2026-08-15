@@ -1,0 +1,58 @@
+<div class="wrapper">
+
+      <!-- Full Width Column -->
+      <div class="content-wrapper bg-gray">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                  <h1>
+                    <i class="fa fa-home"></i> Accueil
+                  </h1>
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+
+                  <div class="box box-default" *ngFor="let news of all_news">
+                    <div class="box-header with-border">
+                      <h3 class="box-title">{{ news.title }}
+                        <br>
+                        <small>{{ news.createdAt|date:"d/m/Y H:m" }}</small></h3>
+                    </div>
+                    <div class="box-body">
+                      <p>{{ news.content }}</p>
+
+                      <div class="post-image" *ngIf="news.photo" (click)="openImage(news.photo)">
+                        <img class="img-responsive" [src]="'http://127.0.0.1:8080/uploads/' + news.photo">
+                      </div>
+                    </div><!-- /.box-body -->
+                  </div><!-- /.box -->
+                </section><!-- /.content -->
+
+                <div
+                  class="image-modal"
+                  *ngIf="selectedImage"
+                  (click)="closeImage()">
+                  <button
+                      type="button"
+                      class="close-image"
+                      (click)="closeImage(); $event.stopPropagation()">
+                      &times;
+                  </button>
+                  <img
+                      [src]="selectedImage"
+                      class="expanded-image"
+                      (click)="$event.stopPropagation()">
+                </div>
+
+            </div>
+            <div class="col-md-1"></div>
+          </div>
+        </div><!-- /.container -->
+      </div><!-- /.content-wrapper -->
+
+    </div><!-- ./wrapper -->

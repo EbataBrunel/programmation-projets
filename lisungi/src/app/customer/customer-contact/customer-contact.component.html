@@ -1,0 +1,151 @@
+<div class="wrapper">
+
+      <!-- Full Width Column -->
+      <div class="content-wrapper bg-gray">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                  <h1>
+                   <i class="fa fa-phone"></i> Contactez-nous
+                  </h1>
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+                  <div class="box box-default">
+                    <div class="box-header with-border">
+                      <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                          <h1>Contact</h1>
+
+                          <p>Vous avez des questions ? Vous rencontrez un problème avec nos produits ?</p>
+                          <p>N'hésitez pas à nous contacter, notre service client est à votre disposition 24h/24 et 7j/7.</p>
+
+                          <hr>
+
+                          <div class="row" *ngIf="setting$ | async as setting">
+                              <div class="col-sm-4">
+                                  <h3><i class="fa fa-map-marker"></i> Adresse</h3>
+                                  <p>{{ setting.address }}</p>
+                              </div>
+                              <!-- /.col-sm-4 -->
+                              <div class="col-sm-4">
+                                  <h3><i class="fa fa-phone"></i>Téléphone</h3>
+                                  <p class="text-muted">Ce numéro est gratuit si vous appelez depuis le République du Congo; sinon, nous vous conseillons d'utiliser les moyens de communication électroniques.</p>
+                                  <p><strong>{{ setting.phone }}</strong>
+                                  </p>
+                              </div>
+                              <!-- /.col-sm-4 -->
+                              <div class="col-sm-4">
+                                  <h3><i class="fa fa-envelope"></i> Email</h3>
+                                  <p class="text-muted">N'hésitez pas à nous envoyer un courriel.</p>
+                                  <ul>
+                                      <li><strong><a href="mailto:">{{ setting.email }}</a></strong></li>
+                                  </ul>
+                              </div>
+                              <!-- /.col-sm-4 -->
+                          </div>
+                          <!-- /.row -->
+
+                          <hr>
+                          <h2>Contactez-nous</h2>
+
+                          <form #form="ngForm" (ngSubmit)="addContact(form)">
+                              <div class="row">
+                                  <div class="col-sm-6">
+                                      <div class="form-group">
+                                          <label for="lastname">Nom *</label>
+                                          <input type="text" [(ngModel)] = "contact.lastName" name="lastname" #lastnameModel="ngModel" class="form-control" id="lastname">
+                                          <!-- Message d'erreur -->
+                                          <div class="text-danger" *ngIf="lastnameModel.invalid && lastnameModel.touched">
+                                            Le nom est obligatoire
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-6">
+                                      <div class="form-group">
+                                          <label for="firstname">Prénom *</label>
+                                          <input type="text" [(ngModel)] = "contact.firstName" name="firstname" #firstnameModel="ngModel" class="form-control" id="firstname">
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-6">
+                                      <div class="form-group">
+                                          <label for="email">Email *</label>
+                                          <input type="email" [(ngModel)] = "contact.email" #emailModel="ngModel" name="email" class="form-control" id="email">
+                                          <!-- Message d'erreur -->
+                                          <div class="text-danger" *ngIf="emailModel.invalid && emailModel.touched">
+                                            Le nom est obligatoire
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-6">
+                                      <div class="form-group">
+                                          <label for="subject">Phone *</label>
+                                          <input type="text" [(ngModel)] = "contact.phone" #subjectModel="ngModel" name="phone" class="form-control" id="subject">
+                                          <!-- Message d'erreur -->
+                                          <div class="text-danger" *ngIf="subjectModel.invalid && subjectModel.touched">
+                                            Le nom est obligatoire
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-12">
+                                      <div class="form-group">
+                                          <label for="message">Message *</label>
+                                          <textarea id="message" [(ngModel)] = "contact.message" #messageModel="ngModel" name="message" class="form-control"></textarea>
+                                          <!-- Message d'erreur -->
+                                          <div class="text-danger" *ngIf="messageModel.invalid && messageModel.touched">
+                                            Le message est obligatoire
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="col-sm-12 text-center">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Envoyer le message</button>
+                                  </div>
+                              </div>
+                              <!-- /.row -->
+                          </form>
+                          <!-- start info modal -->
+                          <div class="modal fade" id="info-modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+                              <div class="modal-dialog modal-sm">
+
+                                  <div class="modal-content">
+                                      <div class="modal-header">
+                                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                          <h4 class="modal-title" id="Login">Information</h4>
+                                      </div>
+                                      <div class="modal-body">
+                                          <p class="text-center text-center"> Message envoyé avec succès</p>
+                                          <p class="text-center text-success" style="font-size: 20px;"><i class="fa fa-check" style="font-size: 50px;"></i></p>
+
+                                      </div>
+                                      <!-- AJOUT DU FOOTER -->
+                                      <div class="modal-footer">
+                                          <button type="button" class="btn btn-default" data-dismiss="modal">
+                                              Fermer
+                                          </button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- end info modal -->
+                        </div>
+                        <div class="col-md-1"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                </section><!-- /.content -->
+
+            </div>
+            <div class="col-md-1"></div>
+          </div>
+        </div><!-- /.container -->
+      </div><!-- /.content-wrapper -->
+
+    </div><!-- ./wrapper -->

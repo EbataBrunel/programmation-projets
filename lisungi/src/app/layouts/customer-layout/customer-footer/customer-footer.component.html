@@ -1,0 +1,8 @@
+<footer class="main-footer {{ setting.theme }}" *ngIf="setting$ | async as setting">
+  <div class="container">
+    <div class="pull-right hidden-xs">
+        <b>Version</b> {{ setting.version }}
+      </div>
+    <strong>Copyright &copy; 2022-2023 <a href="http://almsaeedstudio.com">{{ setting.nameApp }}</a>.</strong> Tous droits reservés.
+  </div><!-- /.container -->
+</footer>

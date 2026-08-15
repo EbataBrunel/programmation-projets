@@ -1,0 +1,429 @@
+
+    <div class="wrapper">
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-10">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+              <h1>
+                Tableau de bord
+              </h1>
+              <ol class="breadcrumb">
+                <li><a href="/dashboard"><i class="fa fa-dashboard"></i> tableau de bord</a></li>
+                <li class="active">Bénéficiaires</li>
+              </ol>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+              <div class="row">
+                <div class="col-xs-12">
+
+                  <div class="box">
+                    <div class="box-header">
+                      <h3 class="box-title"><b>Liste des bénéficiaires</b></h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                      <div class="text-right">
+                        <button (click)="openAddModal()" class="btn btn-sm btn-mint"><i class="glyphicon glyphicon-plus"></i> Ajouter un bénéficiaire</button>
+                        </div>
+                      <br>
+                      <div class="table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
+                          <thead>
+                            <tr>
+                              <th>Nom</th>
+                              <th>Pays</th>
+                              <th>Zone</th>
+                              <th>Adresse</th>
+                              <th *ngIf="isAdmin$ | async">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let benef of beneficiaries">
+                              <td>{{ benef.name }}</td>
+                              <td>{{ benef.city }}</td>
+                              <td>{{ benef.borough }}</td>
+                              <td>{{ benef.address }}</td>
+                              <td *ngIf="isAdmin$ | async">
+                                <button class="btn btn-danger btn-xs" (click)="openDeleteModal(benef)"><i class="fa fa-trash"></i></button>&nbsp;
+                                <button (click)="openUpdateModal(benef.publicId!)" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i></button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <!-- start detail modal -->
+                      <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div *ngIf="setting$ | async as setting" class="modal-header {{ setting.bodyTheme }}">
+                              <h4 class="modal-title {{ setting.textColor }}"><b>Détail du bénéficiaire</b></h4>
+                            </div>
+
+                            <div class="modal-body">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                      <tr>
+                                          <th>Nom</th>
+                                          <td>{{ selectedBeneficiary?.name }}</td>
+                                      </tr>
+
+                                      <tr>
+                                          <th>Pays de résidence</th>
+                                          <td>{{ selectedBeneficiary?.country }}</td>
+                                      </tr>
+
+                                      <tr>
+                                          <th>Ville</th>
+                                          <td>{{ selectedBeneficiary?.city }}</td>
+                                      </tr>
+
+                                      <tr>
+                                          <th>Zone</th>
+                                          <td>{{ selectedBeneficiary?.borough }}</td>
+                                      </tr>
+
+                                      <tr>
+                                          <th>Adresse</th>
+                                          <td>{{ selectedBeneficiary?.address }}</td>
+                                      </tr>
+                                    </table>
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                      <tr>
+                                            <th>Email</th>
+                                            <td>{{ selectedBeneficiary?.email }}</td>
+                                      </tr>
+                                      <tr>
+                                            <th>Téléphone</th>
+                                            <td>{{ selectedBeneficiary?.phone }}</td>
+                                      </tr>
+                                      <tr>
+                                            <th>Type</th>
+                                            <td>{{ selectedBeneficiary?.type }}</td>
+                                      </tr>
+                                      <tr>
+                                          <th>Ville</th>
+                                          <td>{{ selectedBeneficiary?.dateExistence| date:'dd/MM/yyyy' }}</td>
+                                      </tr>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end detail modal -->
+
+                            <!-- start add modal -->
+                                    <div class="modal fade" id="addBeneficiaryModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered modal-sm">
+                                        <div class="modal-content">
+                                          <div *ngIf="setting$ | async as setting" class="modal-header {{ setting.bodyTheme }}">
+                                            <h4 class="modal-title {{ setting.textColor }}"><b>Ajout d'un bénéficiaire</b></h4>
+                                          </div>
+
+                                          <div class="modal-body">
+                                            <!--Block Styled Form -->
+                                            <!--===================================================-->
+                                            <form [formGroup]="beneficiaryForm" (ngSubmit)="addBeneficiary()">
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+
+                                                          <div class="form-group">
+                                                              <label for="type">Type *</label>
+                                                              <select formControlName="type" name="type" id="type" class="form-control" required>
+                                                                  <option [ngValue]="null">
+                                                                    -- Sélectionnez un type --
+                                                                  </option>
+                                                                  <option [ngValue]="type" *ngFor="let type of types">{{ type }}</option>
+                                                              </select>
+                                                              <div class="text-danger"
+                                                                  *ngIf="beneficiaryForm.get('type')?.invalid && beneficiaryForm.get('type')?.touched">
+                                                                  Le type est obligatoire
+                                                              </div>
+                                                          </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Nom *</label>
+                                                                <input type="text" formControlName="name" name="name" class="form-control" required>
+                                                                <!-- Message d'erreur -->
+                                                                <div class="text-danger"
+                                                                  *ngIf="beneficiaryForm.get('name')?.invalid && beneficiaryForm.get('title')?.touched">
+                                                                  Le nom est obligatoire
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Pays *</label>
+                                                                <input type="text" formControlName="country" name="country" class="form-control" required>
+                                                                <!-- Message d'erreur -->
+                                                                <div class="text-danger"
+                                                                  *ngIf="beneficiaryForm.get('country')?.invalid && beneficiaryForm.get('country')?.touched">
+                                                                  Le pays est obligatoire
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Ville *</label>
+                                                                <input type="text" formControlName="city"  name="city" class="form-control" required>
+                                                                <!-- Message d'erreur -->
+                                                                <div class="text-danger"
+                                                                  *ngIf="beneficiaryForm.get('city')?.invalid && beneficiaryForm.get('city')?.touched">
+                                                                  La ville est obligatoire
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Zone *</label>
+                                                                <input type="text" formControlName="borough" name="borough" class="form-control" required>
+                                                                <!-- Message d'erreur -->
+                                                                <div class="text-danger"
+                                                                  *ngIf="beneficiaryForm.get('borough')?.invalid && beneficiaryForm.get('borough')?.touched">
+                                                                  La  zone est obligatoire
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Adresse *</label>
+                                                                <input type="text" formControlName="address" name="address" class="form-control" required>
+                                                                <!-- Message d'erreur -->
+                                                                <div class="text-danger"
+                                                                  *ngIf="beneficiaryForm.get('address')?.invalid && beneficiaryForm.get('address')?.touched">
+                                                                  L'adresse est obligatoire
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Email </label>
+                                                                <input type="email" formControlName="email" name="email" class="form-control">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Téléphone </label>
+                                                                <input type="text" formControlName="phone" name="phone" class="form-control">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Date *</label>
+                                                                <input type="date" formControlName="dateExistence" name="dateExistence" class="form-control" required>
+                                                                <!-- Message d'erreur -->
+                                                                <div class="text-danger"
+                                                                  *ngIf="beneficiaryForm.get('dateExistence')?.invalid && beneficiaryForm.get('dateExistence')?.touched">
+                                                                  La date est obligatoire
+                                                                </div>
+                                                                <div class="text-danger" *ngIf="errorMessage">
+                                                                  {{ errorMessage }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="panel-footer text-left">
+                                                  <button class="btn btn-info btn-xs" type="submit" [disabled]="beneficiaryForm.invalid"><i class="glyphicon glyphicon-ok"></i> Valider</button>
+                                                </div>
+                                            </form>
+                                            <!--===================================================-->
+                                            <!--End form Modal -->
+                                          </div>
+
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-xs" data-dismiss="modal">Fermer </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                <!-- end add modal -->
+
+                              <!-- start edit modal -->
+                                    <div class="modal fade" id="updateBeneficiaryModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered modal-sm">
+                                        <div class="modal-content">
+                                          <div *ngIf="setting$ | async as setting" class="modal-header {{ setting.bodyTheme }}">
+                                            <h4 class="modal-title {{ setting.textColor }}"><b>Edition d'un bénéficiaire</b></h4>
+                                          </div>
+
+                                          <div class="modal-body">
+                                            <!--Block Styled Form -->
+                                            <!--===================================================-->
+                                            <form [formGroup]="beneficiaryForm" (ngSubmit)="updBeneficiary()">
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+
+                                                          <div class="form-group">
+                                                              <label for="type">Type *</label>
+                                                              <select formControlName="type" name="type" id="type" class="form-control" required>
+                                                                  <option [ngValue]="type" *ngFor="let type of types">{{ type }}</option>
+                                                              </select>
+                                                              <div class="text-danger"
+                                                                  *ngIf="beneficiaryForm.get('type')?.invalid && beneficiaryForm.get('type')?.touched">
+                                                                  Le type est obligatoire
+                                                              </div>
+                                                          </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Nom *</label>
+                                                                <input type="text" formControlName="name" name="name" class="form-control" required>
+                                                                <!-- Message d'erreur -->
+                                                                <div class="text-danger"
+                                                                  *ngIf="beneficiaryForm.get('name')?.invalid && beneficiaryForm.get('title')?.touched">
+                                                                  Le nom est obligatoire
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Pays *</label>
+                                                                <input type="text" formControlName="country" name="country" class="form-control" required>
+                                                                <!-- Message d'erreur -->
+                                                                <div class="text-danger"
+                                                                  *ngIf="beneficiaryForm.get('country')?.invalid && beneficiaryForm.get('country')?.touched">
+                                                                  Le pays est obligatoire
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Ville *</label>
+                                                                <input type="text" formControlName="city"  name="city" class="form-control" required>
+                                                                <!-- Message d'erreur -->
+                                                                <div class="text-danger"
+                                                                  *ngIf="beneficiaryForm.get('city')?.invalid && beneficiaryForm.get('city')?.touched">
+                                                                  La ville est obligatoire
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Zone *</label>
+                                                                <input type="text" formControlName="borough" name="borough" class="form-control" required>
+                                                                <!-- Message d'erreur -->
+                                                                <div class="text-danger"
+                                                                  *ngIf="beneficiaryForm.get('borough')?.invalid && beneficiaryForm.get('borough')?.touched">
+                                                                  La  zone est obligatoire
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Adresse *</label>
+                                                                <input type="text" formControlName="address" name="address" class="form-control" required>
+                                                                <!-- Message d'erreur -->
+                                                                <div class="text-danger"
+                                                                  *ngIf="beneficiaryForm.get('address')?.invalid && beneficiaryForm.get('address')?.touched">
+                                                                  L'adresse est obligatoire
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Email *</label>
+                                                                <input type="email" formControlName="email" name="email" class="form-control">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Téléphone *</label>
+                                                                <input type="text" formControlName="phone" name="phone" class="form-control">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Date *</label>
+                                                                <input type="date" formControlName="dateExistence" name="dateExistence" class="form-control" required>
+                                                                <!-- Message d'erreur -->
+                                                                <div class="text-danger"
+                                                                  *ngIf="beneficiaryForm.get('dateExistence')?.invalid && beneficiaryForm.get('dateExistence')?.touched">
+                                                                  La date est obligatoire
+                                                                </div>
+                                                                <div class="text-danger" *ngIf="errorMessage">
+                                                                  {{ errorMessage }}
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="panel-footer text-left">
+                                                  <button class="btn btn-info btn-xs" type="submit" [disabled]="beneficiaryForm.invalid"><i class="glyphicon glyphicon-ok"></i> Valider</button>
+                                                </div>
+                                            </form>
+                                            <!--===================================================-->
+                                            <!--End form Modal -->
+                                          </div>
+
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-xs" data-dismiss="modal">Fermer </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                <!-- end edit modal -->
+
+                                <!-- satrt info modal -->
+                                            <div
+                                              class="modal fade"
+                                              id="infoModal"
+                                              tabindex="-1"
+                                              aria-labelledby="deleteModalLabel"
+                                              aria-hidden="true"
+                                            >
+                                              <div class="modal-dialog modal-dialog-centered modal-sm">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h4 class="modal-title"><i class="glyphicon glyphicon-info-sign"></i><b> information</b></h4>
+                                                  </div>
+
+                                                  <div class="modal-body">
+                                                    <div *ngIf="statusInfo">
+                                                      <p class="text-success text-center">Bénéficiaire enregistré avec succès ? <br>
+                                                        <i class="glyphicon glyphicon-ok-sign" style="font-size: 50px;"></i></p>
+                                                    </div>
+                                                    <div *ngIf="!statusInfo">
+                                                      <p class="text-success text-center">Bénéficiaire modifié avec succès ? <br>
+                                                        <i class="glyphicon glyphicon-ok-sign" style="font-size: 50px;"></i></p>
+                                                    </div>
+                                                  </div>
+
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer </button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                            <!-- end info modal -->
+
+                            <!-- start delete modale -->
+                                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered modal-sm">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title"><b>Avertissement</b></h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+                                          </div>
+
+                                          <div class="modal-body">
+                                            <p class="text-center">Voulez-vous vraiment supprimer ce bénéficiaire ? </p>
+                                          </div>
+
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-xs pull-left" data-dismiss="modal">Fermer </button>
+                                            <button class="btn btn-danger btn-xs" (click)="deleteBeneficiary(selectedBeneficiary.publicId)"><i class="fa fa-tarsh"></i> Supprimer</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                            <!-- end delete modale -->
+
+
+                    </div><!-- /.box-body -->
+                  </div><!-- /.box -->
+                </div><!-- /.col -->
+              </div><!-- /.row -->
+            </section><!-- /.content -->
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+
+      </div><!-- /.content-wrapper -->
+
+    </div><!-- ./wrapper -->
+
