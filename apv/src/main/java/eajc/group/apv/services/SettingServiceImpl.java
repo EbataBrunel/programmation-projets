@@ -85,9 +85,8 @@ public class SettingServiceImpl implements SettingService{
         if (logoFile != null && !logoFile.isEmpty()) {
 
             // supprimer ancien logo
-            if (setting.getLogo() != null) {
-                Path oldPath = Paths.get("uploads/" + setting.getLogo());
-                Files.deleteIfExists(oldPath);
+            if (setting.getLogo() != null && !setting.getLogo().isBlank()) {
+                fileStorageService.deleteFile(setting.getLogo());
             }
 
             // utiliser FileStorageService
@@ -105,6 +104,10 @@ public class SettingServiceImpl implements SettingService{
         Setting setting = settingRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Setting not found"));
 
+        // supprimer ancien logo
+        if (setting.getLogo() != null && !setting.getLogo().isBlank()) {
+            fileStorageService.deleteFile(setting.getLogo());
+        }
         settingRepository.delete(setting);
     }
 }

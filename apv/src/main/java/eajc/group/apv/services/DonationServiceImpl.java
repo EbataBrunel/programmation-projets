@@ -214,9 +214,8 @@ public class DonationServiceImpl implements DonationService {
         if (photoFile != null && !photoFile.isEmpty()) {
 
             // supprimer ancienne photo
-            if (donation.getPhoto()!= null) {
-                Path oldPath = Paths.get("uploads/" + donation.getPhoto());
-                Files.deleteIfExists(oldPath);
+            if (donation.getPhoto() != null && !donation.getPhoto().isBlank()) {
+                fileStorageService.deleteFile(donation.getPhoto());
             }
 
             // utiliser FileStorageService
@@ -231,6 +230,11 @@ public class DonationServiceImpl implements DonationService {
     public void deleteDonation(UUID publicId) {
         Donation donation = donationRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Don introuvable"));
+
+        // supprimer ancienne photo
+        if (donation.getPhoto() != null && !donation.getPhoto().isBlank()) {
+            fileStorageService.deleteFile(donation.getPhoto());
+        }
 
         donationRepository.delete(donation);
     }

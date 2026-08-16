@@ -145,9 +145,8 @@ public class UserProfileServiceImpl implements UserProfileService {
         if (photoFile != null && !photoFile.isEmpty()) {
 
             // supprimer ancien logo
-            if (profile.getPhoto() != null) {
-                Path oldPath = Paths.get("uploads/" + profile.getPhoto());
-                Files.deleteIfExists(oldPath);
+            if (profile.getPhoto() != null && !profile.getPhoto().isBlank()) {
+                fileStorageService.deleteFile(profile.getPhoto());
             }
 
             // utiliser FileStorageService
@@ -164,6 +163,11 @@ public class UserProfileServiceImpl implements UserProfileService {
     public void deleteProfile(UUID publicId) {
         UserProfile profile = userProfileRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Profile introuvable"));
+
+        // supprimer ancien logo
+        if (profile.getPhoto() != null && !profile.getPhoto().isBlank()) {
+            fileStorageService.deleteFile(profile.getPhoto());
+        }
 
         userProfileRepository.delete(profile);
     }

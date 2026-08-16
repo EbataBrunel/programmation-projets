@@ -6,5 +6,7 @@ public interface FileStorageService {
     String saveFile(MultipartFile file);
 
     void deleteFile(String filename);
+
+    String extractPublicId(String url);
 }
 

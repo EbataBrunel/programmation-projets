@@ -90,13 +90,12 @@ public class NewsServiceImpl implements NewsService{
 
         if (photoFile != null && !photoFile.isEmpty()) {
 
-            // supprimer ancienne photo
-            if (news.getPhoto()!= null) {
-                Path oldPath = Paths.get("uploads/" + news.getPhoto());
-                Files.deleteIfExists(oldPath);
+            // Supprimer l'ancienne photo
+            if (news.getPhoto() != null && !news.getPhoto().isBlank()) {
+                fileStorageService.deleteFile(news.getPhoto());
             }
 
-            // utiliser FileStorageService
+            // Enregistrer la nouvelle photo sur Cloudinary
             String fileName = fileStorageService.saveFile(photoFile);
             news.setPhoto(fileName);
         }
@@ -108,6 +107,10 @@ public class NewsServiceImpl implements NewsService{
     public void deleteNews(UUID publicId) {
         News news = newsRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Actualité introuvable"));
+
+        if (news.getPhoto() != null && !news.getPhoto().isBlank()) {
+            fileStorageService.deleteFile(news.getPhoto());
+        }
 
         newsRepository.delete(news);
     }
