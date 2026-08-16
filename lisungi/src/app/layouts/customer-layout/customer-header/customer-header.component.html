@@ -5,7 +5,7 @@
 
               <a routerLink="/home" class="logo {{ setting.theme }}">
                 <span *ngIf="setting.logo; else another">
-                  <img [src]="'http://127.0.0.1:8080/uploads/' + setting.logo" alt="logo" class="img-circle" width="{{ setting.width}}" height="setting.height">
+                  <img [src]="'https://lisungi-x9vx.onrender.com/uploads/' + setting.logo" alt="logo" class="img-circle" width="{{ setting.width}}" height="setting.height">
                 </span>
                 <ng-template #another>
                   <!-- logo for regular state and mobile devices -->
