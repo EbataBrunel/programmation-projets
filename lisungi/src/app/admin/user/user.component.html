@@ -387,7 +387,7 @@
                   <h3 class="text-center">{{ selectedDetailUser.userProfile?.lastName|uppercase }} {{ selectedDetailUser.userProfile?.firstName|titlecase }}</h3>
                   <span class="{{ setting.bodyTheme }}" *ngIf="setting$ | async as setting">
                     <div class="avatar" *ngIf="selectedDetailUser.userProfile?.photo">
-                      <img class="profile-user-img img-responsive img-circle" [src]="'http://127.0.0.1:8080/uploads/' + selectedDetailUser.userProfile?.photo" alt="User profile picture">
+                      <img class="profile-user-img img-responsive img-circle" [src]="'https://apv-973f.onrender.com/uploads/' + selectedDetailUser.userProfile?.photo" alt="User profile picture">
                     </div>
                     <div class="avatar bg-info" *ngIf="!selectedDetailUser.userProfile?.photo">
                       <img class="profile-user-img img-responsive img-circle" src="assets/static/dist/img/user4-128x128.jpg" alt="User profile picture">
