@@ -12,6 +12,7 @@ import eajc.group.apv.exception.ResourceNotFoundException;
 import eajc.group.apv.repository.SettingRepository;
 import org.springframework.stereotype.Service;
 
+import org.springframework.beans.factory.annotation.Value;
 import java.awt.*;
 import com.lowagie.text.Image;
 import java.io.ByteArrayOutputStream;
@@ -22,6 +23,9 @@ import java.util.List;
 
 @Service
 public class ContributionPdfServiceImpl implements ContributionPdfService{
+
+    @Value("${app.backend.url}")
+    private String backendUrl;
 
     private final SettingRepository settingRepository;
 
@@ -218,9 +222,7 @@ public class ContributionPdfServiceImpl implements ContributionPdfService{
          * Logo
          */
 
-        String url =
-                "http://127.0.0.1:8080/uploads/"
-                        + setting.getLogo();
+        String url = backendUrl + "/uploads/" + setting.getLogo();
 
 
         Image logo =
