@@ -68,7 +68,10 @@ public class NewsServiceImpl implements NewsService{
     }
 
     @Override
-    public NewsResponseDto updateNews(UUID publicId, NewsRequestDto dto, MultipartFile photoFile) throws IOException {
+    public NewsResponseDto updateNews(
+            UUID publicId,
+            NewsRequestDto dto,
+            MultipartFile photoFile) throws IOException {
 
         if (dto.getTitle() == null || dto.getTitle().trim().isEmpty()) {
             throw new BadRequestException("Le titre est obligatoire.");
@@ -78,29 +81,49 @@ public class NewsServiceImpl implements NewsService{
             throw new BadRequestException("Le contenu est obligatoire.");
         }
 
-        if (newsRepository.existsByTitleIgnoreCaseAndPublicIdNot(dto.getTitle().trim(), publicId)) {
+        if (newsRepository.existsByTitleIgnoreCaseAndPublicIdNot(
+                dto.getTitle().trim(), publicId)) {
+
             throw new BadRequestException("Ce titre existe déjà.");
         }
 
         News news = newsRepository.findByPublicId(publicId)
-                .orElseThrow(() -> new ResourceNotFoundException("Actualité introuvable"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Actualité introuvable"));
 
-        news.setTitle(dto.getTitle());
+        news.setTitle(dto.getTitle().trim());
         news.setContent(dto.getContent());
 
         if (photoFile != null && !photoFile.isEmpty()) {
 
-            // Supprimer l'ancienne photo
-            if (news.getPhoto() != null && !news.getPhoto().isBlank()) {
-                fileStorageService.deleteFile(news.getPhoto());
-            }
+            // Garder l'ancienne URL
+            String oldPhoto = news.getPhoto();
 
-            // Enregistrer la nouvelle photo sur Cloudinary
-            String fileName = fileStorageService.saveFile(photoFile);
-            news.setPhoto(fileName);
+            // 1. Upload de la nouvelle photo
+            String newPhoto = fileStorageService.saveFile(photoFile);
+
+            // 2. Enregistrer la nouvelle URL
+            news.setPhoto(newPhoto);
+
+            // 3. Supprimer l'ancienne photo de Cloudinary
+            if (oldPhoto != null
+                    && !oldPhoto.isBlank()
+                    && oldPhoto.startsWith("http")) {
+
+                try {
+                    fileStorageService.deleteFile(oldPhoto);
+                } catch (Exception e) {
+                    System.err.println(
+                            "Impossible de supprimer l'ancienne image Cloudinary : "
+                                    + e.getMessage()
+                    );
+                }
+            }
         }
 
-        return newsMapper.toDto(newsRepository.save(news));
+        News savedNews = newsRepository.save(news);
+
+        return newsMapper.toDto(savedNews);
     }
 
     @Override
