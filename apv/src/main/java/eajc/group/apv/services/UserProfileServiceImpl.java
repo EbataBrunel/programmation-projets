@@ -4,7 +4,6 @@ import eajc.group.apv.dto.GenderCountDto;
 import eajc.group.apv.dto.UserProfileReasonRemovalDto;
 import eajc.group.apv.dto.UserProfileRequestDto;
 import eajc.group.apv.dto.UserProfileResponseDto;
-import eajc.group.apv.entity.Event;
 import eajc.group.apv.entity.UserProfile;
 import eajc.group.apv.entity.User;
 import eajc.group.apv.enums.Reason;
@@ -16,9 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
