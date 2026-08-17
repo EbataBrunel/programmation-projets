@@ -218,9 +218,7 @@ public class ContributionPdfServiceImpl implements ContributionPdfService{
          * Logo
          */
 
-        String url =
-                "http://127.0.0.1:8080/uploads/"
-                        + setting.getLogo();
+        String url = setting.getLogo();
 
 
         Image logo =

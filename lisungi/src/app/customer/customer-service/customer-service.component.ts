@@ -42,7 +42,7 @@ export class CustomerServiceComponent {
   }
 
   openImage(photo: string): void {
-      this.selectedImage = 'http://127.0.0.1:8080/uploads/' + photo;
+      this.selectedImage = photo;
   }
 
   closeImage(): void {

@@ -12,8 +12,6 @@ import { FaviconService } from './core/services/favicon/favicon.service';
 export class AppComponent {
   title = 'apv';
 
-  private rootUrl = `${environment.apiUrl}/uploads`;
-
   constructor(
     private settingService: SettingService,
     private faviconService: FaviconService,
@@ -22,9 +20,8 @@ export class AppComponent {
     this.settingService.setting$.subscribe(setting => {
 
       if (setting?.logo) {
-        const logoUrl = `${this.rootUrl}/${setting.logo}`;
 
-        this.faviconService.setFavicon(logoUrl);
+        this.faviconService.setFavicon(setting.logo);
       }
 
     });

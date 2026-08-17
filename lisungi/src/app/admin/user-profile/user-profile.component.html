@@ -30,7 +30,7 @@
                       <a (click)="openPhotoModal()">
                         <span class="{{ setting.bodyTheme }}" *ngIf="setting$ | async as setting">
                           <div class="avatar" *ngIf="profile.photo">
-                            <img class="profile-user-img img-responsive img-circle" [src]="'https://apv-973f.onrender.com/uploads/' + profile.photo" alt="User profile picture">
+                            <img class="profile-user-img img-responsive img-circle" [src]="profile.photo" alt="User profile picture">
                           </div>
                           <div class="avatar bg-info" *ngIf="!profile.photo">
                             <img class="profile-user-img img-responsive img-circle" src="assets/static/dist/img/user4-128x128.jpg" alt="User profile picture">
@@ -108,7 +108,7 @@
                                                 <div class="modal-body">
                                                   <div class="m-t-10">
                                                     <p class="text-center text-center" *ngIf="profile.photo">
-                                                      <img [src]="'https://apv-973f.onrender.com/uploads/' + profile.photo"
+                                                      <img [src]="profile.photo"
                                                         style="border:1px solid #ddd; padding:5px;" width="200" height="200">
                                                     </p>
                                                     <p class="text-center text-center" *ngIf="!profile.photo">
