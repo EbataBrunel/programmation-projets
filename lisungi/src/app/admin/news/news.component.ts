@@ -261,14 +261,22 @@ export class NewsComponent {
       },
 
       error: (err) => {
+  console.error('========== ERREUR AJOUT NEWS ==========');
+  console.error('Status:', err.status);
+  console.error('Status text:', err.statusText);
+  console.error('URL:', err.url);
+  console.error('Error:', err.error);
+  console.error('Message:', err.message);
+  console.error('=======================================');
 
-        console.error('Erreur ajout news :', err);
-
-        this.errorMessage =
-          err?.error?.message ||
-          err?.error ||
-          'Erreur lors de l’ajout de l’actualité.';
-      }
+  if (typeof err.error === 'string') {
+    this.errorMessage = err.error;
+  } else if (err.error?.message) {
+    this.errorMessage = err.error.message;
+  } else {
+    this.errorMessage = `Erreur serveur (${err.status})`;
+  }
+}
 
     });
   }
